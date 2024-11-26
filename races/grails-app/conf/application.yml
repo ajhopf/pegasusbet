@@ -8,6 +8,9 @@ grails:
             # Whether to translate GORM events into Reactor events
             # Disabled by default for performance reasons
             events: false
+    mime:
+        types:
+            json: ['application/json', 'text/json']
 info:
     app:
         name: '@info.app.name@'
