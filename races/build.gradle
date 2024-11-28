@@ -36,6 +36,7 @@ configurations {
 
 dependencies {
     implementation group: 'org.jsoup', name: 'jsoup', version: '1.18.1'
+    runtimeOnly 'org.postgresql:postgresql'
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     compileOnly "io.micronaut:micronaut-inject-groovy"
