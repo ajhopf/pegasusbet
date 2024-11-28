@@ -8,6 +8,8 @@ import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
 import races.Horse
 import races.HorseService
+import races.Jockey
+import races.JockeyService
 import races.RaceCourse
 import races.RaceCourseService
 import races.RaceService
@@ -17,6 +19,7 @@ class SportingLifeCrawlerService {
     RaceCourseService raceCourseService
     RaceService raceService
     HorseService horseService
+    JockeyService jockeyService
 
     String BASE_URL = "https://www.sportinglife.com"
 
@@ -56,6 +59,12 @@ class SportingLifeCrawlerService {
             String horseLinkHref = horseLink.attr("href")
 
             getHorseInfo(horseLinkHref)
+
+            Elements subinfo = runner.select("[data-test-id=horse-sub-info]")
+            Element jockeyLink = subinfo.select("a").first()
+            String jockeyLinkHref = jockeyLink.attr("href")
+
+            getJockeyInfo(jockeyLinkHref)
         }
 
     }
@@ -72,20 +81,52 @@ class SportingLifeCrawlerService {
         Element ageRow = horseInfoCard.select("tr:has(th:contains(Age))").first()
         String age = ageRow.select("td").text()
 
-        Element resultsTable = horsePage.select("table.FormTable__StyledTable-sc-1xr7jxa-1").first()
+        Map results = getResults(horsePage)
+
+        Horse horse = new Horse(
+                name: name,
+                age: age,
+                sex: sex,
+                numberOfRaces: results.numberOfRaces,
+                numberOfVictories: results.numberOfVictories as int,
+                lastResults: results.lastThreeResults as List<String>
+        )
+
+        horseService.addHorse(horse)
+    }
+
+    void getJockeyInfo(String url) {
+        Document jockeyPage = Jsoup.connect("$BASE_URL$url").get()
+        Element jockeyInfoCard = jockeyPage.select("div.HorseBackgroundWrapper-sc-1exxuzc-0").first()
+
+        String name = jockeyInfoCard.selectFirst("h1").text()
+        Map results = getResults(jockeyPage)
+
+        Jockey jockey = new Jockey(
+                name: name,
+                numberOfRaces: results.numberOfRaces,
+                numberOfVictories: results.numberOfVictories as int,
+                lastResults: results.lastThreeResults as List<String>
+        )
+
+        jockeyService.addJockey(jockey)
+    }
+
+    Map getResults(Document page) {
+        Element resultsTable = page.select("table.FormTable__StyledTable-sc-1xr7jxa-1").first()
         Element resultsTableBody = resultsTable.select("tbody").first()
         Elements resultsTableBodyLines = resultsTableBody.select("tr")
 
         int numberOfRaces = resultsTableBodyLines.size()
 
-        int numberOfVitories = 0
+        int numberOfVictories = 0
 
         resultsTableBodyLines.each {line ->
             Elements tableCells = line.select("td")
             String position = tableCells[1].text()
 
             if (position.split("/")[0] == "1") {
-                numberOfVitories++
+                numberOfVictories++
             }
         }
 
@@ -102,15 +143,10 @@ class SportingLifeCrawlerService {
             }
         }
 
-        Horse horse = new Horse(
-                name: name,
-                age: age,
-                sex: sex,
+        return [
                 numberOfRaces: numberOfRaces,
-                numberOfVictories: numberOfVitories,
+                numberOfVictories: numberOfVictories,
                 lastResults: lastThreeResults
-        )
-
-        horseService.addHorse(horse)
+        ]
     }
 }

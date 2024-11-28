@@ -9,6 +9,6 @@ class SportingLifeCrawlerController {
     def list() {
         sportingLifeCrawlerService.fetchRaces()
 
-        respond ([ "id": 1 ])
+        respond ([ "message": "Dados obtidos com sucesso" ])
     }
 }
