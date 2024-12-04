@@ -1,14 +1,12 @@
 package kafka
 
-import grails.gorm.transactions.Transactional
 import org.apache.kafka.clients.producer.KafkaProducer
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.common.serialization.StringSerializer
 import serializers.RaceCourseSerializer
-import webcrawler.RaceCourse
+import models.RaceCourse
 
-@Transactional
 class RaceCourseService {
 
     synchronized RaceCourse addRaceCourse(String name) {

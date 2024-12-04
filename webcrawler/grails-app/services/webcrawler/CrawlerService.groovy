@@ -1,9 +1,12 @@
 package webcrawler
 
+import models.Horse
+import models.Jockey
+
 import kafka.HorseService
 import kafka.JockeyService
 import kafka.RaceCourseService
-import kafka.RaceService
+
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 
@@ -14,7 +17,6 @@ import org.jsoup.select.Elements
 @Transactional
 class CrawlerService {
     RaceCourseService raceCourseService
-    RaceService raceService
     HorseService horseService
     JockeyService jockeyService
 
@@ -192,34 +194,34 @@ class CrawlerService {
         ]
     }
 
-    void getRaceInfos(String url) {
-        Document racePage = Jsoup.connect("$BASE_URL$url").get()
-
-        Element title = racePage.select("p.CourseListingHeader__StyledMainTitle-sc-164fi8g-5").first()
-        Element subtitle = racePage.select("p.CourseListingHeader__StyledMainSubTitle-sc-164fi8g-7").first()
-
-        String raceCourse = title.text().split(" ")[1]
-        String raceTime = title.text().split(" ")[0]
-        String date = subtitle.text()
-
-        RaceCourse raceCourseInstance = raceCourseService.addRaceCourse(raceCourse)
-        raceCourseService.produceRaceCourse(raceCourse)
-        raceService.addRace(raceCourseInstance, date, raceTime)
-
-        Elements runnerCard = racePage.select("[data-test-id=runner]")
-
-        runnerCard.each {runner ->
-            Element horseLink = runner.select("[data-test-id=horse-name-link]").first()
-            String horseLinkHref = horseLink.attr("href")
-
-            getHorseInfo(horseLinkHref)
-
-            Elements subinfo = runner.select("[data-test-id=horse-sub-info]")
-            Element jockeyLink = subinfo.select("a").first()
-            String jockeyLinkHref = jockeyLink.attr("href")
-
-            getJockeyInfo(jockeyLinkHref)
-        }
-    }
+//    void getRaceInfos(String url) {
+//        Document racePage = Jsoup.connect("$BASE_URL$url").get()
+//
+//        Element title = racePage.select("p.CourseListingHeader__StyledMainTitle-sc-164fi8g-5").first()
+//        Element subtitle = racePage.select("p.CourseListingHeader__StyledMainSubTitle-sc-164fi8g-7").first()
+//
+//        String raceCourse = title.text().split(" ")[1]
+//        String raceTime = title.text().split(" ")[0]
+//        String date = subtitle.text()
+//
+//        RaceCourse raceCourseInstance = raceCourseService.addRaceCourse(raceCourse)
+//        raceCourseService.produceRaceCourse(raceCourse)
+////        raceService.addRace(raceCourseInstance, date, raceTime)
+//
+//        Elements runnerCard = racePage.select("[data-test-id=runner]")
+//
+//        runnerCard.each {runner ->
+//            Element horseLink = runner.select("[data-test-id=horse-name-link]").first()
+//            String horseLinkHref = horseLink.attr("href")
+//
+//            getHorseInfo(horseLinkHref)
+//
+//            Elements subinfo = runner.select("[data-test-id=horse-sub-info]")
+//            Element jockeyLink = subinfo.select("a").first()
+//            String jockeyLinkHref = jockeyLink.attr("href")
+//
+//            getJockeyInfo(jockeyLinkHref)
+//        }
+//    }
 
 }

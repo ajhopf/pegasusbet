@@ -28,7 +28,7 @@ class CrawlerController {
         }
     }
 
-    def raceCourses() {
+    def racecourses() {
         try {
             crawlerService.fetchRaceCourses()
 

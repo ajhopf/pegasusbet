@@ -3,7 +3,7 @@ package serializers
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.kafka.common.serialization.Serializer
-import webcrawler.Horse
+import models.Horse
 
 class HorseSerializer implements Serializer<Horse> {
     @Override
