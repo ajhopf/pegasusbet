@@ -1,5 +1,7 @@
 package pegasusdatastore
 
+import com.fasterxml.jackson.annotation.JsonIgnore
+
 class Jockey {
     String name
     int numberOfRaces
@@ -7,11 +9,12 @@ class Jockey {
     List<String> lastResults
 
     static constraints = {
+        name nullable: false
     }
 
 
     @Override
-    public String toString() {
+    String toString() {
         return "Jockey{" +
                 "name='" + name + '\'' +
                 ", numberOfRaces=" + numberOfRaces +

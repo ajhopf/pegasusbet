@@ -1,18 +1,16 @@
 package pegasusdatastore
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import grails.gorm.services.Service
 import grails.gorm.transactions.Transactional
 
-@Transactional
-class JockeyService {
-    ObjectMapper objectMapper
+@Service(Jockey)
+abstract class JockeyService implements IJockeyService {
 
-    JockeyService() {
-        this.objectMapper = new ObjectMapper()
-    }
-
+    @Transactional
     Jockey addJockey(String jockeyJson) {
-        Jockey jockey = this.objectMapper.readValue(jockeyJson, Jockey.class)
+        ObjectMapper objectMapper = new ObjectMapper()
+        Jockey jockey = objectMapper.readValue(jockeyJson, Jockey.class)
 
         Jockey existingJockey = Jockey.findByName(jockey.name, [lock: true])
 
@@ -30,4 +28,18 @@ class JockeyService {
             return existingJockey
         }
     }
+
+    @Override
+    @Transactional
+    boolean deleteJockey(Serializable id){
+        Jockey jockey = Jockey.get(id)
+
+        if (jockey == null) {
+            return false
+        } else {
+            jockey.delete()
+            return true
+        }
+    }
+
 }

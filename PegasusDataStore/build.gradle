@@ -1,5 +1,6 @@
 buildscript {
     repositories {
+        mavenCentral()
         maven { url "https://plugins.gradle.org/m2/" }
         maven { url "https://repo.grails.org/grails/core" }
     }
@@ -8,6 +9,7 @@ buildscript {
         classpath "gradle.plugin.com.github.erdi.webdriver-binaries:webdriver-binaries-gradle-plugin:2.6"
         classpath "org.grails.plugins:hibernate5:7.3.0"
         classpath "com.bertramlabs.plugins:asset-pipeline-gradle:3.4.7"
+        classpath "org.grails.plugins:views-gradle:2.0.0"
     }
 }
 
@@ -25,6 +27,7 @@ apply plugin:"com.bertramlabs.asset-pipeline"
 repositories {
     mavenCentral()
     maven { url "https://repo.grails.org/grails/core" }
+    maven { url "https://s01.oss.sonatype.org/content/repositories/releases/" }
 }
 
 configurations {
@@ -35,6 +38,8 @@ configurations {
 }
 
 dependencies {
+    implementation "org.grails.plugins:views-json:2.1.1"
+
     implementation group: 'org.jsoup', name: 'jsoup', version: '1.18.1'
     runtimeOnly 'org.postgresql:postgresql'
 
@@ -45,7 +50,7 @@ dependencies {
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.18.1'
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
-    compileOnly "io.micronaut:micronaut-inject-groovy"
+    implementation "io.micronaut:micronaut-inject-groovy"
     console "org.grails:grails-console"
     implementation "org.springframework.boot:spring-boot-starter-logging"
     implementation "org.springframework.boot:spring-boot-starter-validation"
@@ -65,6 +70,7 @@ dependencies {
     implementation "org.grails.plugins:async"
     implementation "org.grails.plugins:scaffolding"
     implementation "org.grails.plugins:hibernate5"
+
     implementation "org.hibernate:hibernate-core:5.6.11.Final"
     implementation "org.grails.plugins:events"
     implementation "org.grails.plugins:gsp"
