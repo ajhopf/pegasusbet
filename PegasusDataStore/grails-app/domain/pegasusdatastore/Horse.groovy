@@ -9,8 +9,14 @@ class Horse {
     List<String> lastResults
 
     static constraints = {
+        name nullable: false
+        sex nullable: false
+        age nullable: false
+        numberOfRaces nullable: true
+        numberOfVictories nullable: true
     }
 
+    static hasMany = [raceHorseJockey: RaceHorseJockey]
 
     @Override
     String toString() {

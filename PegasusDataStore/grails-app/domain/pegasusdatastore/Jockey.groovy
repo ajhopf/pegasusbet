@@ -1,6 +1,5 @@
 package pegasusdatastore
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 
 class Jockey {
     String name
@@ -12,6 +11,7 @@ class Jockey {
         name nullable: false
     }
 
+    static hasMany = [raceHorseJockey: RaceHorseJockey]
 
     @Override
     String toString() {

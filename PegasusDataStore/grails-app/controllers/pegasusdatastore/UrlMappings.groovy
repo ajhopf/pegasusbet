@@ -3,7 +3,9 @@ package pegasusdatastore
 class UrlMappings {
 
     static mappings = {
-        "/jockey"(resources: 'jockey')
+        "/jockeys"(resources: 'jockey')
+        "/horses"(resources: 'horse')
+        "/racecourses"(resources: 'raceCourse')
 
         "/$controller/$action?/$id?(.$format)?"{
             constraints {

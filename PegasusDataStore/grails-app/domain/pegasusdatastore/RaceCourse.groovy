@@ -1,18 +1,16 @@
 package pegasusdatastore
 
-//import com.fasterxml.jackson.annotation.JsonAutoDetect
-//
-//@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 class RaceCourse {
     String name
 
     static constraints = {
-        name unique: true, nullable: false
+        name unique: true, nullable: false,  maxSize: 100
     }
 
+    static hasMany = [races: Race]
 
     @Override
-    public String toString() {
+    String toString() {
         return "RaceCourse{" +
                 ", name='" + name + '\'' +
                 ", id=" + id +

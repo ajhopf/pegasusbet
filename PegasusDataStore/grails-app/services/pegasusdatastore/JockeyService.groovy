@@ -3,6 +3,9 @@ package pegasusdatastore
 import com.fasterxml.jackson.databind.ObjectMapper
 import grails.gorm.services.Service
 import grails.gorm.transactions.Transactional
+import model.dtos.JockeyDTO
+import model.mappers.JockeyMapper
+import pegasusdatastore.interfaces.IJockeyService
 
 @Service(Jockey)
 abstract class JockeyService implements IJockeyService {
@@ -28,6 +31,21 @@ abstract class JockeyService implements IJockeyService {
             return existingJockey
         }
     }
+
+    @Override
+    @Transactional
+    List<JockeyDTO> list(Map params) {
+        List<Jockey> jockeys = Jockey.list(offset: params.offset, max: params.max)
+        return JockeyMapper.toDTOs(jockeys)
+    }
+
+    @Override
+    @Transactional
+    JockeyDTO getJockey(Long id) {
+        Jockey jockey = Jockey.get(id)
+        return JockeyMapper.toDTO(jockey)
+    }
+
 
     @Override
     @Transactional

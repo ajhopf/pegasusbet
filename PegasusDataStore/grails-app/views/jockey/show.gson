@@ -1,9 +1,0 @@
-import pegasusdatastore.Jockey
-
-model {
-    Jockey jockey
-}
-
-json {
-    jockey
-}

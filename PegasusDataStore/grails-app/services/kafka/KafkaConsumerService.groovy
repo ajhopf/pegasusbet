@@ -8,7 +8,6 @@ import org.apache.kafka.clients.consumer.ConsumerRecords
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.springframework.scheduling.annotation.Async
 import pegasusdatastore.HorseService
-import pegasusdatastore.Jockey
 import pegasusdatastore.JockeyService
 import pegasusdatastore.RaceCourseService
 

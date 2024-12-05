@@ -2,48 +2,46 @@ package pegasusdatastore
 
 import grails.converters.JSON
 import grails.validation.ValidationException
-import model.dtos.HorseDTO
-import model.mappers.HorseMapper
+import model.dtos.JockeyDTO
+import model.mappers.JockeyMapper
 
-class HorseController {
-    HorseService horseService
+class JockeyController {
 
-    static allowedMethods = [index: "GET", save: "POST", update: "PUT", delete: "DELETE"]
+    JockeyService jockeyService
+
+    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max, Integer offset) {
         max = Math.min(max ?: 10, 100)
         offset = offset ?: 0
 
-        List<HorseDTO> horseDTOList = horseService.list([max: max, offset: offset])
+        List<JockeyDTO> jockeyDTOList = jockeyService.list([max: max, offset: offset])
 
         render(status: 200, contentType: "application/json") {
-            "horses" horseDTOList as JSON
-            "items" max
-            "offest" offset
+            "jockeys" jockeyDTOList as JSON
         }
     }
 
     def show(Long id) {
-        def horseDTO = horseService.getHorse(id)
+        def jockeyDTO = jockeyService.getJockey(id)
 
-        if (!horseDTO) {
+        if (!jockeyDTO) {
             notFound()
             return
         }
 
         render(status: 200, contentType: "application/json") {
-            "horse"  horseDTO as JSON
+            "jockey" jockeyDTO as JSON
         }
     }
 
-    def save(Horse newHorse) {
+    def save(Jockey newJockey) {
         try {
-            newHorse = horseService.save(newHorse)
-
+            newJockey = jockeyService.save(newJockey)
         } catch (ValidationException e) {
             render(status: 400, contentType: "application/json") {
-                validationError "Horse not saved"
-                newHorse.errors.fieldErrors.each {
+                validationError "Jockey not saved"
+                newJockey.errors.fieldErrors.each {
                     field it.field
                 }
             }
@@ -51,31 +49,31 @@ class HorseController {
         }
 
         render (status: 201, contentType: "application/json") {
-            "horse" HorseMapper.toDTO(newHorse) as JSON
+            "jockey" JockeyMapper.toDTO(newJockey) as JSON
         }
     }
 
 
-    def update(Horse updatedHorse) {
-        if (updatedHorse == null) {
+    def update(Jockey updatedJockey) {
+        if (updatedJockey == null) {
             notFound()
             return
         }
 
         try {
-            updatedHorse = horseService.save(updatedHorse)
+            updatedJockey = jockeyService.save(updatedJockey)
         } catch (ValidationException e) {
             render(status: 400, contentType: "application/json") {
-                validationError "Horse not updated"
-                updatedHorse.errors.fieldErrors.each {
+                validationError "Jockey not updated"
+                updatedJockey.errors.fieldErrors.each {
                     field it.field
                 }
             }
-            return
         }
 
+
         render(contentType: "application/json", status: 200) {
-            "horse" HorseMapper.toDTO(updatedHorse) as JSON
+            "jockey" JockeyMapper.toDTO(updatedJockey) as JSON
         }
     }
 
@@ -85,13 +83,13 @@ class HorseController {
             return
         }
 
-        boolean deleted = horseService.deleteHorse(id)
+        boolean deleted = jockeyService.deleteJockey(id)
 
         if (deleted) {
             render(status: 204, contentType: "application/json") {}
         } else {
             render(status: 404, contentType: "application/json") {
-                message "Horse not found, could not delete"
+                message "Jockey not found, could not delete"
             }
         }
 
@@ -99,7 +97,7 @@ class HorseController {
 
     protected void notFound() {
         render (contentType: "application/json", status: 404) {
-            message "Resource not found"
+            message: "Resource not found"
         }
     }
 }
