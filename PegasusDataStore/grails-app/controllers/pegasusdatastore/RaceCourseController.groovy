@@ -19,6 +19,8 @@ class RaceCourseController {
 
         render(status: 200, contentType: "application/json") {
             "raceCourses" raceCourseDTOList as JSON
+            "items" max
+            "offsetItems" offset
         }
     }
 

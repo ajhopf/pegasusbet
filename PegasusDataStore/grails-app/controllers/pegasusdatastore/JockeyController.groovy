@@ -19,6 +19,8 @@ class JockeyController {
 
         render(status: 200, contentType: "application/json") {
             "jockeys" jockeyDTOList as JSON
+            "items" max
+            "offsetItems" offset
         }
     }
 
@@ -40,9 +42,12 @@ class JockeyController {
             newJockey = jockeyService.save(newJockey)
         } catch (ValidationException e) {
             render(status: 400, contentType: "application/json") {
-                validationError "Jockey not saved"
-                newJockey.errors.fieldErrors.each {
-                    field it.field
+                message "Jockey not saved"
+                validationErrors newJockey.errors.fieldErrors.collect { fieldError ->
+                    [
+                            field: fieldError.field,
+                            rejectedValue: fieldError.rejectedValue,
+                    ]
                 }
             }
             return
@@ -64,9 +69,12 @@ class JockeyController {
             updatedJockey = jockeyService.save(updatedJockey)
         } catch (ValidationException e) {
             render(status: 400, contentType: "application/json") {
-                validationError "Jockey not updated"
-                updatedJockey.errors.fieldErrors.each {
-                    field it.field
+                message "Jockey not updated"
+                validationErrors updatedJockey.errors.fieldErrors.collect { fieldError ->
+                    [
+                            field: fieldError.field,
+                            rejectedValue: fieldError.rejectedValue,
+                    ]
                 }
             }
         }

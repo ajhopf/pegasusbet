@@ -19,7 +19,7 @@ class HorseController {
         render(status: 200, contentType: "application/json") {
             "horses" horseDTOList as JSON
             "items" max
-            "offest" offset
+            "offsetItems" offset
         }
     }
 
@@ -42,9 +42,12 @@ class HorseController {
 
         } catch (ValidationException e) {
             render(status: 400, contentType: "application/json") {
-                validationError "Horse not saved"
-                newHorse.errors.fieldErrors.each {
-                    field it.field
+                message "Horse not saved"
+                validationErrors newHorse.errors.fieldErrors.collect { fieldError ->
+                    [
+                            field: fieldError.field,
+                            rejectedValue: fieldError.rejectedValue,
+                    ]
                 }
             }
             return
