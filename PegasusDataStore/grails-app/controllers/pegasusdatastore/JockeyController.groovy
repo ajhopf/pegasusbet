@@ -12,13 +12,13 @@ class JockeyController {
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max, Integer offset) {
-        max = Math.min(max ?: 10, 100)
+        max = Math.min(max ?: 10, 1000)
         offset = offset ?: 0
 
         List<JockeyDTO> jockeyDTOList = jockeyService.list([max: max, offset: offset])
 
         render(status: 200, contentType: "application/json") {
-            "jockeys" jockeyDTOList as JSON
+            "jockeys" jockeyDTOList
             "items" max
             "offsetItems" offset
         }
@@ -33,7 +33,7 @@ class JockeyController {
         }
 
         render(status: 200, contentType: "application/json") {
-            "jockey" jockeyDTO as JSON
+            "jockey" jockeyDTO
         }
     }
 
@@ -54,7 +54,7 @@ class JockeyController {
         }
 
         render (status: 201, contentType: "application/json") {
-            "jockey" JockeyMapper.toDTO(newJockey) as JSON
+            "jockey" JockeyMapper.toDTO(newJockey)
         }
     }
 
@@ -81,7 +81,7 @@ class JockeyController {
 
 
         render(contentType: "application/json", status: 200) {
-            "jockey" JockeyMapper.toDTO(updatedJockey) as JSON
+            "jockey" JockeyMapper.toDTO(updatedJockey)
         }
     }
 

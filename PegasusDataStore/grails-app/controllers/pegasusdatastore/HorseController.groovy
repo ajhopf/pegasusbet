@@ -1,6 +1,5 @@
 package pegasusdatastore
 
-import grails.converters.JSON
 import grails.validation.ValidationException
 import model.dtos.HorseDTO
 import model.mappers.HorseMapper
@@ -10,15 +9,23 @@ class HorseController {
 
     static allowedMethods = [index: "GET", save: "POST", update: "PUT", delete: "DELETE"]
 
-    def index(Integer max, Integer offset) {
-        max = Math.min(max ?: 10, 100)
+    def index(Integer max, Integer offset, String filter, String filterField) {
+        max = max ?: 1000
         offset = offset ?: 0
 
-        List<HorseDTO> horseDTOList = horseService.list([max: max, offset: offset])
+        if (!filterField) {
+            filterField = 'name'
+        }
+
+        if (!filter) {
+            filter = ''
+        }
+
+        List<HorseDTO> horseDTOList = horseService.list([max: max, offset: offset, filterField: filterField, filter: filter])
 
         render(status: 200, contentType: "application/json") {
-            "horses" horseDTOList as JSON
-            "items" max
+            "horses" horseDTOList
+            "items" horseDTOList.size()
             "offsetItems" offset
         }
     }
@@ -32,7 +39,7 @@ class HorseController {
         }
 
         render(status: 200, contentType: "application/json") {
-            "horse"  horseDTO as JSON
+            "horse"  horseDTO
         }
     }
 
@@ -54,7 +61,7 @@ class HorseController {
         }
 
         render (status: 201, contentType: "application/json") {
-            "horse" HorseMapper.toDTO(newHorse) as JSON
+            "horse" HorseMapper.toDTO(newHorse)
         }
     }
 
@@ -78,7 +85,7 @@ class HorseController {
         }
 
         render(contentType: "application/json", status: 200) {
-            "horse" HorseMapper.toDTO(updatedHorse) as JSON
+            "horse" HorseMapper.toDTO(updatedHorse)
         }
     }
 

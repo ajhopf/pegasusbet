@@ -1,6 +1,5 @@
 package pegasusdatastore
 
-import grails.converters.JSON
 import grails.validation.ValidationException
 import model.dtos.RaceCourseDTO
 import model.mappers.RaceCourseMapper
@@ -18,7 +17,7 @@ class RaceCourseController {
         List<RaceCourseDTO> raceCourseDTOList = raceCourseService.list([max: max, offset: offset])
 
         render(status: 200, contentType: "application/json") {
-            "raceCourses" raceCourseDTOList as JSON
+            "raceCourses" raceCourseDTOList
             "items" max
             "offsetItems" offset
         }
@@ -33,7 +32,7 @@ class RaceCourseController {
         }
 
         render(status: 200, contentType: "application/json") {
-            "raceCourse" raceCourseDTO as JSON
+            "raceCourse" raceCourseDTO
         }
     }
 
@@ -51,7 +50,7 @@ class RaceCourseController {
         }
 
         render (status: 201, contentType: "application/json") {
-            "raceCourse" RaceCourseMapper.toDTO(newRaceCourse) as JSON
+            "raceCourse" RaceCourseMapper.toDTO(newRaceCourse)
         }
     }
 
@@ -76,7 +75,7 @@ class RaceCourseController {
 
 
         render(contentType: "application/json", status: 200) {
-            "raceCourse" RaceCourseMapper.toDTO(updatedRaceCourse) as JSON
+            "raceCourse" RaceCourseMapper.toDTO(updatedRaceCourse)
         }
     }
 

@@ -5,6 +5,7 @@ import grails.gorm.services.Service
 import grails.gorm.transactions.Transactional
 import model.dtos.HorseDTO
 import model.mappers.HorseMapper
+import org.grails.datastore.mapping.query.api.BuildableCriteria
 import pegasusdatastore.interfaces.IHorseService
 
 @Service(Horse)
@@ -35,8 +36,16 @@ abstract class HorseService implements IHorseService {
     @Override
     @Transactional
     List<HorseDTO> list(Map params) {
-        List<Horse> horses = Horse.list(offset: params.offset, max: params.max)
-        return HorseMapper.toDTOs(horses)
+        BuildableCriteria h = Horse.createCriteria()
+
+        List<Horse> results = h.list (max: params.max, offset: params.offset) {
+            if (params.filter && params.filterField) {
+                ilike(params.filterField as String, "%${params.filter}%")
+            }
+
+        } as List<Horse>
+
+        return HorseMapper.toDTOs(results)
     }
 
     @Override

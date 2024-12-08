@@ -3,6 +3,12 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { HttpClientModule } from "@angular/common/http";
+import { CardModule } from "primeng/card";
+import { MessageService, SharedModule } from "primeng/api";
+import { TableModule } from "primeng/table";
+import { ToastModule } from "primeng/toast";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 @NgModule({
   declarations: [
@@ -10,9 +16,16 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule,
+    TableModule,
+    CardModule,
+    SharedModule,
+    ToastModule,
+    BrowserAnimationsModule
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [ MessageService ],
+  exports: [],
+  bootstrap: [ AppComponent ]
 })
 export class AppModule { }

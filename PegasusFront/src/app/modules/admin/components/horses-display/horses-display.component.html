@@ -1,0 +1,10 @@
+<p-confirmDialog [style]="{ width: '50vw' }"></p-confirmDialog>
+
+<app-table
+  tableHeader="Cavalos"
+  [tableColumnDefinition]="columns"
+  [values]="horses"
+  (editEvent)="handleEditHorse($event)"
+  (deleteEvent)="handleDeleteHorse($event)"
+  (filterEvent)="filterHorse($event)"
+></app-table>

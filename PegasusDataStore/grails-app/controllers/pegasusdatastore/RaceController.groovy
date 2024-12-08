@@ -5,7 +5,6 @@ import grails.converters.JSON
 import model.dtos.raceDTOs.RaceRequestDTO
 import model.dtos.raceDTOs.RaceResponseDTO
 import model.mappers.RaceMapper
-import org.springframework.validation.FieldError
 
 class RaceController {
     RaceService raceService
@@ -17,11 +16,10 @@ class RaceController {
         List<RaceResponseDTO> racesList = raceService.list([max: max, offset: offset])
 
         render(status: 200, contentType: "application/json") {
-            "races" racesList as JSON
+            "races" racesList
             "items" max
             "offsetItems" offset
         }
-
     }
 
     def save(RaceRequestDTO raceRequestDTO) {
@@ -34,7 +32,7 @@ class RaceController {
             Race newRace = raceService.save(raceRequestDTO)
 
             render (status: 201, contentType: "application/json") {
-                race RaceMapper.toResponseDTO(newRace) as JSON
+                race RaceMapper.toResponseDTO(newRace)
             }
         } catch (ResourceNotFoundException e) {
             render (status: 404, contentType: "application/json") {
