@@ -9,7 +9,7 @@ export class TableComponent {
   @Input() tableHeader: string = ''
   @Input() tableColumnDefinition: TableColumnDefinition[] = []
   @Input() values: any[] = []
-  @Input() filterFn: any
+  @Output() addEvent = new EventEmitter()
   @Output() deleteEvent = new EventEmitter()
   @Output() editEvent = new EventEmitter()
   @Output() filterEvent = new EventEmitter()
@@ -21,6 +21,10 @@ export class TableComponent {
 
   handleDeleteEvent(id: string) {
     this.deleteEvent.emit(id)
+  }
+
+  handleAddEvent() {
+    this.addEvent.emit()
   }
 
   handleFilterEvent(filterValue: string) {

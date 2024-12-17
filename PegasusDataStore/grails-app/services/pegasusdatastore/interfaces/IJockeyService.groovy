@@ -1,12 +1,12 @@
 package pegasusdatastore.interfaces
 
-import model.dtos.JockeyDTO
+import model.dtos.jockeyDTOs.JockeyResponseDTO
 import pegasusdatastore.Jockey
 
 interface IJockeyService {
-    List<JockeyDTO> list(Map args)
+    List<JockeyResponseDTO> list(Map args)
     Jockey save(Jockey jockey)
-    JockeyDTO getJockey(Long id)
+    JockeyResponseDTO getJockey(Long id)
     boolean deleteJockey(Serializable id)
     Number count()
 }

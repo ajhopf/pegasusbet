@@ -5,6 +5,10 @@ import exceptions.ResourceNotFoundException
 class UrlMappings {
 
     static mappings = {
+        "/horses/$id" (controller: 'horse', action: 'update')
+
+        "/jockeys/$id" (controller: 'jockey', action: 'update')
+
         "/jockeys"(resources: 'jockey')
         "/horses"(resources: 'horse')
         "/racecourses"(resources: 'raceCourse')

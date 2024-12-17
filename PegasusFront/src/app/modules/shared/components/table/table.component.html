@@ -12,7 +12,7 @@
       <div class="flex align-items-center justify-content-between">
         {{ tableHeader }}
         <input pInputText type="text" [(ngModel)]="filterValue"  (input)="handleFilterEvent(filterValue)" placeholder="Filtre pelo nome" />
-        <p-button icon="pi pi-plus"></p-button>
+        <p-button icon="pi pi-plus" (onClick)="handleAddEvent()"></p-button>
       </div>
     </ng-template>
 

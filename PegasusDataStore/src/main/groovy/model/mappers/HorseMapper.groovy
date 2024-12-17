@@ -1,23 +1,39 @@
 package model.mappers
 
-import model.dtos.HorseDTO
+import model.dtos.horseDTOs.HorseRequestDTO
+import model.dtos.horseDTOs.HorseResponseDTO
+import model.dtos.horseDTOs.HorseResultResponseDTO
 import pegasusdatastore.Horse
 
 class HorseMapper {
-    static HorseDTO toDTO(Horse horse) {
-        return new HorseDTO(
+    static HorseResponseDTO toResponseDTO(Horse horse) {
+        return new HorseResponseDTO(
                 id: horse.id,
                 name: horse.name,
                 age: horse.age,
                 sex: horse.sex,
                 numberOfRaces: horse.numberOfRaces,
                 numberOfVictories: horse.numberOfVictories,
-                lastResults: horse.lastResults
+                horseResults: horse.horseResults ? horse.horseResults.collect { new HorseResultResponseDTO(it) } : []
         )
     }
 
-    static List<HorseDTO> toDTOs(List<Horse> horses) {
-        return horses.collect { toDTO(it) }
+    static List<HorseResponseDTO> toDTOs(List<Horse> horses) {
+        if (!horses) {
+            return []
+        }
+        return horses.collect { toResponseDTO(it) }
+    }
+
+    static Horse fromDTO(HorseRequestDTO horseRequestDTO) {
+        return new Horse(
+                name: horseRequestDTO.name,
+                age: horseRequestDTO.age,
+                sex: horseRequestDTO.sex,
+                numberOfRaces: horseRequestDTO.numberOfRaces,
+                numberOfVictories: horseRequestDTO.numberOfVictories,
+                horseResults: horseRequestDTO.horseResults
+        )
     }
 
 }

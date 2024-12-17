@@ -3,8 +3,9 @@
 <app-table
   tableHeader="Cavalos"
   [tableColumnDefinition]="columns"
-  [values]="horses"
+  [values]="filteredHorses"
   (editEvent)="handleEditHorse($event)"
   (deleteEvent)="handleDeleteHorse($event)"
-  (filterEvent)="filterHorse($event)"
+  (filterEvent)="handleFilterHorses($event)"
+  (addEvent)="handleAddHorse()"
 ></app-table>

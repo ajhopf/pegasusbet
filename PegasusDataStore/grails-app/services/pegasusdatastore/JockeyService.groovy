@@ -1,54 +1,86 @@
 package pegasusdatastore
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import grails.gorm.services.Service
+import exceptions.ResourceAlreadyExistsException
+import exceptions.ResourceNotFoundException
+
 import grails.gorm.transactions.Transactional
-import model.dtos.JockeyDTO
+import model.dtos.jockeyDTOs.JockeyRequestDTO
+import model.dtos.jockeyDTOs.JockeyResponseDTO
 import model.mappers.JockeyMapper
-import pegasusdatastore.interfaces.IJockeyService
 
-@Service(Jockey)
-abstract class JockeyService implements IJockeyService {
+@Transactional
+class JockeyService {
 
-    @Transactional
-    Jockey addJockey(String jockeyJson) {
-        ObjectMapper objectMapper = new ObjectMapper()
-        Jockey jockey = objectMapper.readValue(jockeyJson, Jockey.class)
+    JockeyResponseDTO save(JockeyRequestDTO jockeyRequestDTO) {
+        Jockey jockey = JockeyMapper.fromDTO(jockeyRequestDTO)
 
         Jockey existingJockey = Jockey.findByName(jockey.name, [lock: true])
 
         if (!existingJockey) {
             Jockey newJockey = jockey.save(flush: true)
 
-            return newJockey
+            return JockeyMapper.toResponseDTO(newJockey)
         } else {
-            existingJockey.numberOfRaces = jockey.numberOfRaces
-            existingJockey.lastResults = jockey.lastResults
-            existingJockey.numberOfVictories = jockey.numberOfVictories
-
-            existingJockey.save()
-
-            return existingJockey
+            throw new ResourceAlreadyExistsException("Jockey já existe")
         }
     }
 
-    @Override
-    @Transactional
-    List<JockeyDTO> list(Map params) {
-        List<Jockey> jockeys = Jockey.list(offset: params.offset, max: params.max)
-        return JockeyMapper.toDTOs(jockeys)
+    JockeyResponseDTO updateJockey(JockeyRequestDTO jockeyRequestDTO, Long id) {
+        Jockey existingJockey = Jockey.get(id)
+
+        if (!existingJockey) {
+            throw new ResourceNotFoundException("Jockey não encontrado com id $id")
+        }
+
+        if (jockeyRequestDTO.name) {
+            existingJockey.name = jockeyRequestDTO.name
+        }
+
+        if (jockeyRequestDTO.numberOfRaces) {
+            existingJockey.numberOfRaces = jockeyRequestDTO.numberOfRaces
+        }
+
+        if (jockeyRequestDTO.numberOfVictories) {
+            existingJockey.numberOfVictories = jockeyRequestDTO.numberOfVictories
+        }
+
+
+        if (jockeyRequestDTO.jockeyResults?.size() > 0) {
+            // Remove associações e deleta os resultados
+            JockeyResults.deleteAll(existingJockey.jockeyResults)
+            existingJockey.jockeyResults.clear()
+
+            // Adiciona novos resultados
+            jockeyRequestDTO.jockeyResults.each { newResult ->
+                newResult.jockey = existingJockey
+                newResult.save(flush: true, failOnError: true)
+            }
+        }
+
+        existingJockey.save(flush: true)
+
+        existingJockey.jockeyResults = jockeyRequestDTO.jockeyResults
+
+        return JockeyMapper.toResponseDTO(existingJockey)
     }
 
-    @Override
-    @Transactional
-    JockeyDTO getJockey(Long id) {
+
+    List<JockeyResponseDTO> list(Map params) {
+        List<Jockey> results = Jockey.list(params)
+
+        return JockeyMapper.toDTOs(results)
+    }
+
+    JockeyResponseDTO getJockey(Long id) {
         Jockey jockey = Jockey.get(id)
-        return JockeyMapper.toDTO(jockey)
+
+        if (!jockey) {
+            throw new ResourceNotFoundException("Jockey com id $id não encontrado")
+        }
+
+        return JockeyMapper.toResponseDTO(jockey)
     }
 
-
-    @Override
-    @Transactional
     boolean deleteJockey(Serializable id){
         Jockey jockey = Jockey.get(id)
 

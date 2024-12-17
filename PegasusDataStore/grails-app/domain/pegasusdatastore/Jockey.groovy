@@ -5,13 +5,12 @@ class Jockey {
     String name
     int numberOfRaces
     int numberOfVictories
-    List<String> lastResults
 
     static constraints = {
         name nullable: false
     }
 
-    static hasMany = [raceHorseJockey: RaceHorseJockey]
+    static hasMany = [raceHorseJockey: RaceHorseJockey, jockeyResults: JockeyResults]
 
     @Override
     String toString() {
@@ -19,7 +18,7 @@ class Jockey {
                 "name='" + name + '\'' +
                 ", numberOfRaces=" + numberOfRaces +
                 ", numberOfVictories=" + numberOfVictories +
-                ", lastResults=" + lastResults +
+                ", results=" + jockeyResults +
                 '}';
     }
 }

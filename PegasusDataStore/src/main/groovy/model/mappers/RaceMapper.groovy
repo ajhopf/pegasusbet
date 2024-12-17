@@ -1,5 +1,6 @@
 package model.mappers
 
+import model.dtos.jockeyDTOs.JockeyResultResponseDTO
 import model.dtos.raceDTOs.RaceHorseJockeyDTO
 import model.dtos.raceDTOs.RaceResponseDTO
 import pegasusdatastore.Race
@@ -11,14 +12,7 @@ class RaceMapper {
                 raceCourseId: race.raceCourse.id,
                 time: race.time,
                 date: race.date,
-                raceHorseJockeys: race.raceHorseJockey?.collect { raceHorseJockey ->
-                    [
-                            horseId: raceHorseJockey.horse.id,
-                            jockeyId: raceHorseJockey.jockey.id,
-                            position: raceHorseJockey.position,
-                            raceTime: raceHorseJockey.raceTime?.toString()
-                    ]
-                } as List<RaceHorseJockeyDTO>
+                raceHorseJockeys: race.raceHorseJockey ? race.raceHorseJockey.collect { new RaceHorseJockeyDTO(it) } : []
         )
     }
 

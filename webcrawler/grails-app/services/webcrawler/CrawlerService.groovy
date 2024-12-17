@@ -24,6 +24,7 @@ class CrawlerService {
 
     void fetchHorses() {
         Elements raceCards = getRaceCards()
+        println 'fetching horses'
 
         raceCards.each {card ->
             try {
@@ -136,6 +137,8 @@ class CrawlerService {
                 lastResults: results.lastResults as List<String>
         )
 
+        println 'producing horse'
+        println horse
         horseService.produceHorse(horse)
     }
 

@@ -1,9 +1,9 @@
 package pegasusdatastore
 
-import grails.testing.web.controllers.ControllerUnitTest
+import grails.testing.gorm.DomainUnitTest
 import spock.lang.Specification
 
-class RaceCourseControllerSpec extends Specification implements ControllerUnitTest<RaceCourseController> {
+class JockeyResultsSpec extends Specification implements DomainUnitTest<JockeyResults> {
 
     def setup() {
     }

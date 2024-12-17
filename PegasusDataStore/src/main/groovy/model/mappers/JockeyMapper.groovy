@@ -1,21 +1,31 @@
 package model.mappers
 
-import model.dtos.JockeyDTO
+import model.dtos.jockeyDTOs.JockeyRequestDTO
+import model.dtos.jockeyDTOs.JockeyResponseDTO
+import model.dtos.jockeyDTOs.JockeyResultResponseDTO
 import pegasusdatastore.Jockey
 
 class JockeyMapper {
-    static JockeyDTO toDTO(Jockey jockey) {
-        return new JockeyDTO(
+    static JockeyResponseDTO toResponseDTO(Jockey jockey) {
+        return new JockeyResponseDTO(
                 id: jockey.id,
                 name: jockey.name,
                 numberOfRaces: jockey.numberOfRaces,
                 numberOfVictories: jockey.numberOfVictories,
-                lastResults: jockey.lastResults
+                jockeyResults: jockey.jockeyResults ? jockey.jockeyResults.collect { new JockeyResultResponseDTO(it) } : []
         )
     }
 
-    static List<JockeyDTO> toDTOs(List<Jockey> jockey) {
-        return jockey.collect { toDTO(it) }
+    static List<JockeyResponseDTO> toDTOs(List<Jockey> jockey) {
+        return jockey.collect { toResponseDTO(it) }
     }
 
+    static Jockey fromDTO(JockeyRequestDTO jockeyRequestDTO) {
+        return new Jockey(
+                name: jockeyRequestDTO.name,
+                numberOfRaces: jockeyRequestDTO.numberOfRaces,
+                numberOfVictories: jockeyRequestDTO.numberOfVictories,
+                jockeyResults: jockeyRequestDTO.jockeyResults
+        )
+    }
 }

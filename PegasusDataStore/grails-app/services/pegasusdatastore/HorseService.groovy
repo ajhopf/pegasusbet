@@ -1,62 +1,86 @@
 package pegasusdatastore
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import grails.gorm.services.Service
+import exceptions.ResourceAlreadyExistsException
+import exceptions.ResourceNotFoundException
 import grails.gorm.transactions.Transactional
-import model.dtos.HorseDTO
+import model.dtos.horseDTOs.HorseResponseDTO
+import model.dtos.horseDTOs.HorseRequestDTO
 import model.mappers.HorseMapper
-import org.grails.datastore.mapping.query.api.BuildableCriteria
-import pegasusdatastore.interfaces.IHorseService
 
-@Service(Horse)
-abstract class HorseService implements IHorseService {
-
-    @Transactional
-    Horse addHorse(String horsejson) {
-        ObjectMapper objectMapper = new ObjectMapper()
-        Horse horse = objectMapper.readValue(horsejson, Horse.class)
+@Transactional
+class HorseService  {
+    HorseResponseDTO save(HorseRequestDTO horseRequestDTO) {
+        Horse horse = HorseMapper.fromDTO(horseRequestDTO)
 
         Horse existingHorse = Horse.findByNameAndAge(horse.name, horse.age, [lock: true])
 
-        println existingHorse
-
-        if (existingHorse == null) {
+        if (!existingHorse) {
             Horse newHorse = horse.save(flush: true)
-            return newHorse
+            return HorseMapper.toResponseDTO(newHorse)
         } else {
-            existingHorse.numberOfRaces = horse.numberOfRaces
-            existingHorse.lastResults = horse.lastResults
-            existingHorse.numberOfVictories = horse.numberOfVictories
-            existingHorse.save(flush: true)
-
-            return existingHorse
+            throw new ResourceAlreadyExistsException("Cavalo já existe")
         }
     }
 
-    @Override
-    @Transactional
-    List<HorseDTO> list(Map params) {
-        BuildableCriteria h = Horse.createCriteria()
+    HorseResponseDTO updateHorse(HorseRequestDTO horseRequestDTO, Long id) {
+        Horse existingHorse = Horse.get(id)
 
-        List<Horse> results = h.list (max: params.max, offset: params.offset) {
-            if (params.filter && params.filterField) {
-                ilike(params.filterField as String, "%${params.filter}%")
+        if (!existingHorse) {
+            throw new ResourceNotFoundException("Cavalo não encontrado com id $id")
+        }
+
+        if (horseRequestDTO.name) {
+            existingHorse.name = horseRequestDTO.name
+        }
+
+        if (horseRequestDTO.age) {
+            existingHorse.age = horseRequestDTO.age
+        }
+
+        if (horseRequestDTO.numberOfRaces) {
+            existingHorse.numberOfRaces = horseRequestDTO.numberOfRaces
+        }
+
+        if (horseRequestDTO.numberOfVictories) {
+            existingHorse.numberOfVictories = horseRequestDTO.numberOfVictories
+        }
+
+
+        if (horseRequestDTO.horseResults && horseRequestDTO.horseResults.size() > 0) {
+            // Remove associações e deleta os resultados
+            HorseResults.deleteAll(existingHorse.horseResults)
+            existingHorse.horseResults.clear()
+
+            // Adiciona novos resultados
+            horseRequestDTO.horseResults.each { newResult ->
+                newResult.horse = existingHorse
+                newResult.save(flush: true, failOnError: true)
             }
+        }
 
-        } as List<Horse>
+        existingHorse.save(flush: true)
+
+        existingHorse.horseResults = horseRequestDTO.horseResults
+
+        return HorseMapper.toResponseDTO(existingHorse)
+    }
+
+    List<HorseResponseDTO> list(Map params) {
+        List<Horse> results = Horse.list(params)
 
         return HorseMapper.toDTOs(results)
     }
 
-    @Override
-    @Transactional
-    HorseDTO getHorse(Long id) {
+    HorseResponseDTO getHorse(Long id) {
         Horse horse = Horse.get(id)
-        return HorseMapper.toDTO(horse)
+
+        if (!horse) {
+            throw new ResourceNotFoundException("Cavalo com id $id não encontrado")
+        }
+
+        return HorseMapper.toResponseDTO(horse)
     }
 
-    @Override
-    @Transactional
     boolean deleteHorse(Serializable id){
         Horse horse = Horse.get(id)
 

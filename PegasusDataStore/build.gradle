@@ -40,11 +40,18 @@ configurations {
 dependencies {
     implementation "org.grails.plugins:views-json:2.1.1"
 
+    // Springfox
+    implementation 'org.springdoc:springdoc-openapi-ui:1.7.0'
+    implementation 'org.springdoc:springdoc-openapi-data-rest:1.7.0'
+//    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-api:2.7.0'
+
+
     implementation group: 'org.jsoup', name: 'jsoup', version: '1.18.1'
     runtimeOnly 'org.postgresql:postgresql'
 
+    //Kafka
     implementation group: 'org.apache.kafka', name: 'kafka-clients', version: '3.9.0'
-    implementation group: 'org.slf4j', name: 'slf4j-simple', version: '2.0.16'
+
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.18.1'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.18.1'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.18.1'

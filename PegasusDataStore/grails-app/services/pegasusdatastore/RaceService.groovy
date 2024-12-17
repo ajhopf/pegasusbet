@@ -39,7 +39,7 @@ abstract class RaceService implements IRaceService {
                 time: time
         )
 
-        race = race.save()
+        race = race.save(flush: true)
 
         saveHorseJockeys(raceRequestDTO.horseJockeys, race)
 
@@ -71,10 +71,12 @@ abstract class RaceService implements IRaceService {
             RaceHorseJockey raceHorseJockey = new RaceHorseJockey(
                     horse: horse,
                     jockey: jockey,
-                    race: race
+                    race: race,
+                    raceTime: null,
+                    position: null
             )
 
-            raceHorseJockey.save()
+            raceHorseJockey.save(flush: true)
         }
     }
 }

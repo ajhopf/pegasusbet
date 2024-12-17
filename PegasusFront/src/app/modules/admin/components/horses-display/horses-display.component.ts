@@ -4,6 +4,7 @@ import { TableColumnDefinition } from "../../../../models/table/TableColumnDefin
 import { HorseService } from "../../../../services/horse/horse.service";
 import { Subject, take, takeUntil } from "rxjs";
 import { ConfirmationService, MessageService } from "primeng/api";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-horses-display',
@@ -13,8 +14,9 @@ export class HorsesDisplayComponent implements OnInit, OnDestroy{
   private destroy$= new Subject<void>()
 
   horses: Horse[] = []
+  filteredHorses: Horse[] = []
   totalRecords: number = 0
-  filter: string = ''
+  // filter: string = ''
   loading: boolean = false
 
   columns: TableColumnDefinition[] = [
@@ -30,7 +32,8 @@ export class HorsesDisplayComponent implements OnInit, OnDestroy{
   constructor(
     private horseService: HorseService,
     private confirmationService: ConfirmationService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private router: Router
     ) {}
 
   ngOnInit(): void {
@@ -40,18 +43,13 @@ export class HorsesDisplayComponent implements OnInit, OnDestroy{
   fetchHorses(): void {
     this.loading = true
 
-    const params = {
-      max: 1000,
-      filter: this.filter,
-      filterField: 'name'
-    }
-
-    this.horseService.fetchHorses(params)
+    this.horseService.fetchHorses()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (response) => {
           if (response) {
             this.horses = response.horses
+            this.filteredHorses = response.horses
             this.totalRecords = response.items
             this.loading = false
           }
@@ -62,9 +60,12 @@ export class HorsesDisplayComponent implements OnInit, OnDestroy{
       })
   }
 
-  filterHorse(filterString: string) {
-    this.filter = filterString
-    this.fetchHorses()
+  handleFilterHorses(filterString: string) {
+    this.filteredHorses = this.horses.filter(horse => horse.name.toUpperCase().includes(filterString.toUpperCase()))
+  }
+
+  handleAddHorse() {
+    return this.router.navigate(['/admin/horses/form'])
   }
 
   handleDeleteHorse(horseId: string) {

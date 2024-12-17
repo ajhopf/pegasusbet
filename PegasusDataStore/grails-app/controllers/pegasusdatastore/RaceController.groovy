@@ -1,7 +1,6 @@
 package pegasusdatastore
 
 import exceptions.ResourceNotFoundException
-import grails.converters.JSON
 import model.dtos.raceDTOs.RaceRequestDTO
 import model.dtos.raceDTOs.RaceResponseDTO
 import model.mappers.RaceMapper

@@ -2,9 +2,7 @@ package pegasusdatastore
 
 import grails.gorm.services.Service
 import grails.gorm.transactions.Transactional
-import model.dtos.JockeyDTO
 import model.dtos.RaceCourseDTO
-import model.mappers.JockeyMapper
 import model.mappers.RaceCourseMapper
 import pegasusdatastore.interfaces.IRaceCourseService
 

@@ -1,8 +1,10 @@
 package pegasusdatastore
 
+import exceptions.ResourceAlreadyExistsException
+import exceptions.ResourceNotFoundException
 import grails.validation.ValidationException
-import model.dtos.HorseDTO
-import model.mappers.HorseMapper
+import model.dtos.horseDTOs.HorseResponseDTO
+import model.dtos.horseDTOs.HorseRequestDTO
 
 class HorseController {
     HorseService horseService
@@ -21,7 +23,7 @@ class HorseController {
             filter = ''
         }
 
-        List<HorseDTO> horseDTOList = horseService.list([max: max, offset: offset, filterField: filterField, filter: filter])
+        List<HorseResponseDTO> horseDTOList = horseService.list([max: max, offset: offset, filterField: filterField, filter: filter])
 
         render(status: 200, contentType: "application/json") {
             "horses" horseDTOList
@@ -31,49 +33,59 @@ class HorseController {
     }
 
     def show(Long id) {
-        def horseDTO = horseService.getHorse(id)
+        try {
+            HorseResponseDTO horseDTO = horseService.getHorse(id)
 
-        if (!horseDTO) {
-            notFound()
-            return
-        }
-
-        render(status: 200, contentType: "application/json") {
-            "horse"  horseDTO
+            render(status: 200, contentType: "application/json") {
+                "horse"  horseDTO
+            }
+        } catch (ResourceNotFoundException e) {
+            render(status: 404, contentType: "application/json") {
+                error e.getMessage()
+            }
         }
     }
 
-    def save(Horse newHorse) {
-        try {
-            newHorse = horseService.save(newHorse)
+    def save(HorseRequestDTO newHorse) {
+        if (!newHorse.validate()) {
+            renderError("Horse not saved", newHorse)
+            return
+        }
 
+        try {
+            HorseResponseDTO savedHorse = horseService.save(newHorse)
+
+            render (status: 201, contentType: "application/json") {
+                "horse" savedHorse
+            }
         } catch (ValidationException e) {
             render(status: 400, contentType: "application/json") {
-                message "Horse not saved"
-                validationErrors newHorse.errors.fieldErrors.collect { fieldError ->
-                    [
-                            field: fieldError.field,
-                            rejectedValue: fieldError.rejectedValue,
-                    ]
+                validationError "Horse not saved"
+                newHorse.errors.fieldErrors.each {
+                    field it.field
                 }
             }
-            return
+        } catch (ResourceAlreadyExistsException e) {
+            render(status: 409, contentType: "application/json") {
+                message e.getMessage()
+            }
         }
 
-        render (status: 201, contentType: "application/json") {
-            "horse" HorseMapper.toDTO(newHorse)
-        }
     }
 
 
-    def update(Horse updatedHorse) {
+    def update(HorseRequestDTO updatedHorse, Long id) {
         if (updatedHorse == null) {
             notFound()
             return
         }
 
         try {
-            updatedHorse = horseService.save(updatedHorse)
+            HorseResponseDTO responseDTO = horseService.updateHorse(updatedHorse, id)
+
+            render(contentType: "application/json", status: 200) {
+                "horse" responseDTO
+            }
         } catch (ValidationException e) {
             render(status: 400, contentType: "application/json") {
                 validationError "Horse not updated"
@@ -81,12 +93,12 @@ class HorseController {
                     field it.field
                 }
             }
-            return
+        } catch (ResourceNotFoundException e) {
+            render(status: 404, contentType: "application/json") {
+                validationError e.getMessage()
+            }
         }
 
-        render(contentType: "application/json", status: 200) {
-            "horse" HorseMapper.toDTO(updatedHorse)
-        }
     }
 
     def delete(Long id) {
@@ -110,6 +122,19 @@ class HorseController {
     protected void notFound() {
         render (contentType: "application/json", status: 404) {
             message "Resource not found"
+        }
+    }
+
+    void renderError(String errorMessage, HorseRequestDTO requestDTO) {
+        render (status: 400, contentType: "application/json") {
+            message errorMessage
+            validationErrors requestDTO.errors.fieldErrors.collect { fieldError ->
+                [
+                        field: fieldError.field,
+                        rejectedValue: fieldError.rejectedValue,
+                        message: g.message(error: fieldError)
+                ]
+            }
         }
     }
 }

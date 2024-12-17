@@ -1,0 +1,51 @@
+<p-card
+  styleClass="shadow-3 m-5 text-indigo-800">
+  <form [formGroup]="createHorseForm" (ngSubmit)="handleSubmit()">
+    <div class="card flex flex-column md:flex-column gap-5">
+
+      <span class="p-float-label">
+        <input pInputText id="name" class="w-full" formControlName="name" />
+        <label for="name">Nome</label>
+      </span>
+
+      <div class="flex flex-row">
+        <span class="p-float-label col-6 pl-0">
+          <input pInputText id="sex" class="w-full" formControlName="sex" />
+          <label for="sex">Sexo</label>
+        </span>
+
+        <span class="p-float-label col-6 pr-0">
+          <input pInputText id="age" class="w-full" formControlName="age" />
+          <label for="age">Idade</label>
+        </span>
+      </div>
+
+      <div class="flex flex-row">
+        <span class="p-float-label col-6 pl-0">
+          <input pInputText pKeyFilter="int" id="races" class="w-full" formControlName="numberOfRaces" />
+          <label for="races">Número de Corridas</label>
+        </span>
+
+        <span class="p-float-label col-6 pr-0">
+          <input pInputText pKeyFilter="int" id="victories" class="w-full" formControlName="numberOfVictories" />
+          <label for="victories">Número de Vitórias</label>
+        </span>
+      </div>
+
+      <div>
+        <p>Últimos resultados</p>
+      </div>
+
+      <p-chips formControlName="results"></p-chips>
+      <div
+        class="flex flex-row justify-content-center align-content-center align-items-center m-1"
+      >
+        <p-button
+          [disabled]="!createHorseForm.valid"
+          type="submit"
+          label="Concluir"
+        ></p-button>
+      </div>
+    </div>
+  </form>
+</p-card>

@@ -17,13 +17,19 @@ import { PaginatorModule } from "primeng/paginator";
 import { ConfirmDialogModule } from "primeng/confirmdialog";
 import { ConfirmationService } from "primeng/api";
 import { RippleModule } from "primeng/ripple";
+import { ReactiveFormsModule } from "@angular/forms";
+import { HorseFormComponent } from './components/horse-form/horse-form.component';
+import { KeyFilterModule } from "primeng/keyfilter";
+import { ChipModule } from "primeng/chip";
+import { ChipsModule } from "primeng/chips";
 
 
 @NgModule({
   declarations: [
     AdminHomeComponent,
     HorsesDisplayComponent,
-    JockeysDisplayComponent
+    JockeysDisplayComponent,
+    HorseFormComponent
   ],
   imports: [
     CommonModule,
@@ -35,7 +41,12 @@ import { RippleModule } from "primeng/ripple";
     SharedModule,
     InputTextModule,
     PaginatorModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    ReactiveFormsModule,
+    InputTextModule,
+    KeyFilterModule,
+    ChipModule,
+    ChipsModule
   ],
   providers: [ConfirmationService]
 })

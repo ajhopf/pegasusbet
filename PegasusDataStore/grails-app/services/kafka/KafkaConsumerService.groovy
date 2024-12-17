@@ -63,7 +63,7 @@ class KafkaConsumerService {
     }
 
     private void processJockey(ConsumerRecord<String, String> record) {
-        jockeyService.addJockey(record.value())
+        jockeyService.save(record.value())
     }
 
     private void processHorse(ConsumerRecord<String, String> record) {

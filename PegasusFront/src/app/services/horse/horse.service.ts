@@ -13,9 +13,9 @@ export class HorseService {
 
   constructor(private httpClient: HttpClient) { }
 
-  fetchHorses(params: any): Observable<GetHorsesResponse> {
+  fetchHorses(): Observable<GetHorsesResponse> {
     return this.httpClient
-      .get<any>(`${this.API_URL}/horses`, {params} )
+      .get<any>(`${this.API_URL}/horses` )
   }
 
   deleteHorse(id: string) {

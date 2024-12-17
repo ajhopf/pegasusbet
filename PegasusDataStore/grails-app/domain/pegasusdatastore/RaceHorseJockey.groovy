@@ -15,7 +15,9 @@ class RaceHorseJockey {
         jockey nullable: false
         position nullable: true
         raceTime nullable: true
+        odds nullable: true
     }
 
+    static hasOne = [odds: Odds]
     static belongsTo = [race: Race, horse: Horse, jockey: Jockey]
 }
