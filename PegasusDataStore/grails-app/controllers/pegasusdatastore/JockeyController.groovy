@@ -5,7 +5,6 @@ import exceptions.ResourceNotFoundException
 import grails.validation.ValidationException
 import model.dtos.jockeyDTOs.JockeyRequestDTO
 import model.dtos.jockeyDTOs.JockeyResponseDTO
-import model.mappers.JockeyMapper
 
 class JockeyController {
 

@@ -18,6 +18,8 @@ import java.time.format.DateTimeParseException
 
 @Service(Race)
 abstract class RaceService implements IRaceService {
+    OddsService oddsService
+
     @Override
     @Transactional
     Race save(RaceRequestDTO raceRequestDTO) throws ResourceNotFoundException, DateTimeParseException {
@@ -41,7 +43,8 @@ abstract class RaceService implements IRaceService {
 
         race = race.save(flush: true)
 
-        saveHorseJockeys(raceRequestDTO.horseJockeys, race)
+        List<RaceHorseJockey> raceHorseJockeyList = saveHorseJockeys(raceRequestDTO.horseJockeys, race)
+        oddsService.calculateInitialOdds(raceHorseJockeyList)
 
         return race
     }
@@ -54,7 +57,9 @@ abstract class RaceService implements IRaceService {
     }
 
     @Transactional
-    void saveHorseJockeys(List<HorseJockeyDTO> horseJockeyRequestDTOList, Race race) {
+    List<RaceHorseJockey> saveHorseJockeys(List<HorseJockeyDTO> horseJockeyRequestDTOList, Race race) {
+        List<RaceHorseJockey> raceHorseJockeyList = []
+
         horseJockeyRequestDTOList.each {horseJockeyRequestDTO ->
             Horse horse = Horse.get(horseJockeyRequestDTO.horseId)
 
@@ -76,7 +81,10 @@ abstract class RaceService implements IRaceService {
                     position: null
             )
 
-            raceHorseJockey.save(flush: true)
+            RaceHorseJockey savedRaceHorseJockey = raceHorseJockey.save(flush: true)
+            raceHorseJockeyList << savedRaceHorseJockey
         }
+
+        return raceHorseJockeyList
     }
 }

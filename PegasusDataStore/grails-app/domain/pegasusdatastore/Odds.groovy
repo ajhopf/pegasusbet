@@ -1,21 +1,35 @@
 package pegasusdatastore
 
+import java.time.LocalDateTime
+
 class Odds {
     RaceHorseJockey raceHorseJockey
-    Double probability // Probabilidade inicial
-    Double initialOdd // Odd inicial
-    Double currentOdd // Odd ajustada
-    Date lastUpdated = new Date()
+    Double rating
+    Double initialOdd
+    Double currentOdd
+    LocalDateTime lastUpdated = LocalDateTime.now()
 
     static constraints = {
-        probability nullable: false
-        initialOdd nullable: false
-        currentOdd nullable: false
+        rating nullable: false
+        initialOdd nullable: true
+        currentOdd nullable: true
     }
 
     static mapping = {
         lastUpdated column: 'last_updated'
     }
 
-    static belongsTo = [raceHorseJockey: RaceHorseJockey] // Odds pertence a RaceHorseJockey
+    static belongsTo = [raceHorseJockey: RaceHorseJockey]
+
+
+    @Override
+    public String toString() {
+        return "Odds{" +
+                "raceHorseJockey=" + raceHorseJockey +
+                ", rating=" + rating +
+                ", initialOdd=" + initialOdd +
+                ", currentOdd=" + currentOdd +
+                ", lastUpdated=" + lastUpdated +
+                '}';
+    }
 }
