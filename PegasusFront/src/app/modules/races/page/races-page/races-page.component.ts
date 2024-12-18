@@ -26,16 +26,17 @@ export class RacesPageComponent implements OnInit, OnDestroy{
 
 
   ngOnInit(): void {
-    this.fetchJockeys()
+    this.fetchRaces()
   }
 
-  fetchJockeys(): void {
+  fetchRaces(): void {
     this.racesService.fetchRaces(0, 1000)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (response) => {
           if (response) {
             this.races = response.races
+            console.log(response.races)
           }
         },
         error: (err) => {

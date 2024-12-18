@@ -14,6 +14,13 @@ class OddsService {
         return OddsMapper.toDTOs(oddsList)
     }
 
+    OddsResponseDTO getOddsByRaceHorseJockey(Long id) {
+        RaceHorseJockey raceHorseJockey = RaceHorseJockey.get(id)
+        Odds odds = Odds.findByRaceHorseJockey(raceHorseJockey)
+
+        return OddsMapper.toResponseDTO(odds)
+    }
+
     void calculateInitialOdds(List<RaceHorseJockey> raceHorseJockeyList) {
         List<Double> predefinedInitialOdds = [2.0, 2.5, 3.0, 4.0, 5.0, 6.0, 7.0]
 

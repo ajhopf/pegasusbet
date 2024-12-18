@@ -1,8 +1,10 @@
 package model.dtos.raceDTOs
 
+import model.dtos.RaceCourseDTO
+
 class RaceResponseDTO  {
     Long id
-    Long raceCourseId
+    RaceCourseDTO raceCourse
     String time
     String date
     List<RaceHorseJockeyDTO> raceHorseJockeys

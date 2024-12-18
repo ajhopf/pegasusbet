@@ -1,6 +1,5 @@
 package pegasusdatastore
 
-import grails.converters.JSON
 import model.dtos.oddsDTOs.OddsResponseDTO
 
 class OddsController {
@@ -24,6 +23,14 @@ class OddsController {
             "odds" oddsResponseDTOS
             "items" oddsResponseDTOS.size()
             "offsetItems" offset
+        }
+    }
+
+    def getOddsByRaceHorseJockey(Long id){
+        OddsResponseDTO oddsResponseDTO = oddsService.getOddsByRaceHorseJockey(id)
+
+        render(status: 200, contentType: "application/json") {
+            "odds" oddsResponseDTO
         }
     }
 }

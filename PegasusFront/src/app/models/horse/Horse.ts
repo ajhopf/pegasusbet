@@ -1,3 +1,5 @@
+import { Results } from "../Results";
+
 export interface Horse {
   id: number
   name: string
@@ -5,5 +7,5 @@ export interface Horse {
   sex: string
   numberOfRaces?: number
   numberOfVictories?: number
-  horseResults?: Object[]
+  horseResults?: Results[]
 }

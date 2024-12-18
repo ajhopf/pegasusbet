@@ -1,3 +1,5 @@
 <app-header-menu-bar [menuItems]="menuItems"></app-header-menu-bar>
 
-<app-races-cards *ngFor="let race of races" [race]="race"></app-races-cards>
+<div class="row justify-content-center">
+    <app-races-cards class="col-10 col-lg-4 my-2" *ngFor="let race of races" [race]="race"></app-races-cards>
+</div>
