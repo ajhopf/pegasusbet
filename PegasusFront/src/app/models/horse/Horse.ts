@@ -5,5 +5,5 @@ export interface Horse {
   sex: string
   numberOfRaces?: number
   numberOfVictories?: number
-  lastResults?: String[]
+  horseResults?: Object[]
 }

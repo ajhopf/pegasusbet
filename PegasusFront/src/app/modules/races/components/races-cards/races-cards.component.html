@@ -1,0 +1,39 @@
+
+<div class="m-2">
+  <p-panel header="Hora: {{race.time}} Data: {{race.date | date:'dd/MM/yyyy'}}" [toggleable]="true">
+    <ng-container *ngFor="let horseJockey of race.raceHorseJockeys">
+      <p-card class="m-2">
+        <div class="flex justify-content-around">
+          <p>Jockey: {{getJockeyInfo(horseJockey.jockeyId)?.name}}</p>
+          <p>Horse: {{getHorseInfo(horseJockey.horseId)?.name}}</p>
+        </div>
+      </p-card>
+    </ng-container>
+  </p-panel>
+</div>
+
+
+
+<!--<div>-->
+<!--  <p>{{race.id}}</p>-->
+<!--  <p>{{race.time}}</p>-->
+<!--  <p>{{race.date}}</p>-->
+<!--  <p>RaceCourseId: {{race.raceCourseId}}</p>-->
+<!--  <div *ngFor="let raceHorseJockey of race.raceHorseJockeys">-->
+
+<!--    <ng-container>-->
+<!--      <p>Horse Name: {{ getHorseInfo(raceHorseJockey.horseId)?.name }}</p>-->
+<!--&lt;!&ndash;      <p>Horse Age: {{ horse.age }}</p>&ndash;&gt;-->
+<!--&lt;!&ndash;      <p>Horse sex: {{ horse.sex }}</p>&ndash;&gt;-->
+<!--&lt;!&ndash;      <p>Número de Corridas: {{horse.numberOfRaces}}</p>&ndash;&gt;-->
+<!--    </ng-container>-->
+
+<!--    <ng-container>-->
+<!--      <p>Jockey Name: {{ getJockeyInfo(raceHorseJockey.jockeyId)?.name }}</p>-->
+<!--      &lt;!&ndash;      <p>Horse Age: {{ horse.age }}</p>&ndash;&gt;-->
+<!--      &lt;!&ndash;      <p>Horse sex: {{ horse.sex }}</p>&ndash;&gt;-->
+<!--      &lt;!&ndash;      <p>Número de Corridas: {{horse.numberOfRaces}}</p>&ndash;&gt;-->
+<!--    </ng-container>-->
+
+<!--  </div>-->
+<!--</div>-->
