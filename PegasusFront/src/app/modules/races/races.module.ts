@@ -5,15 +5,21 @@ import { RacesPageComponent } from './page/races-page/races-page.component';
 import { RouterModule } from "@angular/router";
 import { RACES_ROUTES } from "./races.routing";
 import { SharedModule } from "../shared/shared.module";
-import { RacesCardsComponent } from "./components/races-cards/races-cards.component";
+import { RaceCardComponent } from "./components/race-card/race-card.component";
 import { PanelModule } from "primeng/panel";
 import { CardModule } from "primeng/card";
+import { InformationOverlayComponent } from './components/information-overlay/information-overlay.component';
+import { DialogService } from "primeng/dynamicdialog";
+import { SidebarModule } from "primeng/sidebar";
+import { SidebarContentComponent } from './components/sidebar-content/sidebar-content.component';
 
 
 @NgModule({
   declarations: [
-    RacesCardsComponent,
-    RacesPageComponent
+    RaceCardComponent,
+    RacesPageComponent,
+    InformationOverlayComponent,
+    SidebarContentComponent
   ],
   imports: [
     CommonModule,
@@ -21,6 +27,8 @@ import { CardModule } from "primeng/card";
     CardModule,
     RouterModule.forChild(RACES_ROUTES),
     SharedModule,
-  ]
+    SidebarModule
+  ],
+  providers: [DialogService]
 })
 export class RacesModule { }

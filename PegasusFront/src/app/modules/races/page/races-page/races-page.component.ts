@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MenuItem } from "primeng/api";
 import { Subject, takeUntil } from "rxjs";
 import { RacesService } from "../../../../services/races/races.service";
-import { Jockey } from "../../../../models/jockey/Jockey";
 import { Race } from "../../../../models/races/Race";
 
 @Component({
@@ -16,14 +15,11 @@ export class RacesPageComponent implements OnInit, OnDestroy{
   races: Race[] = []
 
   menuItems: MenuItem[] = [
-    {label: 'Home', icon: 'pi pi-home', routerLink: '/'},
-    {label: 'Corridas', icon: 'fa fa-horse-head', routerLink: 'horses'},
-    {label: 'Jockeys', icon: 'fa fa-hat-cowboy', routerLink: 'jockeys'},
+    {label: 'Corridas', icon: 'pi pi-home', routerLink: '/'},
   ]
 
   constructor(private racesService: RacesService) {
   }
-
 
   ngOnInit(): void {
     this.fetchRaces()
@@ -36,7 +32,6 @@ export class RacesPageComponent implements OnInit, OnDestroy{
         next: (response) => {
           if (response) {
             this.races = response.races
-            console.log(response.races)
           }
         },
         error: (err) => {
