@@ -3,14 +3,19 @@ package usersdatastore
 class UrlMappings {
 
     static mappings = {
-        "/$controller/$action?/$id?(.$format)?"{
-            constraints {
-                // apply constraints here
-            }
-        }
+        "/user" (controller: 'user', action: 'save')
+        "/wallet" (controller: "wallet", action: "getWalletInfo")
+        "/wallet/transaction" (controller: "wallet", action: "addTransaction")
 
-        "/"(view:"/index")
-        "500"(view:'/error')
-        "404"(view:'/notFound')
+        delete "/$controller/$id(.$format)?"(action:"delete")
+        get "/$controller(.$format)?"(action:"index")
+        get "/$controller/$id(.$format)?"(action:"show")
+        post "/$controller(.$format)?"(action:"save")
+        put "/$controller/$id(.$format)?"(action:"update")
+        patch "/$controller/$id(.$format)?"(action:"patch")
+
+        "/"(controller: 'application', action:'index')
+        "500"(view: '/error')
+        "404"(view: '/notFound')
     }
 }

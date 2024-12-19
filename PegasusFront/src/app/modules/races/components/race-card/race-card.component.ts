@@ -20,9 +20,12 @@ export class RaceCardComponent {
   constructor(public dialogService: DialogService) {}
 
   showInformation (id: number, type: string) {
+    const isSmallScreen = window.innerWidth < 768;
+    const width = isSmallScreen ? '90%' : '50%';
+
     this.ref = this.dialogService.open(InformationOverlayComponent, {
         data: { id: id, type: type },
-        width: '50%',
+        width: width,
         contentStyle: { overflow: 'auto' },
         baseZIndex: 10000
     }
