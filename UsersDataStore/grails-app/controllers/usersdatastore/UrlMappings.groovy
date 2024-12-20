@@ -4,6 +4,8 @@ class UrlMappings {
 
     static mappings = {
         "/user" (controller: 'user', action: 'save')
+        "/user/admin" (controller: 'user', action: 'createAdmin')
+
         "/wallet" (controller: "wallet", action: "getWalletInfo")
         "/wallet/transaction" (controller: "wallet", action: "addTransaction")
 

@@ -9,21 +9,6 @@ grails:
             # Disabled by default for performance reasons
             events: false
 
-    plugin:
-        springsecurity:
-            rest:
-                token:
-                    storage:
-                        jwt:
-                            secret: 'uma_chave_muito_secreta_e_bem_longa_para_segurança' # Use uma chave segura
-                            expiration: 3600 # Token válido por 1 hora
-                stateless: true
-                login:
-                    endpointUrl: '/login' # Endpoint de login
-                logout:
-                    endpointUrl: '/logout' # Endpoint de logout
-                tokenValidation:
-                    endpointUrl: '/validate' # Endpoint para validar o token
 info:
     app:
         name: '@info.app.name@'
