@@ -1,0 +1,36 @@
+<div class="d-flex justify-content-center align-items-center min-vh-100">
+  <div class="w-50">
+
+    <p-card>
+
+      <form [formGroup]="loginForm" (ngSubmit)="handleLogin()">
+
+        <div class="d-flex align-items-center flex-column">
+
+          <span class="p-float-label m-3 w-100 d-flex justify-content-center flex-column">
+            <input id="username" type="text" pInputText formControlName="username"/>
+            <label htmlFor="username">Username</label>
+          </span>
+
+          <span class="p-float-label m-3 w-100 d-flex justify-content-center flex-column">
+            <input id="password" type="password" pInputText formControlName="password"/>
+            <label htmlFor="password">Password</label>
+          </span>
+
+          <div class="w-100">
+            <button pButton pRipple label="Login" class="p-button-success" class="w-100"></button>
+          </div>
+
+        </div>
+
+
+
+      </form>
+
+    </p-card>
+
+  </div>
+</div>
+
+
+

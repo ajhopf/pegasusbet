@@ -13,7 +13,7 @@ import { MenuItem } from "primeng/api";
 export class AdminHomeComponent {
 
   menuItems: MenuItem[] = [
-    {label: 'Home', icon: 'pi pi-home', routerLink: '/'},
+    {label: 'Home', icon: 'pi pi-home', routerLink: '/admin'},
     {label: 'Horses', icon: 'fa fa-horse-head', routerLink: 'horses'},
     {label: 'Jockeys', icon: 'fa fa-hat-cowboy', routerLink: 'jockeys'},
   ]

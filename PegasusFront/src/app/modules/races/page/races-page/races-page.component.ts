@@ -15,7 +15,7 @@ export class RacesPageComponent implements OnInit, OnDestroy{
   races: Race[] = []
 
   menuItems: MenuItem[] = [
-    {label: 'Corridas', icon: 'pi pi-home', routerLink: '/'},
+    {label: 'Corridas', icon: 'pi pi-home', routerLink: '/races'},
   ]
 
   constructor(private racesService: RacesService) {

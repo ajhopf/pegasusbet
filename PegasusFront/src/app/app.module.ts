@@ -9,6 +9,7 @@ import { MessageService, SharedModule } from "primeng/api";
 import { TableModule } from "primeng/table";
 import { ToastModule } from "primeng/toast";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { JWT_OPTIONS, JwtHelperService } from "@auth0/angular-jwt";
 
 @NgModule({
   declarations: [
@@ -24,7 +25,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
     ToastModule,
     BrowserAnimationsModule
   ],
-  providers: [ MessageService ],
+  providers: [ MessageService, JwtHelperService,{ provide: JWT_OPTIONS, useValue: JWT_OPTIONS } ],
   exports: [],
   bootstrap: [ AppComponent ]
 })

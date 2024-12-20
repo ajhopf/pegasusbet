@@ -1,7 +1,6 @@
 package usersdatastore
 
 import grails.gorm.transactions.Transactional
-import grails.plugin.springsecurity.annotation.Secured
 import users.Role
 import users.User
 import users.UserRole
@@ -15,12 +14,13 @@ class UserService {
                 amount: 0
         )
 
-        Role role =  Role.findByAuthority('ADMIN')
+        Role role = Role.findByAuthority('ROLE_ADMIN')
 
         User user = new User(
                 username: username,
                 password: password,
-                wallet: wallet
+                wallet: wallet,
+                role: role
         )
 
         user = user.save(flush: true)
@@ -33,12 +33,17 @@ class UserService {
                 amount: 0
         )
 
+        Role role =  Role.findByAuthority('ROLE_USER')
+
         User user = new User(
                 username: username,
                 password: password,
-                wallet: wallet
+                wallet: wallet,
+                role: role
         )
 
-        user.save(flush: true)
+        user = user.save(flush: true)
+
+        UserRole.create(user, role, true)
     }
 }

@@ -8,7 +8,29 @@ class UserController {
 
 	static responseFormats = ['json']
 
-    @Secured('ROLE_ADMIN')
+    @Secured('permitAll')
+    def save(CreateUserDTO createUserDTO) {
+        if (!createUserDTO.username || !createUserDTO.password) {
+            render status: 400, text: "Username and password are required"
+            return
+        }
+
+        try {
+            userService.createUser(createUserDTO.username, createUserDTO.password)
+
+            render(status: 201, contentType: 'application/json') {
+
+            }
+        } catch (Exception e) {
+            println e.getMessage()
+
+            render(status: 400,  contentType: 'application/json') {
+                error e.getMessage()
+            }
+        }
+    }
+
+    @Secured(['ROLE_ADMIN'])
     def createAdmin(CreateUserDTO createUserDTO) {
         if (!createUserDTO.username || !createUserDTO.password) {
             render status: 400, text: "Username and password are required"
@@ -31,24 +53,5 @@ class UserController {
         }
     }
 
-    def save(CreateUserDTO createUserDTO) {
-        if (!createUserDTO.username || !createUserDTO.password) {
-            render status: 400, text: "Username and password are required"
-            return
-        }
 
-        try {
-            userService.createUser(createUserDTO.username, createUserDTO.password)
-
-            render(status: 201, contentType: 'application/json') {
-
-            }
-        } catch (Exception e) {
-            println e.getMessage()
-
-            render(status: 400,  contentType: 'application/json') {
-                error e.getMessage()
-            }
-        }
-    }
 }

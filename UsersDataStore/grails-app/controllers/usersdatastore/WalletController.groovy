@@ -7,8 +7,8 @@ import grails.plugin.springsecurity.SpringSecurityService
 import grails.plugin.springsecurity.annotation.Secured
 import users.User
 
-
-@Secured(['isAuthenticated()'])
+//
+//@Secured(['isAuthenticated()'])
 class WalletController {
     WalletService walletService
     SpringSecurityService springSecurityService
