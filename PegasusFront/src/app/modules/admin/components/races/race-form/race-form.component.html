@@ -1,0 +1,137 @@
+<section class="races py-5">
+  <p-card >
+    <ng-template pTemplate="header">
+      <div class="image-container"></div>
+      <h1 class="text-center mt-3">Criar Corrida</h1>
+    </ng-template>
+
+    <ng-template pTemplate="body">
+      <form (ngSubmit)="handleCreateRaceSubmit()" [formGroup]="createRaceForm">
+
+        <!--Horário e racecourse-->
+        <section class="my-2">
+          <p-card>
+            <div class="row justify-content-center g-0">
+
+              <div class="col-12 col-md-4 flex-grow-1 px-3">
+                <label for="racecourse">Pista</label>
+                <p-dropdown
+                  id="racecourse"
+                  formControlName="racecourse"
+                  [options]="racecourses"
+                  [filter]="true"
+                  filterBy="name"
+                  optionLabel="name">
+                </p-dropdown>
+              </div>
+
+              <div class="col-12 col-md-4 flex-grow-1 px-3 d-flex flex-column">
+                <label for="date">Data e horário</label>
+                <p-calendar
+                  id="date"
+                  [showTime]="true"
+                  dateFormat="dd/mm/yy"
+                  formControlName="date"></p-calendar>
+              </div>
+
+            </div>
+          </p-card>
+        </section>
+
+        <!--Criar Duplas-->
+        <section class="my-2">
+          <p-card>
+            <div class="row justify-content-center g-0">
+              <div class="col-12 col-md-6 flex-grow-1 px-3">
+                <label for="selectHorse">Cavalo</label>
+                <p-dropdown
+                  id="selectHorse"
+                  [(ngModel)]="selectedHorse"
+                  [ngModelOptions]="{standalone: true}"
+                  [options]="horses"
+                  [filter]="true"
+                  filterBy="name"
+                  optionLabel="name">
+                </p-dropdown>
+              </div>
+
+              <div class="col-12 col-md-5 flex-grow-1 px-3">
+                  <label for="selectJockey">Jockey</label>
+                  <p-dropdown
+                    id="selectJockey"
+                    [(ngModel)]="selectedJockey"
+                    [ngModelOptions]="{standalone: true}"
+                    [options]="jockeys"
+                    [filter]="true"
+                    filterBy="name"
+                    optionLabel="name">
+                  </p-dropdown>
+              </div>
+
+              <div class="col-12 col-md-1 flex-grow-1 align-content-end px-3 px-md-0 m-1 m-md-0">
+                <button
+                  [disabled]="(!selectedJockey && !selectedHorse)"
+                  (click)="addHorseJockey()"
+                  type="button"
+                  pButton
+                  pRipple
+                  class="w-100 p-3">
+                  <i class="pi pi-plus"></i>
+                </button>
+
+              </div>
+            </div>
+          </p-card>
+        </section>
+
+        <!--Lineup-->
+        <section class="my-2" *ngIf="horseJockeys.controls.length > 0">
+          <p-card>
+            <div>
+              <h3 class="text-center">Lineup</h3>
+              <p-table [value]="horseJockeys.controls">
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th>Número</th>
+                    <th>Cavalo</th>
+                    <th>Jockey</th>
+                    <th></th>
+                  </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-horseJockey let-rowIndex="rowIndex">
+                  <tr>
+                    <td>{{ horseJockey.value.number }}</td>
+                    <td>{{ getHorseName(horseJockey.value.horseId) }}</td>
+                    <td>{{ getJockeyName(horseJockey.value.jockeyId) }}</td>
+                    <td class="d-flex justify-content-end">
+                      <button
+                        (click)="removeHorseJockey(rowIndex)"
+                        pButton
+                        pRipple
+                        class="p-button-danger w-25">
+                        <i class="pi pi-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </ng-template>
+
+              </p-table>
+            </div>
+          </p-card>
+        </section>
+
+        <!--Submit-->
+        <section class="w-100">
+          <button
+            [disabled]="createRaceForm.invalid"
+            pButton
+            pRipple
+            label="Criar Corrida"
+            class="p-button"></button>
+        </section>
+
+      </form>
+    </ng-template>
+  </p-card>
+</section>

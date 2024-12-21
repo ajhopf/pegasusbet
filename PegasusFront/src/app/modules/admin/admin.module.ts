@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { RouterModule } from "@angular/router";
 
 import { AdminHomeComponent } from './page/admin-home/admin-home.component';
@@ -10,7 +10,7 @@ import { TableModule } from "primeng/table";
 import { ButtonModule } from "primeng/button";
 import { TooltipModule } from "primeng/tooltip";
 import { SharedModule } from "../shared/shared.module";
-import { HorsesDisplayComponent } from './components/horses-display/horses-display.component';
+import { HorsesDisplayComponent } from './components/horses/horses-display/horses-display.component';
 import { JockeysDisplayComponent } from './components/jockeys-display/jockeys-display.component';
 import { InputTextModule } from "primeng/inputtext";
 import { PaginatorModule } from "primeng/paginator";
@@ -18,10 +18,13 @@ import { ConfirmDialogModule } from "primeng/confirmdialog";
 import { ConfirmationService } from "primeng/api";
 import { RippleModule } from "primeng/ripple";
 import { ReactiveFormsModule } from "@angular/forms";
-import { HorseFormComponent } from './components/horse-form/horse-form.component';
+import { HorseFormComponent } from './components/horses/horse-form/horse-form.component';
 import { KeyFilterModule } from "primeng/keyfilter";
 import { ChipModule } from "primeng/chip";
 import { ChipsModule } from "primeng/chips";
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { RaceFormComponent } from './components/races/race-form/race-form.component';
+import { CalendarModule } from "primeng/calendar";
 
 
 @NgModule({
@@ -29,7 +32,9 @@ import { ChipsModule } from "primeng/chips";
     AdminHomeComponent,
     HorsesDisplayComponent,
     JockeysDisplayComponent,
-    HorseFormComponent
+    HorseFormComponent,
+    DashboardComponent,
+    RaceFormComponent
   ],
   imports: [
     CommonModule,
@@ -46,8 +51,10 @@ import { ChipsModule } from "primeng/chips";
     InputTextModule,
     KeyFilterModule,
     ChipModule,
-    ChipsModule
+    ChipsModule,
+    CalendarModule,
+    RippleModule
   ],
-  providers: [ConfirmationService]
+  providers: [ConfirmationService, DatePipe]
 })
 export class AdminModule { }

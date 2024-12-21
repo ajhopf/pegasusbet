@@ -13,18 +13,24 @@ import { TokenFields } from "../../models/auth/TokenFields";
 })
 
 export class HorseService {
-  private API_URL = environment.DATASTORE_API;
+  private API_URL = environment.DATASTORE_API
+  private WEBCRAWLER_URL = environment.WEBCRAWLER
 
-  private JWT_TOKEN = this.cookie.get(TokenFields.ACCESS_TOKEN);
+  private JWT_TOKEN = this.cookieService.get(TokenFields.ACCESS_TOKEN)
 
   private httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
       Authorization: `Bearer ${this.JWT_TOKEN}`,
     }),
-  };
+  }
 
-  constructor(private httpClient: HttpClient, private cookie: CookieService) {}
+  constructor(private httpClient: HttpClient, private cookieService: CookieService) {}
+
+  insertHorsesViaWebcrawler() {
+    return this.httpClient
+      .get<any>(`${this.WEBCRAWLER_URL}/crawler/horses`, this.httpOptions)
+  }
 
   fetchHorses(): Observable<GetHorsesResponse> {
     return this.httpClient

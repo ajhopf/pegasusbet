@@ -16,6 +16,7 @@ export class AdminHomeComponent {
     {label: 'Home', icon: 'pi pi-home', routerLink: '/admin'},
     {label: 'Horses', icon: 'fa fa-horse-head', routerLink: 'horses'},
     {label: 'Jockeys', icon: 'fa fa-hat-cowboy', routerLink: 'jockeys'},
+    {label: 'Corridas', icon: 'fa fa-flag-checkered', routerLink: 'races'}
   ]
 
 }

@@ -49,6 +49,10 @@ environments:
 
 ---
 grails:
+    cors:
+        enabled: true
+        allowedOrigins: [ 'http://localhost:4200' ]
+        allowedMethods: [ 'GET', 'POST', 'PUT', 'DELETE', 'OPTIONS' ]
     mime:
         disable:
             accept:

@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Horse } from "../../../../models/horse/Horse";
-import { TableColumnDefinition } from "../../../../models/table/TableColumnDefinition";
-import { HorseService } from "../../../../services/horse/horse.service";
+import { Horse } from "../../../../../models/horse/Horse";
+import { TableColumnDefinition } from "../../../../../models/table/TableColumnDefinition";
+import { HorseService } from "../../../../../services/horse/horse.service";
 import { Subject, take, takeUntil } from "rxjs";
 import { ConfirmationService, MessageService } from "primeng/api";
 import { Router } from "@angular/router";

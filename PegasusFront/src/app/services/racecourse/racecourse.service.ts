@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
 import { environment } from "../../../environments/environment";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Observable } from "rxjs";
-import { GetJockeysResponse } from "../../models/jockey/GetJockeysResponse";
-import { GetRacesResponse } from "../../models/races/GetRacesResponse";
 import { TokenFields } from "../../models/auth/TokenFields";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { CookieService } from "ngx-cookie-service";
-import { CreateRaceRequest } from "../../models/races/CreateRaceRequest";
+import { Observable } from "rxjs";
+import { GetRacesResponse } from "../../models/races/GetRacesResponse";
+import { GetRacecoursesResponse } from "../../models/race-course/GetRacecoursesReponse";
 
 @Injectable({
   providedIn: 'root'
 })
-export class RacesService {
+export class RacecourseService {
+
   private API_URL = environment.DATASTORE_API;
 
   private JWT_TOKEN = this.cookie.get(TokenFields.ACCESS_TOKEN);
@@ -25,20 +25,10 @@ export class RacesService {
 
   constructor(private httpClient: HttpClient, private cookie: CookieService) { }
 
-  fetchRaces(offset: number, max: number): Observable<GetRacesResponse> {
+  fetchRacecourses(offset: number, max: number): Observable<GetRacecoursesResponse> {
     return this.httpClient
       .get<any>(
-        `${this.API_URL}/races?offset=${offset}&max=${max}`, this.httpOptions
+        `${this.API_URL}/racecourses?offset=${offset}&max=${max}`, this.httpOptions
       )
-  }
-
-  createRace(createRaceRequest: CreateRaceRequest) {
-    return this.httpClient.post<any>(
-      `${this.API_URL}/races`,
-      createRaceRequest,
-      {
-        ...this.httpOptions
-      }
-    )
   }
 }
