@@ -6,7 +6,7 @@ class Horse {
     String age
     int numberOfRaces
     int numberOfVictories
-    List<String> lastResults
+    List<Results> results
 
     static constraints = {
     }
@@ -20,7 +20,7 @@ class Horse {
                 ", age='" + age + '\'' +
                 ", numberOfRaces=" + numberOfRaces +
                 ", numberOfVictories=" + numberOfVictories +
-                ", lastResults=" + lastResults +
+                ", results=" + results +
                 '}';
     }
 }

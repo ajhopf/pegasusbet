@@ -1,5 +1,6 @@
 package pegasusdatastore
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import exceptions.ResourceAlreadyExistsException
 import exceptions.ResourceNotFoundException
 
@@ -8,8 +9,52 @@ import model.dtos.jockeyDTOs.JockeyRequestDTO
 import model.dtos.jockeyDTOs.JockeyResponseDTO
 import model.mappers.JockeyMapper
 
+import java.time.LocalDate
+
 @Transactional
 class JockeyService {
+
+    void saveJockeyFromKafka(String jockeyString) {
+        ObjectMapper objectMapper = new ObjectMapper()
+
+        Map<String, Object> jockeydata = objectMapper.readValue(jockeyString, Map.class)
+
+        Jockey jockey = new Jockey(
+                name: jockeydata.name,
+                numberOfRaces: jockeydata.numberOfRaces as int,
+                numberOfVictories: jockeydata.numberOfVictories as int
+        )
+
+        Jockey existingJockey = Jockey.findByName(jockey.name, [lock: true])
+
+        if (!existingJockey) {
+            jockey = jockey.save(flush: true)
+
+            jockeydata.results.each { Map result ->
+                println result
+
+                String dateString = result.date
+
+                int day = dateString.split('/')[0].toInteger()
+                int month = dateString.split('/')[1].toInteger()
+                int year = dateString.split('/')[2].toInteger()
+
+                LocalDate date = LocalDate.of(day, month, year)
+
+                JockeyResults jockeyResults = new JockeyResults(
+                        jockey: jockey,
+                        result: result.result,
+                        date: date
+                )
+
+                jockeyResults.save(flush: true)
+            }
+
+        } else {
+            println "Jockey já existe."
+        }
+    }
+
 
     JockeyResponseDTO save(JockeyRequestDTO jockeyRequestDTO) {
         Jockey jockey = JockeyMapper.fromDTO(jockeyRequestDTO)

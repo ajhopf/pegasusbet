@@ -4,7 +4,7 @@ class Jockey {
     String name
     int numberOfRaces
     int numberOfVictories
-    List<String> lastResults
+    List<Results> results
 
     static constraints = {
     }
@@ -16,7 +16,7 @@ class Jockey {
                 "name='" + name + '\'' +
                 ", numberOfRaces=" + numberOfRaces +
                 ", numberOfVictories=" + numberOfVictories +
-                ", lastResults=" + lastResults +
+                ", results=" + results +
                 '}';
     }
 }

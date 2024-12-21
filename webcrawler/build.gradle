@@ -35,6 +35,7 @@ configurations {
 }
 
 dependencies {
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
     implementation group: 'org.jsoup', name: 'jsoup', version: '1.18.1'
     runtimeOnly 'org.postgresql:postgresql'
 

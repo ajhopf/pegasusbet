@@ -1,5 +1,8 @@
 package pegasusdatastore
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import exceptions.ResourceAlreadyExistsException
 import exceptions.ResourceNotFoundException
 import grails.gorm.transactions.Transactional
@@ -7,8 +10,53 @@ import model.dtos.horseDTOs.HorseResponseDTO
 import model.dtos.horseDTOs.HorseRequestDTO
 import model.mappers.HorseMapper
 
+import java.time.LocalDate
+
 @Transactional
 class HorseService  {
+    void saveHorseFromKafka(String horseString) {
+        ObjectMapper objectMapper = new ObjectMapper()
+
+        Map<String, Object> horseData = objectMapper.readValue(horseString, Map.class)
+
+        Horse horse = new Horse(
+                name: horseData.name,
+                sex: horseData.sex,
+                age: horseData.age,
+                numberOfRaces: horseData.numberOfRaces as int,
+                numberOfVictories: horseData.numberOfVictories as int
+        )
+
+        Horse existingHorse = Horse.findByNameAndAge(horse.name, horse.age, [lock: true])
+
+        if (!existingHorse) {
+            horse = horse.save(flush: true)
+
+            horseData.results.each { Map result ->
+                String dateString = result.date
+
+                int day = dateString.split('/')[0].toInteger()
+                int month = dateString.split('/')[1].toInteger()
+                int year = dateString.split('/')[2].toInteger()
+
+                LocalDate date = LocalDate.of(day, month, year)
+
+                HorseResults horseResults = new HorseResults(
+                        horse: horse,
+                        result: result.result,
+                        date: date
+                )
+
+                horseResults.save(flush: true)
+            }
+
+        } else {
+            println "Cavalo já existe."
+        }
+
+
+    }
+
     HorseResponseDTO save(HorseRequestDTO horseRequestDTO) {
         Horse horse = HorseMapper.fromDTO(horseRequestDTO)
 

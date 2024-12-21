@@ -33,7 +33,7 @@ class KafkaConsumerService {
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(properties)
 
         // Assinar múltiplos tópicos
-        consumer.subscribe(['jockeys', 'horses', 'race-courses'])
+        consumer.subscribe(['jockeys', 'horses'])
 
         try {
             while (true) {
@@ -49,9 +49,9 @@ class KafkaConsumerService {
                         case 'horses':
                             processHorse(record)
                             break
-                        case 'race-courses':
-                            processRacecourse(record)
-                            break
+//                        case 'race-courses':
+//                            processRacecourse(record)
+//                            break
                     }
                 }
             }
@@ -63,14 +63,14 @@ class KafkaConsumerService {
     }
 
     private void processJockey(ConsumerRecord<String, String> record) {
-        jockeyService.save(record.value())
+        jockeyService.saveJockeyFromKafka(record.value())
     }
 
     private void processHorse(ConsumerRecord<String, String> record) {
-        horseService.addHorse(record.value())
+        horseService.saveHorseFromKafka(record.value())
     }
 
-    private void processRacecourse(ConsumerRecord<String, String> record) {
-        raceCourseService.addRaceCourse(record.value())
-    }
+//    private void processRacecourse(ConsumerRecord<String, String> record) {
+//        raceCourseService.addRaceCourse(record.value())
+//    }
 }

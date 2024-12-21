@@ -23,7 +23,7 @@ class HorseService {
             producer.send(record)
 
         } catch (Exception e) {
-            throw new RuntimeException("Failed to produce RaceCourse to Kafka", e)
+            throw new RuntimeException("Failed to produce Horse to Kafka", e)
         }
     }
 }

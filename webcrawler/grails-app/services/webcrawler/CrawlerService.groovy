@@ -6,13 +6,15 @@ import models.Jockey
 import kafka.HorseService
 import kafka.JockeyService
 import kafka.RaceCourseService
-
+import models.Results
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 
 import grails.gorm.transactions.Transactional
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
+
+import java.time.LocalDate
 
 @Transactional
 class CrawlerService {
@@ -125,16 +127,17 @@ class CrawlerService {
 
         Element ageRow = horseInfoCard.select("tr:has(th:contains(Age))").first()
         String age = ageRow.select("td").text()
+        String formattedAge = age.split(" ")[0]
 
         Map results = getResults(horsePage)
 
         Horse horse = new Horse(
                 name: name,
-                age: age,
+                age: formattedAge,
                 sex: sex,
                 numberOfRaces: results.numberOfRaces,
                 numberOfVictories: results.numberOfVictories as int,
-                lastResults: results.lastResults as List<String>
+                results: results.results
         )
 
         println 'producing horse'
@@ -153,7 +156,7 @@ class CrawlerService {
                 name: name,
                 numberOfRaces: results.numberOfRaces,
                 numberOfVictories: results.numberOfVictories as int,
-                lastResults: results.lastResults as List<String>
+                results: results.results
         )
 
         jockeyService.produceJockey(jockey)
@@ -168,32 +171,33 @@ class CrawlerService {
 
         int numberOfVictories = 0
 
+        List<Results> results = []
+
         resultsTableBodyLines.each {line ->
             Elements tableCells = line.select("td")
+
+            String date = tableCells[0].text()
+
             String position = tableCells[1].text()
+
+            Results result = new Results(
+                    date: date,
+                    result: position
+            )
+
+            results << result
 
             if (position.split("/")[0] == "1") {
                 numberOfVictories++
             }
         }
 
-        List lastThreeResults = []
 
-        for (i in 0..2) {
-            if (resultsTableBodyLines[i] != null) {
-                Elements tableLineCells = resultsTableBodyLines[i]?.select("td")
-                if (tableLineCells[1] != null) {
-                    String result = tableLineCells[1].text()
-                    lastThreeResults << result
-                }
-
-            }
-        }
 
         return [
                 numberOfRaces: numberOfRaces,
                 numberOfVictories: numberOfVictories,
-                lastResults: lastThreeResults
+                results: results
         ]
     }
 
