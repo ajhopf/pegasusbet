@@ -18,8 +18,8 @@ const routes: Routes = [
   }, {
     path: 'races',
     loadChildren: () =>
-      import('./modules/races/races.module').then(
-        (m) => m.RacesModule
+      import('./modules/users/users.module').then(
+        (m) => m.UsersModule
       ),
     canActivate: [AuthGuard]
   }, {

@@ -74,6 +74,7 @@ abstract class RaceService implements IRaceService {
             }
 
             RaceHorseJockey raceHorseJockey = new RaceHorseJockey(
+                    number: horseJockeyRequestDTO.number,
                     horse: horse,
                     jockey: jockey,
                     race: race,

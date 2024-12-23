@@ -37,9 +37,9 @@ class HorseService  {
 
                 int day = dateString.split('/')[0].toInteger()
                 int month = dateString.split('/')[1].toInteger()
-                int year = dateString.split('/')[2].toInteger()
+                int year = dateString.split('/')[2].toInteger() + 2000
 
-                LocalDate date = LocalDate.of(day, month, year)
+                LocalDate date = LocalDate.of(year, month, day)
 
                 HorseResults horseResults = new HorseResults(
                         horse: horse,

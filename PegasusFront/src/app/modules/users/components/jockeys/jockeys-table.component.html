@@ -1,0 +1,17 @@
+
+<p-confirmDialog [style]="{ width: '50vw' }"></p-confirmDialog>
+
+<section class="m-0 m-md-5">
+  <p-card >
+    <ng-template pTemplate="header">
+      <div class="image-container"></div>
+      <h1 class="text-center mt-3">Jockeys </h1>
+    </ng-template>
+    <app-table
+      tableHeader="Jockeys"
+      [tableColumnDefinition]="jockeyColumns"
+      (filterEvent)="handleFilterJockeys($event)"
+      [values]="filteredJockeys">
+    </app-table>
+  </p-card>
+</section>

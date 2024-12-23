@@ -5,13 +5,15 @@ import { Subject, takeUntil } from "rxjs";
 import { JockeyService } from "../../../../services/jockey/jockey.service";
 
 @Component({
-  selector: 'app-jockeys-display',
-  templateUrl: './jockeys-display.component.html'
+  selector: 'app-jockeys-table',
+  styleUrls: ['./jockeys-table.component.css'],
+  templateUrl: './jockeys-table.component.html'
 })
-export class JockeysDisplayComponent implements OnInit, OnDestroy {
+export class JockeysTableComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>()
 
   jockeys: Jockey[] = []
+  filteredJockeys: Jockey[] = []
 
   jockeyColumns: TableColumnDefinition[] = [
     {header: 'id', field: 'id'},
@@ -35,12 +37,17 @@ export class JockeysDisplayComponent implements OnInit, OnDestroy {
         next: (response) => {
           if (response) {
             this.jockeys = response.jockeys
+            this.filteredJockeys = response.jockeys
           }
         },
         error: (err) => {
           console.log(err)
         }
       })
+  }
+
+  handleFilterJockeys(filterString: string) {
+    this.filteredJockeys = this.jockeys.filter(jockey => jockey.name.toUpperCase().includes(filterString.toUpperCase()))
   }
 
   ngOnDestroy(): void {

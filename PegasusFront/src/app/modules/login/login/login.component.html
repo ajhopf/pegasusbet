@@ -1,10 +1,9 @@
-<div class="d-flex justify-content-center align-items-center min-vh-100">
-  <div class="w-50">
-
+<div class="d-flex justify-content-center align-items-center min-vh-100 background-container">
+  <div class="card-container">
     <p-card>
+      <h1 class="text-center">PegasusBet</h1>
 
       <form [formGroup]="loginForm" (ngSubmit)="handleLogin()">
-
         <div class="d-flex align-items-center flex-column">
 
           <span class="p-float-label m-3 w-100 d-flex justify-content-center flex-column">
@@ -22,11 +21,7 @@
           </div>
 
         </div>
-
-
-
       </form>
-
     </p-card>
 
   </div>

@@ -4,6 +4,7 @@ import { Odds } from "../odds/Odds";
 
 export interface RaceHorseJockey {
   id: number
+  number: number
   jockey: Jockey
   horse: Horse
   position?: string

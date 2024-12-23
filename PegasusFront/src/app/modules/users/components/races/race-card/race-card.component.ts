@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
-import { Race } from "../../../../models/races/Race";
+import { Race } from "../../../../../models/races/Race";
 import { DialogService, DynamicDialogRef } from "primeng/dynamicdialog";
-import { InformationOverlayComponent } from "../information-overlay/information-overlay.component";
-import { RaceHorseJockey } from "../../../../models/races/RaceHorseJockey";
+import { InformationOverlayComponent } from "../../information-overlay/information-overlay.component";
+import { RaceHorseJockey } from "../../../../../models/races/RaceHorseJockey";
 
 @Component({
   selector: 'app-race-card',

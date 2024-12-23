@@ -1,64 +1,60 @@
-<p-card
-  styleClass="shadow-3 m-5 text-indigo-800">
+<p-table
+  [paginator]="true"
+  [rows]="10"
+  [columns]="tableColumnDefinition" [value]="values"
+  [showCurrentPageReport]="true"
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+>
+  <ng-template pTemplate="caption">
+    <div class="flex align-items-center justify-content-between">
+      {{ tableHeader }}
+      <input pInputText type="text" [(ngModel)]="filterValue"  (input)="handleFilterEvent(filterValue)" placeholder="Filtre pelo nome" />
+      <p-button icon="pi pi-plus" (onClick)="handleAddEvent()"></p-button>
+    </div>
+  </ng-template>
 
-  <p-table
-    [paginator]="true"
-    [rows]="10"
-    [columns]="tableColumnDefinition" [value]="values"
-    [showCurrentPageReport]="true"
-    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-  >
-    <ng-template pTemplate="caption">
-      <div class="flex align-items-center justify-content-between">
-        {{ tableHeader }}
-        <input pInputText type="text" [(ngModel)]="filterValue"  (input)="handleFilterEvent(filterValue)" placeholder="Filtre pelo nome" />
-        <p-button icon="pi pi-plus" (onClick)="handleAddEvent()"></p-button>
-      </div>
-    </ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th *ngFor="let col of tableColumnDefinition" pSortableColumn="{{col.field}}">
+        {{col.header}} <p-sortIcon field="code"></p-sortIcon>
+      </th>
+      <th class="flex justify-content-center align-items-center h-full">
+        Actions
+      </th>
+    </tr>
+  </ng-template>
 
-    <ng-template pTemplate="header">
-      <tr>
-        <th *ngFor="let col of tableColumnDefinition" pSortableColumn="{{col.field}}">
-          {{col.header}} <p-sortIcon field="code"></p-sortIcon>
-        </th>
-        <th class="flex justify-content-center align-items-center h-full">
-          Actions
-        </th>
-      </tr>
-    </ng-template>
+  <ng-template pTemplate="body" let-value>
+    <tr>
+      <td *ngFor="let col of tableColumnDefinition">
+        {{value[col.field]}}
+      </td>
 
-    <ng-template pTemplate="body" let-value>
-      <tr>
-        <td *ngFor="let col of tableColumnDefinition">
-          {{value[col.field]}}
-        </td>
+      <td>
+        <div
+          class="flex justify-content-center gap-3 align-content-center align-items-center"
+        >
+          <button
+            pButton
+            icon="pi pi-pencil"
+            class="p-button-rounded p-button-warning"
+            pTooltip="Editar produto"
+            tooltipPosition="top"
+            (click)="handleEditEvent(value?.id)"
+          ></button>
+          <button
+            pButton
+            icon="pi pi-trash"
+            class="p-button-rounded p-button-danger"
+            pTooltip="Remover Produto"
+            tooltipPosition="top"
+            (click)="handleDeleteEvent(value?.id)"
+          ></button>
+        </div>
+      </td>
+    </tr>
 
-        <td>
-          <div
-            class="flex justify-content-center gap-3 align-content-center align-items-center"
-          >
-            <button
-              pButton
-              icon="pi pi-pencil"
-              class="p-button-rounded p-button-warning"
-              pTooltip="Editar produto"
-              tooltipPosition="top"
-              (click)="handleEditEvent(value?.id)"
-            ></button>
-            <button
-              pButton
-              icon="pi pi-trash"
-              class="p-button-rounded p-button-danger"
-              pTooltip="Remover Produto"
-              tooltipPosition="top"
-              (click)="handleDeleteEvent(value?.id)"
-            ></button>
-          </div>
-        </td>
-      </tr>
+  </ng-template>
 
-    </ng-template>
+</p-table>
 
-  </p-table>
-
-</p-card>

@@ -5,6 +5,7 @@ import java.time.LocalTime
 class RaceHorseJockey {
     Race race
     Horse horse
+    Integer number
     Jockey jockey
     String position
     LocalTime raceTime
@@ -12,6 +13,7 @@ class RaceHorseJockey {
     static constraints = {
         race nullable: false
         horse nullable: false
+        number nullable: false
         jockey nullable: false
         position nullable: true
         raceTime nullable: true

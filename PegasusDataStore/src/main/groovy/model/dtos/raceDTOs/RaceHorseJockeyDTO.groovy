@@ -10,6 +10,7 @@ import pegasusdatastore.RaceHorseJockey
 
 class RaceHorseJockeyDTO {
     Long id
+    Integer number
     HorseResponseDTO horse
     JockeyResponseDTO jockey
     OddsResponseDTO odds
@@ -18,6 +19,7 @@ class RaceHorseJockeyDTO {
 
     RaceHorseJockeyDTO(RaceHorseJockey raceHorseJockey) {
         this.id = raceHorseJockey.id
+        this.number = raceHorseJockey.number
         this.horse = HorseMapper.toResponseDTO(raceHorseJockey.horse)
         this.jockey = JockeyMapper.toResponseDTO(raceHorseJockey.jockey)
         this.position = raceHorseJockey.position

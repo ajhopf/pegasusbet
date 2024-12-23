@@ -14,9 +14,8 @@ export class AdminHomeComponent {
 
   menuItems: MenuItem[] = [
     {label: 'Home', icon: 'pi pi-home', routerLink: '/admin'},
-    {label: 'Horses', icon: 'fa fa-horse-head', routerLink: 'horses'},
-    {label: 'Jockeys', icon: 'fa fa-hat-cowboy', routerLink: 'jockeys'},
-    {label: 'Corridas', icon: 'fa fa-flag-checkered', routerLink: 'races'}
+    {label: 'Criar Corrida', icon: 'fa fa-flag-checkered', routerLink: '/admin/new-race'},
+    {label: 'Área de Usuário', icon: 'fa fa-cowboy-hat', routerLink: '/races'}
   ]
 
 }

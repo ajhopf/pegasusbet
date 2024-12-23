@@ -4,6 +4,7 @@ grails.plugin.springsecurity.rest.token.storage.jwt.secret= 'uma_chave_muito_sec
 grails.plugin.springsecurity.userLookup.userDomainClassName = 'users.User'
 grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'users.UserRole'
 grails.plugin.springsecurity.authority.className = 'users.Role'
+grails.plugin.springsecurity.rest.token.storage.jwt.expiration = 86400
 
 grails.plugin.springsecurity.interceptUrlMap = [
 //		[pattern: '/user', methods: ['POST'], access: ['permitAll']],

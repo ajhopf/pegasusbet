@@ -7,16 +7,16 @@ import { ConfirmationService, MessageService } from "primeng/api";
 import { Router } from "@angular/router";
 
 @Component({
-  selector: 'app-horses-display',
-  templateUrl: './horses-display.component.html'
+  selector: 'app-horses-table',
+  styleUrls: ['./horses-table.componente.css'],
+  templateUrl: './horses-table.component.html'
 })
-export class HorsesDisplayComponent implements OnInit, OnDestroy{
+export class HorsesTableComponent implements OnInit, OnDestroy{
   private destroy$= new Subject<void>()
 
   horses: Horse[] = []
   filteredHorses: Horse[] = []
   totalRecords: number = 0
-  // filter: string = ''
   loading: boolean = false
 
   columns: TableColumnDefinition[] = [
