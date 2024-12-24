@@ -1,16 +1,31 @@
 package usersdatastore
 
+import grails.gorm.transactions.Transactional
 import users.*
 
+
 class BootStrap {
+    UserService userService
 
     def init = { servletContext ->
-//        def roleAdmin = Role.findOrSaveWhere(authority: 'ROLE_ADMIN')
-//        def adminUser = User.findOrSaveWhere(username: 'admin', password: 'admin123', enabled: true)
-//
-//        if (!UserRole.exists(adminUser.id, roleAdmin.id)) {
-//            UserRole.create(adminUser, roleAdmin, true)
-//        }
+        createAdminUser()
     }
+
+    @Transactional
+    void createAdminUser() {
+        User adminUser = User.findByUsername('admin')
+
+        if (!adminUser) {
+            userService.createAdmin('admin' , 'admin')
+        }
+
+        User genericUser = User.findByUsername('user')
+
+        if (!genericUser) {
+            userService.createGenericUser('user' , 'user')
+        }
+    }
+
+
     def destroy = {}
 }

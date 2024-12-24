@@ -8,13 +8,20 @@ import users.Wallet
 
 @Transactional
 class UserService {
-
     def createAdmin(String username, String password) {
+        createGenericUser(username, password, 'ROLE_ADMIN')
+    }
+
+    def createGenericUser(String username, String password) {
+        createGenericUser(username, password, 'ROLE_USER')
+    }
+
+    def createGenericUser(String username, String password, String userRoleString) {
         Wallet wallet = new Wallet(
                 amount: 0
         )
 
-        Role role = Role.findByAuthority('ROLE_ADMIN')
+        Role role = Role.findOrSaveWhere(authority:  userRoleString)
 
         User user = new User(
                 username: username,
@@ -25,25 +32,8 @@ class UserService {
 
         user = user.save(flush: true)
 
-        UserRole.create(user, role, true)
+        UserRole userRole = new UserRole(user: user, role: role)
+        userRole.save(flush: true)
     }
 
-    def createUser(String username, String password) {
-        Wallet wallet = new Wallet(
-                amount: 0
-        )
-
-        Role role =  Role.findByAuthority('ROLE_USER')
-
-        User user = new User(
-                username: username,
-                password: password,
-                wallet: wallet,
-                role: role
-        )
-
-        user = user.save(flush: true)
-
-        UserRole.create(user, role, true)
-    }
 }

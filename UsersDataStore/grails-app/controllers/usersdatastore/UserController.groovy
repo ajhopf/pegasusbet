@@ -16,7 +16,7 @@ class UserController {
         }
 
         try {
-            userService.createUser(createUserDTO.username, createUserDTO.password)
+            userService.createGenericUser(createUserDTO.username, createUserDTO.password)
 
             render(status: 201, contentType: 'application/json') {
 
