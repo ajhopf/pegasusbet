@@ -1,8 +1,15 @@
 <p-menubar [model]="menuItems">
 
   <ng-template pTemplate="end">
-    <p-button (onClick)="handleLogout()">
-      <i class="pi pi-sign-out"></i>
-    </p-button>
+    <div class="d-flex">
+      <div class="mx-3 wallet-btn">
+        <p-button (onClick)="handleWalletClick()" icon="fa-solid fa-sack-dollar" styleClass="p-button-outlined p-button-success">
+        </p-button>
+      </div>
+      <div>
+        <p-button (onClick)="handleLogout()" icon="pi pi-sign-out" class="logout-btn" styleClass="p-button-outlined p-button-warning" >
+        </p-button>
+      </div>
+    </div>
   </ng-template>
 </p-menubar>

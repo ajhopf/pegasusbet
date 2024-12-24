@@ -19,7 +19,7 @@ export class RaceCardComponent {
 
   constructor(public dialogService: DialogService) {}
 
-  showInformation (id: number, type: string) {
+  showInformation (id: number, type: 'jockey' | 'horse') {
     const isSmallScreen = window.innerWidth < 768;
     const width = isSmallScreen ? '90%' : '50%';
 

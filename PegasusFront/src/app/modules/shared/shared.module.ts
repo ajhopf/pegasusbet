@@ -11,12 +11,15 @@ import { MenubarModule } from "primeng/menubar";
 import { ButtonModule } from "primeng/button";
 import { InputTextModule } from "primeng/inputtext";
 import { FormsModule } from "@angular/forms";
+import { WalletComponent } from './components/wallet/wallet/wallet.component';
+import { DialogService } from "primeng/dynamicdialog";
 
 
 @NgModule({
   declarations: [
     TableComponent,
-    HeaderMenuBarComponent
+    HeaderMenuBarComponent,
+    WalletComponent
   ],
   imports: [
     CommonModule,
@@ -27,6 +30,9 @@ import { FormsModule } from "@angular/forms";
     ButtonModule,
     InputTextModule,
     FormsModule
+  ],
+  providers: [
+    DialogService
   ],
   exports: [
     TableComponent,
