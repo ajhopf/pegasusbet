@@ -3,11 +3,19 @@ package usersdatastore
 class UrlMappings {
 
     static mappings = {
+        "/bets" (controller: "bets") {
+            action = [POST: "createBet", GET: "getUserBets"]
+        }
+
+        "/wallet" (controller: "wallet") {
+            action = [POST: "addTransaction", GET: "getWalletInfo"]
+        }
+
         "/user" (controller: 'user', action: 'save')
         "/user/admin" (controller: 'user', action: 'createAdmin')
 
-        "/wallet/$username" (controller: "wallet", action: "getWalletInfo")
-        "/wallet/transaction/$username" (controller: "wallet", action: "addTransaction")
+//        "/wallet" (controller: "wallet", action: "getWalletInfo")
+//        "/wallet/transaction" (controller: "wallet", action: "addTransaction")
 
         delete "/$controller/$id(.$format)?"(action:"delete")
         get "/$controller(.$format)?"(action:"index")

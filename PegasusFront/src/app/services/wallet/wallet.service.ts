@@ -26,15 +26,11 @@ export class WalletService {
   }
 
   fetchUserWalletInfo(): Observable<WalletResponse> {
-    const USERNAME = this.cookie.get(TokenFields.USERNAME)
-
-    return this.httpClient.get<any>(`${this.API_URL}/wallet/${USERNAME}`, this.getHttpOptions())
+    return this.httpClient.get<any>(`${this.API_URL}/wallet`, this.getHttpOptions())
   }
 
   addTransaction(transactionRequest: TransactionRequest): Observable<WalletResponse> {
-    const USERNAME = this.cookie.get(TokenFields.USERNAME)
-
-    return this.httpClient.post<any>(`${this.API_URL}/wallet/transaction/${USERNAME}`,
+    return this.httpClient.post<any>(`${this.API_URL}/wallet`,
       transactionRequest,
       this.getHttpOptions())
   }

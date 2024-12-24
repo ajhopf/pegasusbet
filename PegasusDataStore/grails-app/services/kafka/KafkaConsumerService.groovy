@@ -16,7 +16,6 @@ import java.time.Duration
 class KafkaConsumerService {
 
     HorseService horseService
-    RaceCourseService raceCourseService
     JockeyService jockeyService
 
     @Async
@@ -49,9 +48,6 @@ class KafkaConsumerService {
                         case 'horses':
                             processHorse(record)
                             break
-//                        case 'race-courses':
-//                            processRacecourse(record)
-//                            break
                     }
                 }
             }
@@ -69,8 +65,4 @@ class KafkaConsumerService {
     private void processHorse(ConsumerRecord<String, String> record) {
         horseService.saveHorseFromKafka(record.value())
     }
-
-//    private void processRacecourse(ConsumerRecord<String, String> record) {
-//        raceCourseService.addRaceCourse(record.value())
-//    }
 }

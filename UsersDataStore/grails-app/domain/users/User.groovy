@@ -25,9 +25,11 @@ class User implements Serializable {
     static constraints = {
         password nullable: false, blank: false, password: true
         username nullable: false, blank: false, unique: true
+        bets nullable: false
     }
 
     static hasOne = [wallet: Wallet]
+    static hasMany = [bets: Bet]
 
     static mapping = {
 	    password column: '`password`'
