@@ -6,8 +6,8 @@ class UrlMappings {
         "/user" (controller: 'user', action: 'save')
         "/user/admin" (controller: 'user', action: 'createAdmin')
 
-        "/wallet" (controller: "wallet", action: "getWalletInfo")
-        "/wallet/transaction" (controller: "wallet", action: "addTransaction")
+        "/wallet/$username" (controller: "wallet", action: "getWalletInfo")
+        "/wallet/transaction/$username" (controller: "wallet", action: "addTransaction")
 
         delete "/$controller/$id(.$format)?"(action:"delete")
         get "/$controller(.$format)?"(action:"index")

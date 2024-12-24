@@ -3,20 +3,18 @@ package usersdatastore
 import dtos.TransactionDTO
 import dtos.WalletDTO
 import exceptions.InsuficientFundsException
-import grails.plugin.springsecurity.SpringSecurityService
 import grails.plugin.springsecurity.annotation.Secured
 import users.User
 
-//
+
 @Secured(['isAuthenticated()'])
 class WalletController {
     WalletService walletService
-    SpringSecurityService springSecurityService
 
 	static responseFormats = ['json', 'xml']
 
-    def getWalletInfo() {
-        User currentUser = springSecurityService.currentUser as User
+    def getWalletInfo(String username) {
+        User currentUser = User.findByUsername(username)
 
         if (!currentUser) {
             render(status: 401, contentType: "application/json") {
@@ -33,8 +31,8 @@ class WalletController {
 
     }
 
-    def addTransaction(TransactionDTO transactionDTO) {
-        User currentUser = springSecurityService.currentUser as User
+    def addTransaction(String username, TransactionDTO transactionDTO) {
+        User currentUser = User.findByUsername(username)
 
         if (!currentUser) {
             render(status: 401, contentType: "application/json") {
