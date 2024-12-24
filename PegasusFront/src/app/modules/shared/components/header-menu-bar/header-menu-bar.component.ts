@@ -6,6 +6,8 @@ import { DialogService, DynamicDialogComponent, DynamicDialogRef } from "primeng
 import { WalletComponent } from "../wallet/wallet/wallet.component";
 import { WalletService } from '../../../../services/wallet/wallet.service'
 import { Subject, take, takeUntil } from 'rxjs'
+import { CookieService } from 'ngx-cookie-service'
+import { TokenFields } from '../../../../models/auth/TokenFields'
 
 @Component({
   selector: 'app-header-menu-bar',
@@ -23,7 +25,8 @@ export class HeaderMenuBarComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private router: Router,
     private walletService: WalletService,
-    public dialogService: DialogService
+    public dialogService: DialogService,
+    private cookieService: CookieService,
     ) {
   }
 
@@ -40,6 +43,10 @@ export class HeaderMenuBarComponent implements OnInit, OnDestroy {
   }
 
   handleLogout(){
+    this.cookieService.delete(TokenFields.USER_ROLE)
+    this.cookieService.delete(TokenFields.USERNAME)
+    this.cookieService.delete(TokenFields.ACCESS_TOKEN)
+
     this.authService.logout()
     this.router.navigate(['/'])
   }

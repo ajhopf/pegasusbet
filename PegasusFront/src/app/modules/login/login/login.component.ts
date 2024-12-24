@@ -36,13 +36,17 @@ export class LoginComponent {
       this.authService.login(username, password)
         .pipe(take(1))
         .subscribe({
-          next: response => this.handleSuccesfulLogin(response),
+          next: response => this.handleSuccessfulLogin(response),
           error: err => this.handleError(err)
         })
     }
   }
 
-  handleSuccesfulLogin(response: LoginResponse) {
+  handleSuccessfulLogin(response: LoginResponse) {
+    this.cookieService.delete(TokenFields.USER_ROLE)
+    this.cookieService.delete(TokenFields.USERNAME)
+    this.cookieService.delete(TokenFields.ACCESS_TOKEN)
+
     this.cookieService.set(TokenFields.ACCESS_TOKEN, response.access_token)
     this.cookieService.set(TokenFields.USER_ROLE, response.roles[0])
     this.cookieService.set(TokenFields.USERNAME, response.username)
