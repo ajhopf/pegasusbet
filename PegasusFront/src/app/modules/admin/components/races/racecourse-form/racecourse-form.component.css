@@ -1,16 +1,3 @@
-.race-form-container {
-  width: 75vw;
-}
-
-:host ::ng-deep .p-dropdown, :host ::ng-deep .p-calendar, :host ::ng-deep .p-button {
-  width: 100%
-}
-
-:host ::ng-deep .p-button {
-  justify-content: center;
-}
-
-
 .image-container {
   border-radius: 8px;
   min-height: 400px;
@@ -19,4 +6,8 @@
   background-size: cover;
   background-repeat: no-repeat;
   filter: grayscale(50%);
+}
+
+.racecourse-form-container {
+  width: 75vw;
 }

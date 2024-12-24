@@ -24,6 +24,7 @@ import { ChipsModule } from "primeng/chips";
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { RaceFormComponent } from './components/races/race-form/race-form.component';
 import { CalendarModule } from "primeng/calendar";
+import { RacecourseFormComponent } from './components/races/racecourse-form/racecourse-form.component';
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import { CalendarModule } from "primeng/calendar";
     AdminHomeComponent,
     HorseFormComponent,
     DashboardComponent,
-    RaceFormComponent
+    RaceFormComponent,
+    RacecourseFormComponent
   ],
   imports: [
     CommonModule,

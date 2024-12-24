@@ -8,11 +8,11 @@ class BootStrap {
     UserService userService
 
     def init = { servletContext ->
-        createAdminUser()
+        createUsers()
     }
 
     @Transactional
-    void createAdminUser() {
+    void createUsers() {
         User adminUser = User.findByUsername('admin')
 
         if (!adminUser) {
