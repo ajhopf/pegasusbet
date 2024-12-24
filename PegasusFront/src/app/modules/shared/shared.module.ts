@@ -13,6 +13,7 @@ import { InputTextModule } from "primeng/inputtext";
 import { FormsModule } from "@angular/forms";
 import { WalletComponent } from './components/wallet/wallet/wallet.component';
 import { DialogService } from "primeng/dynamicdialog";
+import { InputNumberModule } from 'primeng/inputnumber'
 
 
 @NgModule({
@@ -21,16 +22,17 @@ import { DialogService } from "primeng/dynamicdialog";
     HeaderMenuBarComponent,
     WalletComponent
   ],
-  imports: [
-    CommonModule,
-    CardModule,
-    SharedModuleNg,
-    TableModule,
-    MenubarModule,
-    ButtonModule,
-    InputTextModule,
-    FormsModule
-  ],
+    imports: [
+        CommonModule,
+        CardModule,
+        SharedModuleNg,
+        TableModule,
+        MenubarModule,
+        ButtonModule,
+        InputTextModule,
+        FormsModule,
+        InputNumberModule
+    ],
   providers: [
     DialogService
   ],

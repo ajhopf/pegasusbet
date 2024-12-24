@@ -7,3 +7,12 @@
   background-repeat: no-repeat;
   filter: grayscale(50%);
 }
+
+:host ::ng-deep .p-button, :host ::ng-deep .p-inputnumber {
+  min-width: 300px;
+  text-align: center;
+}
+
+:host ::ng-deep .p-inputtext {
+  text-align: center;
+}
