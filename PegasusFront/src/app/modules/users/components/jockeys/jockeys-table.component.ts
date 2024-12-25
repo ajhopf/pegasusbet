@@ -3,6 +3,9 @@ import { Jockey } from "../../../../models/jockey/Jockey";
 import { TableColumnDefinition } from "../../../../models/table/TableColumnDefinition";
 import { Subject, takeUntil } from "rxjs";
 import { JockeyService } from "../../../../services/jockey/jockey.service";
+import { Horse } from '../../../../models/horse/Horse'
+import { InformationOverlayComponent } from '../information-overlay/information-overlay.component'
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog'
 
 @Component({
   selector: 'app-jockeys-table',
@@ -11,19 +14,21 @@ import { JockeyService } from "../../../../services/jockey/jockey.service";
 })
 export class JockeysTableComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>()
+  ref: DynamicDialogRef | undefined;
 
   jockeys: Jockey[] = []
   filteredJockeys: Jockey[] = []
 
   jockeyColumns: TableColumnDefinition[] = [
-    {header: 'id', field: 'id'},
-    {header: 'name', field: 'name'},
-    {header: 'lastResults', field: 'lastResults'},
-    {header: 'numberOfRaces', field: 'numberOfRaces'},
-    {header: 'numberOfVictories', field: 'numberOfVictories'},
+    {header: 'Nome', field: 'name'},
+    {header: 'Número de Corridas', field: 'numberOfRaces'},
+    {header: 'Número de Vitórias', field: 'numberOfVictories'},
   ]
 
-  constructor(private jockeyService: JockeyService) {
+  constructor(
+    private jockeyService: JockeyService,
+    private dialogService: DialogService
+    ) {
   }
 
   ngOnInit(): void {
@@ -49,6 +54,20 @@ export class JockeysTableComponent implements OnInit, OnDestroy {
   handleFilterJockeys(filterString: string) {
     this.filteredJockeys = this.jockeys.filter(jockey => jockey.name.toUpperCase().includes(filterString.toUpperCase()))
   }
+
+  showJockeyInfo(jockey: Jockey) {
+    const isSmallScreen = window.innerWidth < 768;
+    const width = isSmallScreen ? '90%' : '50%';
+
+    this.ref = this.dialogService.open(InformationOverlayComponent, {
+        data: { id: jockey.id, type: 'jockey' },
+        width: width,
+        contentStyle: { overflow: 'auto' },
+        baseZIndex: 10000
+      }
+    );
+  }
+
 
   ngOnDestroy(): void {
     this.destroy$.next()

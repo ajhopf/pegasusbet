@@ -23,11 +23,11 @@
                     <p>Odds atual: {{raceHorseJockey.odds.currentOdd}}</p>
                     <p
                       class="participant fw-bold mb-2"
-                      (click)="showInformation(raceHorseJockey.horse.id, 'horse')">
+                      (click)="showParticipantInformation(raceHorseJockey.horse.id, 'horse')">
                       <i class="fa-solid fa-horse-head"></i>
                       <span class="ps-2">{{raceHorseJockey.horse.name}}</span>
                     </p>
-                    <p class="participant m-0" (click)="showInformation(raceHorseJockey.jockey.id, 'jockey')">
+                    <p class="participant m-0" (click)="showParticipantInformation(raceHorseJockey.jockey.id, 'jockey')">
                       <i class="fa-solid fa-hat-cowboy"></i>
                       <span class="ps-2">{{raceHorseJockey.jockey.name}} </span>
                     </p>
@@ -40,10 +40,6 @@
 
                 </ng-container>
               </ng-container>
-
-
-
-
             </div>
           </p-card>
         </div>

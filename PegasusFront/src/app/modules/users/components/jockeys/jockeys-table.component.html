@@ -11,6 +11,7 @@
       tableHeader="Jockeys"
       [tableColumnDefinition]="jockeyColumns"
       (filterEvent)="handleFilterJockeys($event)"
+      (rowClickEvent)="showJockeyInfo($event)"
       [values]="filteredJockeys">
     </app-table>
   </p-card>

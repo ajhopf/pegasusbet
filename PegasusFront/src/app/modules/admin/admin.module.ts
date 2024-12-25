@@ -17,7 +17,6 @@ import { ConfirmDialogModule } from "primeng/confirmdialog";
 import { ConfirmationService } from "primeng/api";
 import { RippleModule } from "primeng/ripple";
 import { ReactiveFormsModule } from "@angular/forms";
-import { HorseFormComponent } from '../users/components/horses/horse-form/horse-form.component';
 import { KeyFilterModule } from "primeng/keyfilter";
 import { ChipModule } from "primeng/chip";
 import { ChipsModule } from "primeng/chips";
@@ -30,7 +29,6 @@ import { RacecourseFormComponent } from './components/races/racecourse-form/race
 @NgModule({
   declarations: [
     AdminHomeComponent,
-    HorseFormComponent,
     DashboardComponent,
     RaceFormComponent,
     RacecourseFormComponent

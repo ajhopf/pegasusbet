@@ -17,7 +17,7 @@
   <p>Número de vitórias: {{ horse?.numberOfVictories}}</p>
   <p>Número de corridas: {{ horse?.numberOfRaces}}</p>
   <div>
-    <h2>Últimas Corridas</h2>
+    <h2>Corridas Passadas</h2>
     <ng-container *ngFor="let result of horse?.horseResults">
       <div class="d-flex justify-content-between">
         <p>Data: {{result?.resultDate | date: "dd/MM/yyyy"}}</p>

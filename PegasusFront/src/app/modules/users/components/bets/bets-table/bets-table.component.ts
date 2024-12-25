@@ -63,7 +63,7 @@ export class BetsTableComponent implements OnInit {
     });
   }
 
-  showInformation (id: number, type: 'jockey' | 'horse') {
+  showParticipantInformation (id: number, type: 'jockey' | 'horse') {
     const isSmallScreen = window.innerWidth < 768;
     const width = isSmallScreen ? '90%' : '50%';
 

@@ -10,10 +10,8 @@
       tableHeader="Cavalos"
       [tableColumnDefinition]="columns"
       [values]="filteredHorses"
-      (editEvent)="handleEditHorse($event)"
-      (deleteEvent)="handleDeleteHorse($event)"
       (filterEvent)="handleFilterHorses($event)"
-      (addEvent)="handleAddHorse()"
+      (rowClickEvent)="showHorseInfo($event)"
     ></app-table>
   </p-card>
 </section>

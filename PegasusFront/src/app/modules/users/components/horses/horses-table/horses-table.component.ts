@@ -5,6 +5,8 @@ import { HorseService } from "../../../../../services/horse/horse.service";
 import { Subject, take, takeUntil } from "rxjs";
 import { ConfirmationService, MessageService } from "primeng/api";
 import { Router } from "@angular/router";
+import { InformationOverlayComponent } from '../../information-overlay/information-overlay.component'
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog'
 
 @Component({
   selector: 'app-horses-table',
@@ -13,6 +15,7 @@ import { Router } from "@angular/router";
 })
 export class HorsesTableComponent implements OnInit, OnDestroy{
   private destroy$= new Subject<void>()
+  ref: DynamicDialogRef | undefined;
 
   horses: Horse[] = []
   filteredHorses: Horse[] = []
@@ -20,20 +23,16 @@ export class HorsesTableComponent implements OnInit, OnDestroy{
   loading: boolean = false
 
   columns: TableColumnDefinition[] = [
-    {header: 'id', field: 'id'},
     {header: 'Nome', field: 'name'},
     {header: 'Idade', field: 'age'},
     {header: 'Sexo', field: 'sex'},
-    {header: 'Últimos Resultados', field: 'lastResults'},
     {header: 'Corridas', field: 'numberOfRaces'},
     {header: 'Vitórias', field: 'numberOfVictories'},
   ]
 
   constructor(
     private horseService: HorseService,
-    private confirmationService: ConfirmationService,
-    private messageService: MessageService,
-    private router: Router
+    private dialogService: DialogService,
     ) {}
 
   ngOnInit(): void {
@@ -64,58 +63,17 @@ export class HorsesTableComponent implements OnInit, OnDestroy{
     this.filteredHorses = this.horses.filter(horse => horse.name.toUpperCase().includes(filterString.toUpperCase()))
   }
 
-  handleAddHorse() {
-    return this.router.navigate(['/admin/horses/form'])
-  }
+  showHorseInfo(horse: Horse) {
+    const isSmallScreen = window.innerWidth < 768;
+    const width = isSmallScreen ? '90%' : '50%';
 
-  handleDeleteHorse(horseId: string) {
-    this.confirmationService.confirm({
-      message: `Confirma a exclusão do cavalo?`,
-      header: 'Confirmação de exclusão',
-      icon: 'pi pi-exclamation-triangle',
-      acceptLabel: 'Sim',
-      rejectLabel: 'Não',
-      accept: () => this.deleteHorse(horseId),
-    });
-  }
-
-  deleteHorse(horseId: string) {
-    this.horseService.deleteHorse(horseId)
-      .pipe(take(1))
-      .subscribe({
-        next: (response) => {
-          if (response && response.status == 204) {
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Sucesso',
-              detail: 'Cavalo removido com sucesso!',
-              life: 2500,
-            })
-          }
-
-          this.horses = this.horses.filter(horse=> horse.id != +horseId)
-        },
-        error: (err) => {
-          console.error('Erro ao deletar cavalo:', err);
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Erro',
-            detail: 'Não foi possível remover o cavalo.',
-            life: 2500,
-          });
-        }
-      })
-  }
-
-  handleEditHorse(horseId: string) {
-    console.log(horseId)
-
-    this.messageService.add({
-      severity: 'error',
-      summary: 'Erro',
-      detail: 'Erro ao remover produto!',
-      life: 2500,
-    });
+    this.ref = this.dialogService.open(InformationOverlayComponent, {
+        data: { id: horse.id, type: 'horse' },
+        width: width,
+        contentStyle: { overflow: 'auto' },
+        baseZIndex: 10000
+      }
+    );
   }
 
   ngOnDestroy(): void {

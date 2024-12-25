@@ -9,7 +9,6 @@
     <div class="flex align-items-center justify-content-between">
       {{ tableHeader }}
       <input pInputText type="text" [(ngModel)]="filterValue"  (input)="handleFilterEvent(filterValue)" placeholder="Filtre pelo nome" />
-      <p-button icon="pi pi-plus" (onClick)="handleAddEvent()"></p-button>
     </div>
   </ng-template>
 
@@ -18,39 +17,13 @@
       <th *ngFor="let col of tableColumnDefinition" pSortableColumn="{{col.field}}">
         {{col.header}} <p-sortIcon field="code"></p-sortIcon>
       </th>
-      <th class="flex justify-content-center align-items-center h-full">
-        Actions
-      </th>
     </tr>
   </ng-template>
 
   <ng-template pTemplate="body" let-value>
-    <tr>
+    <tr class="table-row" (click)="handleRowClickEvent(value)">
       <td *ngFor="let col of tableColumnDefinition">
         {{value[col.field]}}
-      </td>
-
-      <td>
-        <div
-          class="flex justify-content-center gap-3 align-content-center align-items-center"
-        >
-          <button
-            pButton
-            icon="pi pi-pencil"
-            class="p-button-rounded p-button-warning"
-            pTooltip="Editar produto"
-            tooltipPosition="top"
-            (click)="handleEditEvent(value?.id)"
-          ></button>
-          <button
-            pButton
-            icon="pi pi-trash"
-            class="p-button-rounded p-button-danger"
-            pTooltip="Remover Produto"
-            tooltipPosition="top"
-            (click)="handleDeleteEvent(value?.id)"
-          ></button>
-        </div>
       </td>
     </tr>
 
