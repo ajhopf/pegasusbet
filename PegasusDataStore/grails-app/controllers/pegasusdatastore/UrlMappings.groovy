@@ -11,6 +11,8 @@ class UrlMappings {
 
         "/odds/$id" (controller: 'odds', action: 'getOddsByRaceHorseJockey')
 
+        "/races/$id" (controller: 'race', action: 'getRaceByRaceHorseJockeyId')
+
         "/odds"(resources: 'odds')
         "/jockeys"(resources: 'jockey')
         "/horses"(resources: 'horse')

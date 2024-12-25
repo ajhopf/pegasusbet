@@ -7,6 +7,7 @@ import { GetRacesResponse } from "../../models/races/GetRacesResponse";
 import { TokenFields } from "../../models/auth/TokenFields";
 import { CookieService } from "ngx-cookie-service";
 import { CreateRaceRequest } from "../../models/races/CreateRaceRequest";
+import { GetRaceResponse } from '../../models/races/GetRaceResponse'
 
 @Injectable({
   providedIn: 'root'
@@ -40,5 +41,9 @@ export class RacesService {
         ...this.httpOptions
       }
     )
+  }
+
+  fetchRaceByRaceHorseJockeyId(id: number): Observable<GetRaceResponse> {
+    return this.httpClient.get<any>(`${this.API_URL}/races/${id}`, this.httpOptions)
   }
 }

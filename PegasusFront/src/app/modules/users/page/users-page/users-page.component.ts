@@ -9,9 +9,10 @@ import { MenuItem } from "primeng/api";
 export class UsersPageComponent {
 
   menuItems: MenuItem[] = [
-    {label: 'Corridas', icon: 'pi pi-home', routerLink: '/races'},
+    {label: 'Corridas', icon: 'fa fa-flag-checkered', routerLink: '/races'},
     {label: 'Cavalos', icon: 'fa fa-horse', routerLink:'/races/horses'},
     {label: 'Jockeys', icon: 'fa fa-hat-cowboy', routerLink:'/races/jockeys'},
+    {label: 'Apostas', icon: 'fa fa-hat-cowboy', routerLink:'/races/bets'},
   ]
 
 }

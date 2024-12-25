@@ -38,8 +38,20 @@ class RaceController {
                 message e.message ?: "Resource not found"
             }
         }
+    }
 
+    def getRaceByRaceHorseJockeyId(Long id) {
+        try {
+            RaceResponseDTO raceResponseDTO = this.raceService.getRaceByRaceHorseJockeyId(id)
 
+            render (status: 200, contentType: "application/json") {
+                race raceResponseDTO
+            }
+        } catch (ResourceNotFoundException e) {
+            render(status: 404, contentType: "application/json") {
+                message e.message ?: "Resource not found"
+            }
+        }
     }
 
     void renderError(String errorMessage, RaceRequestDTO requestDTO) {

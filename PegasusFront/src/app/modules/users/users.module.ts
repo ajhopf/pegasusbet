@@ -24,6 +24,7 @@ import { CalendarModule } from "primeng/calendar";
 import { RippleModule } from "primeng/ripple";
 import { JockeysTableComponent } from "./components/jockeys/jockeys-table.component";
 import { HorsesTableComponent } from "./components/horses/horses-table/horses-table.component";
+import { BetsTableComponent } from './components/bets/bets-table/bets-table.component';
 
 
 @NgModule({
@@ -34,7 +35,8 @@ import { HorsesTableComponent } from "./components/horses/horses-table/horses-ta
     SidebarContentComponent,
     UsersPageComponent,
     JockeysTableComponent,
-    HorsesTableComponent
+    HorsesTableComponent,
+    BetsTableComponent
   ],
   imports: [
     CommonModule,

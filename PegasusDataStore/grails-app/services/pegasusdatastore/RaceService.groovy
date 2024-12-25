@@ -20,6 +20,17 @@ import java.time.format.DateTimeParseException
 abstract class RaceService implements IRaceService {
     OddsService oddsService
 
+    @Transactional
+    RaceResponseDTO getRaceByRaceHorseJockeyId(Long id) {
+        RaceHorseJockey raceHorseJockey = RaceHorseJockey.get(id)
+
+        if(!raceHorseJockey) {
+            throw new ResourceNotFoundException("Não foi possível encontrar o id $id")
+        }
+
+        return RaceMapper.toResponseDTO(raceHorseJockey.race)
+    }
+
     @Override
     @Transactional
     Race save(RaceRequestDTO raceRequestDTO) throws ResourceNotFoundException, DateTimeParseException {

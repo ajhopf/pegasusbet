@@ -5,6 +5,7 @@ import dtos.CreateBetDTO
 import exceptions.InsuficientFundsException
 import grails.gorm.transactions.Transactional
 import users.Bet
+import users.BetStatus
 import users.User
 import users.Wallet
 
@@ -26,7 +27,8 @@ class BetsService {
                 user: user,
                 amount: createBetDTO.amount,
                 raceHorseJockeyId: createBetDTO.raceHorseJockeyId,
-                timeStamp: now
+                timeStamp: now,
+                status: BetStatus.WAITING
         )
 
         bet = bet.save(flush: true)
