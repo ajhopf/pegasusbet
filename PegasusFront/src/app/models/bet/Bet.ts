@@ -3,4 +3,5 @@ export interface Bet {
   amount: number
   raceHorseJockeyId: number
   timeStamp: Object
+  status: 'WAITING' | 'WIN' | 'LOSS'
 }

@@ -1,0 +1,53 @@
+<section class="cavalos m-0 m-md-5">
+  <p-card >
+    <ng-template pTemplate="header">
+      <div class="image-container"></div>
+      <h1 class="text-center mt-3">Minhas Apostas</h1>
+    </ng-template>
+
+    <ng-container *ngIf="bets$ | async; let bets" >
+
+        <div class="m-2" *ngFor="let bet of bets.bets">
+          <p-card *ngIf="getRaceByHorseJockeyId(bet.raceHorseJockeyId) as race">
+            <div class="d-flex justify-content-around">
+              <div>
+                <p>Valor apostado: {{bet.amount | currency}}</p>
+                <p>Circuito: {{ race.raceCourse.name }}</p>
+                <p>Data: {{race.date | date: "dd/MM/yyyy"}}</p>
+                <p>Horário: {{race.time}}</p>
+              </div>
+
+              <ng-container *ngFor="let raceHorseJockey of race.raceHorseJockeys">
+                <ng-container *ngIf="raceHorseJockey.id === bet.raceHorseJockeyId">
+                  <div>
+                    <p>Odds atual: {{raceHorseJockey.odds.currentOdd}}</p>
+                    <p
+                      class="participant fw-bold mb-2"
+                      (click)="showInformation(raceHorseJockey.horse.id, 'horse')">
+                      <i class="fa-solid fa-horse-head"></i>
+                      <span class="ps-2">{{raceHorseJockey.horse.name}}</span>
+                    </p>
+                    <p class="participant m-0" (click)="showInformation(raceHorseJockey.jockey.id, 'jockey')">
+                      <i class="fa-solid fa-hat-cowboy"></i>
+                      <span class="ps-2">{{raceHorseJockey.jockey.name}} </span>
+                    </p>
+                  </div>
+
+                  <div>
+                    <p>Retorno possível: {{bet.amount * raceHorseJockey.odds.currentOdd | currency}}</p>
+                    <p>Status: {{bet.status}}</p>
+                  </div>
+
+                </ng-container>
+              </ng-container>
+
+
+
+
+            </div>
+          </p-card>
+        </div>
+
+    </ng-container>
+  </p-card>
+</section>
