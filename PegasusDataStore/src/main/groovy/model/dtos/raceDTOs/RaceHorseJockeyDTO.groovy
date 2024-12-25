@@ -16,6 +16,7 @@ class RaceHorseJockeyDTO {
     OddsResponseDTO odds
     String position
     String raceTime
+    BigDecimal totalBetsAmount
 
     RaceHorseJockeyDTO(RaceHorseJockey raceHorseJockey) {
         this.id = raceHorseJockey.id
@@ -25,5 +26,6 @@ class RaceHorseJockeyDTO {
         this.position = raceHorseJockey.position
         this.raceTime = raceHorseJockey.raceTime
         this.odds = OddsMapper.toResponseDTO(raceHorseJockey.odds)
+        this.totalBetsAmount = raceHorseJockey.totalBetsAmount
     }
 }

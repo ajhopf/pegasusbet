@@ -1,6 +1,7 @@
 package pegasusdatastore
 
 import exceptions.ResourceNotFoundException
+import model.dtos.raceDTOs.RaceHorseJockeyDTO
 import model.dtos.raceDTOs.RaceRequestDTO
 import model.dtos.raceDTOs.RaceResponseDTO
 import model.mappers.RaceMapper
@@ -50,6 +51,24 @@ class RaceController {
         } catch (ResourceNotFoundException e) {
             render(status: 404, contentType: "application/json") {
                 message e.message ?: "Resource not found"
+            }
+        }
+    }
+
+    def addBetAmountToRaceHorseJockey(Long id, BigDecimal amount) {
+        try {
+            RaceHorseJockeyDTO raceHorseJockeyDTO = this.raceService.increaseRaceHorseJockeyTotalBetsAmount(id, amount)
+
+            render (status: 200, contentType: "application/json") {
+                raceHorseJockey raceHorseJockeyDTO
+            }
+        } catch (ResourceNotFoundException e) {
+            render(status: 404, contentType: "application/json") {
+                message e.message ?: "Resource not found"
+            }
+        } catch (Exception e) {
+            render(status: 500, contentType: "application/json") {
+                message e.getMessage()
             }
         }
     }

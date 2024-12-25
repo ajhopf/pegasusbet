@@ -22,4 +22,16 @@ class Bet {
     static mapping = {
      table 'bets'
     }
+
+
+    @Override
+    String toString() {
+        return "Bet{" +
+                "raceHorseJockeyId=" + raceHorseJockeyId +
+                ", amount=" + amount +
+                ", timeStamp=" + timeStamp +
+                ", user=" + user +
+                ", status=" + status +
+                '}';
+    }
 }

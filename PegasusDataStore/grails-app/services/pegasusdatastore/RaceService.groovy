@@ -1,10 +1,12 @@
 package pegasusdatastore
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import exceptions.ResourceNotFoundException
 import grails.gorm.services.Service
 import grails.gorm.transactions.Transactional
 import model.dtos.RaceCourseDTO
 import model.dtos.raceDTOs.HorseJockeyDTO
+import model.dtos.raceDTOs.RaceHorseJockeyDTO
 import model.dtos.raceDTOs.RaceRequestDTO
 import model.dtos.raceDTOs.RaceResponseDTO
 import model.mappers.RaceCourseMapper
@@ -29,6 +31,24 @@ abstract class RaceService implements IRaceService {
         }
 
         return RaceMapper.toResponseDTO(raceHorseJockey.race)
+    }
+
+    @Transactional
+    RaceHorseJockeyDTO increaseRaceHorseJockeyTotalBetsAmount(String newBetString) {
+        ObjectMapper objectMapper = new ObjectMapper()
+
+        Map<String, Object> betdata = objectMapper.readValue(newBetString, Map.class)
+
+        Long id = betdata.raceHorseJockeyId as Long
+        Long amount = betdata.amount as Long
+
+        RaceHorseJockey raceHorseJockey = RaceHorseJockey.get(id)
+
+        raceHorseJockey.totalBetsAmount += amount
+
+        raceHorseJockey.save(flush:true)
+
+        return new RaceHorseJockeyDTO(raceHorseJockey)
     }
 
     @Override
@@ -89,6 +109,7 @@ abstract class RaceService implements IRaceService {
                     horse: horse,
                     jockey: jockey,
                     race: race,
+                    totalBetsAmount: 0,
                     raceTime: null,
                     position: null
             )

@@ -9,6 +9,7 @@ class RaceHorseJockey {
     Jockey jockey
     String position
     LocalTime raceTime
+    BigDecimal totalBetsAmount
 
     static constraints = {
         race nullable: false

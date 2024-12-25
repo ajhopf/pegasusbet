@@ -10,6 +10,7 @@ import org.springframework.scheduling.annotation.Async
 import pegasusdatastore.HorseService
 import pegasusdatastore.JockeyService
 import pegasusdatastore.RaceCourseService
+import pegasusdatastore.RaceService
 
 import java.time.Duration
 
@@ -17,6 +18,7 @@ class KafkaConsumerService {
 
     HorseService horseService
     JockeyService jockeyService
+    RaceService raceService
 
     @Async
     void startConsumer() {
@@ -32,7 +34,7 @@ class KafkaConsumerService {
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(properties)
 
         // Assinar múltiplos tópicos
-        consumer.subscribe(['jockeys', 'horses'])
+        consumer.subscribe(['jockeys', 'horses', 'bets'])
 
         try {
             while (true) {
@@ -47,6 +49,9 @@ class KafkaConsumerService {
                             break
                         case 'horses':
                             processHorse(record)
+                            break
+                        case 'bets':
+                            processNewBet(record)
                             break
                     }
                 }
@@ -64,5 +69,9 @@ class KafkaConsumerService {
 
     private void processHorse(ConsumerRecord<String, String> record) {
         horseService.saveHorseFromKafka(record.value())
+    }
+
+    private void processNewBet(ConsumerRecord<String, String> record) {
+        raceService.increaseRaceHorseJockeyTotalBetsAmount(record.value())
     }
 }

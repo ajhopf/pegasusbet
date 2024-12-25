@@ -37,6 +37,9 @@ dependencies {
 
     runtimeOnly 'org.postgresql:postgresql'
 
+    implementation group: 'org.apache.kafka', name: 'kafka-clients', version: '3.9.0'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2'
+
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     compileOnly "io.micronaut:micronaut-inject-groovy"
     console "org.grails:grails-console"
