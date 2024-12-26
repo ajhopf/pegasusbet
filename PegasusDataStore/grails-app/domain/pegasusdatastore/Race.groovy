@@ -7,11 +7,13 @@ class Race {
     RaceCourse raceCourse
     LocalDate date
     LocalTime time
+    boolean finished
 
     static constraints = {
         raceCourse nullable: false
         date nullable: false
         time nullable: false
+        finished nullable: false
     }
 
     static hasOne = [raceCourse: RaceCourse]

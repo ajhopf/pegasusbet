@@ -7,5 +7,6 @@ class RaceResponseDTO  {
     RaceCourseDTO raceCourse
     String time
     String date
+    boolean finished
     List<RaceHorseJockeyDTO> raceHorseJockeys
 }

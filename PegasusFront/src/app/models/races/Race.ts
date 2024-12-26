@@ -6,5 +6,6 @@ export interface Race {
   raceCourse: RaceCourse,
   time: string
   date: string
+  finished: boolean
   raceHorseJockeys: RaceHorseJockey[]
 }

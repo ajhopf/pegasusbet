@@ -30,12 +30,6 @@ spring:
                 - '**/*.gson'
                 - 'logback.groovy'
                 - '*.properties'
-springdoc:
-    api-docs:
-        path: /api-docs
-    swagger-ui:
-        path: /swagger-ui
-    packages-to-scan: pegasusdatastore
 environments:
     development:
         management:

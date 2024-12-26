@@ -21,23 +21,15 @@
                 <ng-container *ngIf="raceHorseJockey.id === bet.raceHorseJockeyId">
                   <div>
                     <p>Odds atual: {{raceHorseJockey.odds.currentOdd}}</p>
-                    <p
-                      class="participant fw-bold mb-2"
-                      (click)="showParticipantInformation(raceHorseJockey.horse.id, 'horse')">
-                      <i class="fa-solid fa-horse-head"></i>
-                      <span class="ps-2">{{raceHorseJockey.horse.name}}</span>
-                    </p>
-                    <p class="participant m-0" (click)="showParticipantInformation(raceHorseJockey.jockey.id, 'jockey')">
-                      <i class="fa-solid fa-hat-cowboy"></i>
-                      <span class="ps-2">{{raceHorseJockey.jockey.name}} </span>
-                    </p>
+                    <app-horse-jockey-info
+                      [horse]="raceHorseJockey.horse"
+                      [jockey]="raceHorseJockey.jockey"
+                    ></app-horse-jockey-info>
                   </div>
-
                   <div>
                     <p>Retorno possível: {{bet.amount * raceHorseJockey.odds.currentOdd | currency}}</p>
                     <p>Status: {{bet.status}}</p>
                   </div>
-
                 </ng-container>
               </ng-container>
             </div>

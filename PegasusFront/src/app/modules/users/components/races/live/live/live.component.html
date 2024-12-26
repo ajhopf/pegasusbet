@@ -1,0 +1,35 @@
+<div *ngIf="currentRace" class="m-3">
+  <p-card>
+    <ng-container *ngIf="currentRace">
+      <p class="text-center">{{currentRace.raceCourse.name}}</p>
+      <div *ngFor="let positions of raceUpdates.positions">
+        <div class="d-flex flex-column">
+          <app-horse-jockey-info
+            [horse]="getHorse(positions.raceHorseJockeyId)"
+            [jockey]="getJockey(positions.raceHorseJockeyId)"
+          >
+          </app-horse-jockey-info>
+        </div>
+        <p-progressBar
+          [showValue]="false"
+          [style]="{color: positions.raceHorseJockeyId }"
+          [value]="positions.position"
+        ></p-progressBar>
+      </div>
+    </ng-container>
+  </p-card>
+</div>
+
+<div class="m-3 text-center" *ngIf="!currentRace">
+  <p-card>
+    <ng-container>
+      <div *ngIf="noLiveRace">
+        <p class="text-center">Nenhuma corrida acontecendo no momento</p>
+      </div>
+      <div *ngIf="!noLiveRace">
+        <p-progressSpinner></p-progressSpinner>
+      </div>
+    </ng-container>
+  </p-card>
+</div>
+

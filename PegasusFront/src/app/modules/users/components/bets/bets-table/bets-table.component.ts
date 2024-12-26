@@ -18,13 +18,10 @@ export class BetsTableComponent implements OnInit {
   bets$: Observable<GetUserBetsResponse> | undefined
   races: Race[] = []
 
-  ref: DynamicDialogRef | undefined;
-
   constructor(
     private betService: BetService,
     private raceService: RacesService,
-    private messageService: MessageService,
-    private dialogService: DialogService
+    private messageService: MessageService
   ) { }
 
   ngOnInit(): void {
@@ -61,19 +58,6 @@ export class BetsTableComponent implements OnInit {
           }
         });
     });
-  }
-
-  showParticipantInformation (id: number, type: 'jockey' | 'horse') {
-    const isSmallScreen = window.innerWidth < 768;
-    const width = isSmallScreen ? '90%' : '50%';
-
-    this.ref = this.dialogService.open(InformationOverlayComponent, {
-        data: { id: id, type: type },
-        width: width,
-        contentStyle: { overflow: 'auto' },
-        baseZIndex: 10000
-      }
-    );
   }
 
   getRaceByHorseJockeyId(id: number): Race | undefined {

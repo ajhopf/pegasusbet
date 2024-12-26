@@ -15,7 +15,4 @@
   transition: all 0.5s ease-in-out;
 }
 
-.participant:hover {
-  cursor: pointer;
-  opacity: 0.8;
-}
+

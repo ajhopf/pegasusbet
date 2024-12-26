@@ -9,6 +9,7 @@ import model.dtos.raceDTOs.HorseJockeyDTO
 import model.dtos.raceDTOs.RaceHorseJockeyDTO
 import model.dtos.raceDTOs.RaceRequestDTO
 import model.dtos.raceDTOs.RaceResponseDTO
+import model.dtos.raceDTOs.RaceResultPositions
 import model.mappers.RaceCourseMapper
 import model.mappers.RaceMapper
 import pegasusdatastore.interfaces.IRaceService
@@ -21,6 +22,51 @@ import java.time.format.DateTimeParseException
 @Service(Race)
 abstract class RaceService implements IRaceService {
     OddsService oddsService
+
+    @Transactional
+    void addResultsToRace(String resultsString) {
+        ObjectMapper objectMapper = new ObjectMapper()
+        Map<String, Object> results = objectMapper.readValue(resultsString, Map.class)
+
+        Long raceId = results.raceId as Long
+        List<RaceResultPositions> positions = results.positions as RaceResultPositions[]
+
+        Race race = Race.get(raceId)
+
+        positions.each {p ->
+            Long raceHorseJockeyId = p.raceHorseJockeyId
+
+            RaceHorseJockey rhj = RaceHorseJockey.get(raceHorseJockeyId)
+
+            Horse horse = Horse.get(rhj.horseId)
+
+            HorseResults horseResult = new HorseResults(
+                    horse: horse,
+                    date: race.date,
+                    result: p.result
+            )
+
+            horseResult.save(flush: true)
+
+            Jockey jockey = Jockey.get(rhj.jockeyId)
+
+            JockeyResults jockeyResults = new JockeyResults(
+                    jockey: jockey,
+                    date: race.date,
+                    result: p.result
+            )
+
+            jockeyResults.save(flush: true)
+
+            rhj.position = p.result
+
+            rhj.save(flush: true)
+        }
+
+        race.finished = true
+
+        race.save(flush: true)
+    }
 
     @Transactional
     RaceResponseDTO getRaceByRaceHorseJockeyId(Long id) {
@@ -69,7 +115,8 @@ abstract class RaceService implements IRaceService {
         Race race = new Race(
                 raceCourse: raceCourse,
                 date: date,
-                time: time
+                time: time,
+                finished: false
         )
 
         race = race.save(flush: true)

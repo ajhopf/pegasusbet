@@ -13,6 +13,7 @@ export class UsersPageComponent {
     {label: 'Cavalos', icon: 'fa fa-horse', routerLink:'/races/horses'},
     {label: 'Jockeys', icon: 'fa fa-hat-cowboy', routerLink:'/races/jockeys'},
     {label: 'Apostas', icon: 'fa fa-hat-wizard', routerLink:'/races/bets'},
+    {label: 'Live', icon: 'fa fa-tower-broadcast', routerLink:'/races/live'},
   ]
 
 }

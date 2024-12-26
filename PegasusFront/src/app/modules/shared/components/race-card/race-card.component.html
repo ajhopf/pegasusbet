@@ -22,16 +22,10 @@
           <p class="m-0">{{horseJockey.number}}</p>
         </div>
         <div class="col-8 d-flex flex-column py-2">
-          <p
-            class="participant fw-bold mb-2"
-            (click)="showInformation(horseJockey.horse.id, 'horse')">
-            <i class="fa-solid fa-horse-head"></i>
-            <span class="ps-2">{{horseJockey.horse.name}}</span>
-          </p>
-          <p class="participant m-0" (click)="showInformation(horseJockey.jockey.id, 'jockey')">
-            <i class="fa-solid fa-hat-cowboy"></i>
-            <span class="ps-2">{{horseJockey.jockey.name}} </span>
-          </p>
+          <app-horse-jockey-info
+            [horse]="horseJockey.horse"
+            [jockey]="horseJockey.jockey"
+          ></app-horse-jockey-info>
         </div>
         <div (click)="toggleSideBar(horseJockey)" class="odds-container col-2 d-flex align-items-center justify-content-center border border-1 border-black rounded">
           <p class="m-0">{{horseJockey.odds.currentOdd}}</p>
@@ -39,7 +33,6 @@
       </div>
     </p-card>
   </ng-container>
-
 </p-panel>
 
 

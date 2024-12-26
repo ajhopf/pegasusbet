@@ -40,12 +40,6 @@ configurations {
 dependencies {
     implementation "org.grails.plugins:views-json:2.1.1"
 
-    // Springfox
-    implementation 'org.springdoc:springdoc-openapi-ui:1.7.0'
-    implementation 'org.springdoc:springdoc-openapi-data-rest:1.7.0'
-//    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-api:2.7.0'
-
-
     implementation group: 'org.jsoup', name: 'jsoup', version: '1.18.1'
     runtimeOnly 'org.postgresql:postgresql'
 

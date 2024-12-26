@@ -13,14 +13,16 @@ import { InputTextModule } from "primeng/inputtext";
 import { FormsModule } from "@angular/forms";
 import { WalletComponent } from './components/wallet/wallet/wallet.component';
 import { DialogService } from "primeng/dynamicdialog";
-import { InputNumberModule } from 'primeng/inputnumber'
+import { InputNumberModule } from 'primeng/inputnumber';
+import { HorseJockeyInfoComponent } from './components/horse-jockey-info/horse-jockey-info.component'
 
 
 @NgModule({
   declarations: [
     TableComponent,
     HeaderMenuBarComponent,
-    WalletComponent
+    WalletComponent,
+    HorseJockeyInfoComponent
   ],
     imports: [
         CommonModule,
@@ -38,7 +40,8 @@ import { InputNumberModule } from 'primeng/inputnumber'
   ],
   exports: [
     TableComponent,
-    HeaderMenuBarComponent
+    HeaderMenuBarComponent,
+    HorseJockeyInfoComponent
   ]
 })
 export class SharedModule { }

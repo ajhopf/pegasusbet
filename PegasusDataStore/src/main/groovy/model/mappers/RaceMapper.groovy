@@ -11,6 +11,7 @@ class RaceMapper {
                 raceCourse: RaceCourseMapper.toDTO(race.raceCourse),
                 time: race.time,
                 date: race.date,
+                finished: race.finished,
                 raceHorseJockeys: race.raceHorseJockey ? race.raceHorseJockey.collect { new RaceHorseJockeyDTO(it) } : []
         )
     }
