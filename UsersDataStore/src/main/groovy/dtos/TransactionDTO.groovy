@@ -1,6 +1,6 @@
 package dtos
 
-import users.TransactionType
+import enums.TransactionType
 
 class TransactionDTO {
     BigDecimal amount

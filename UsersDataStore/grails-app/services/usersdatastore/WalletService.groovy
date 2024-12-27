@@ -4,7 +4,7 @@ import dtos.TransactionDTO
 import dtos.WalletDTO
 import exceptions.InsuficientFundsException
 import grails.gorm.transactions.Transactional
-import users.TransactionType
+import enums.TransactionType
 import users.User
 import users.Wallet
 import users.WalletTransactions
@@ -23,34 +23,36 @@ class WalletService {
     WalletDTO addTransaction(User user, TransactionDTO transactionsDTO) {
         Wallet wallet = Wallet.findByUser(user)
 
-        if (transactionsDTO.transactionType == TransactionType.WITHDRAWAL) {
-            if (transactionsDTO.amount > wallet.amount) {
-                throw new InsuficientFundsException('Insuficiente funds')
-            }
+        println 'no wallet add transaction'
 
-            WalletTransactions walletTransactions = new WalletTransactions(
-                    amount: transactionsDTO.amount,
-                    transactionType: transactionsDTO.transactionType,
-                    timeStamp: LocalDateTime.now(),
-                    wallet: wallet
-            )
+        println transactionsDTO
 
-            wallet.amount -= transactionsDTO.amount
-
-            wallet.save(flush:true)
-            walletTransactions.save(flush:true)
-        } else {
-            WalletTransactions walletTransactions = new WalletTransactions(
-                    amount: transactionsDTO.amount,
-                    transactionType: transactionsDTO.transactionType,
-                    timeStamp: LocalDateTime.now(),
-                    wallet: wallet
-            )
-
-            wallet.amount += transactionsDTO.amount
-            wallet.save(flush:true)
-            walletTransactions.save(flush:true)
+        if (!wallet) {
+            throw new IllegalStateException('Wallet not found for user: ' + user.id)
         }
+
+        if ((transactionsDTO.transactionType == TransactionType.WITHDRAWAL || transactionsDTO.transactionType == TransactionType.PLACE_BET) && transactionsDTO.amount > wallet.amount) {
+            throw new InsuficientFundsException('Recursos Insuficientes')
+        }
+
+        BigDecimal currentAmount = wallet.amount
+
+        BigDecimal newAmount = transactionsDTO.transactionType in [TransactionType.WITHDRAWAL, TransactionType.PLACE_BET]
+                ? currentAmount - transactionsDTO.amount
+                : currentAmount + transactionsDTO.amount
+
+        wallet.amount = newAmount
+
+        wallet.save(flush:true)
+
+        WalletTransactions walletTransactions = new WalletTransactions(
+                amount: transactionsDTO.amount,
+                transactionType: transactionsDTO.transactionType,
+                timeStamp: LocalDateTime.now(),
+                wallet: wallet
+        )
+
+        walletTransactions.save(flush:true)
 
         return new WalletDTO(wallet)
     }

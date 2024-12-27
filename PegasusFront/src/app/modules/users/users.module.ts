@@ -6,10 +6,10 @@ import { SharedModule } from "../shared/shared.module";
 import { RaceCardComponent } from "../shared/components/race-card/race-card.component";
 import { PanelModule } from "primeng/panel";
 import { CardModule } from "primeng/card";
-import { InformationOverlayComponent } from './components/information-overlay/information-overlay.component';
+import { InformationOverlayComponent } from '../shared/components/information-overlay/information-overlay.component';
 import { DialogService } from "primeng/dynamicdialog";
 import { SidebarModule } from "primeng/sidebar";
-import { SidebarContentComponent } from './components/sidebar-content/sidebar-content.component';
+import { PlaceBetSidebarComponent } from './components/place-bet-sidebar/place-bet-sidebar.component';
 import { UsersPageComponent } from './page/users-page/users-page.component';
 import { USERS_ROUTES } from "./users.routing";
 import { ConfirmationService } from "primeng/api";
@@ -31,6 +31,7 @@ import { ProgressBarModule } from 'primeng/progressbar'
 import { ToastModule } from 'primeng/toast'
 import { ProgressSpinnerModule } from 'primeng/progressspinner'
 import { TooltipModule } from 'primeng/tooltip'
+import { SelectButtonModule } from 'primeng/selectbutton'
 
 
 @NgModule({
@@ -38,7 +39,7 @@ import { TooltipModule } from 'primeng/tooltip'
     RaceCardComponent,
     RacesPageComponent,
     InformationOverlayComponent,
-    SidebarContentComponent,
+    PlaceBetSidebarComponent,
     UsersPageComponent,
     JockeysTableComponent,
     HorsesTableComponent,
@@ -65,7 +66,8 @@ import { TooltipModule } from 'primeng/tooltip'
         ProgressBarModule,
         ToastModule,
         ProgressSpinnerModule,
-        TooltipModule
+        TooltipModule,
+        SelectButtonModule
     ],
   providers: [DialogService, ConfirmationService]
 })

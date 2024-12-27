@@ -5,7 +5,7 @@ import { HorseService } from "../../../../../services/horse/horse.service";
 import { Subject, take, takeUntil } from "rxjs";
 import { ConfirmationService, MessageService } from "primeng/api";
 import { Router } from "@angular/router";
-import { InformationOverlayComponent } from '../../information-overlay/information-overlay.component'
+import { InformationOverlayComponent } from '../../../../shared/components/information-overlay/information-overlay.component'
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog'
 
 @Component({

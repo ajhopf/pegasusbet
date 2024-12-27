@@ -5,6 +5,7 @@ import { JockeyService } from "../../../../services/jockey/jockey.service";
 import { Jockey } from "../../../../models/jockey/Jockey";
 import { Horse } from "../../../../models/horse/Horse";
 import { take } from "rxjs";
+import { Results } from '../../../../models/Results'
 
 @Component({
   selector: 'app-information-overlay',
@@ -16,6 +17,7 @@ export class InformationOverlayComponent implements OnInit {
 
   horse: Horse | undefined
   jockey: Jockey | undefined
+  lastResultsAverage: number | null = null
 
   constructor(
     private dynamicDialog: DynamicDialogConfig,
@@ -28,19 +30,23 @@ export class InformationOverlayComponent implements OnInit {
     this.type = this.dynamicDialog.data.type
 
     if (this.type == 'jockey') {
-      this.fetchjockeyInfos(id)
+      this.fetchJockeyInfos(id)
     } else {
       this.fetchHorseInfos(id)
     }
 
   }
 
-  fetchjockeyInfos(id: number) {
+  fetchJockeyInfos(id: number) {
     this.jockeyService.getJockeyById(id)
       .pipe(take(1))
       .subscribe({
         next: value => {
           this.jockey = value.jockey
+          if (this.jockey.jockeyResults) {
+            this.sortResults(this.jockey.jockeyResults)
+            this.calculateLastResultsAverage(this.jockey.jockeyResults)
+          }
           this.dynamicDialog.header = "Jockey: " + value.jockey.name
         }
       })
@@ -52,8 +58,38 @@ export class InformationOverlayComponent implements OnInit {
       .subscribe({
         next: value => {
           this.horse = value.horse
+          if(this.horse.horseResults) {
+            this.sortResults(this.horse.horseResults)
+            this.calculateLastResultsAverage(this.horse.horseResults)
+          }
           this.dynamicDialog.header = "Cavalo: " + value.horse.name
         }
       })
+  }
+
+  sortResults(results: Results[]) {
+    results.sort((a, b) => {
+      return new Date(b.resultDate).getTime() - new Date(a.resultDate).getTime()
+    })
+  }
+
+  calculateLastResultsAverage(result: Results[]) {
+    let count = 0
+    let sum = 0
+
+    for (let i = 0; i < result.length && i < 5; i++) {
+      let resultString = result[i].result.split('/')[0]
+      if (Number.isInteger(+resultString)) {
+        sum += +resultString
+        count++
+      }
+    }
+
+    if (count == 0) {
+      this.lastResultsAverage = null
+    } else {
+      this.lastResultsAverage = Math.round(sum / count)
+    }
+
   }
 }

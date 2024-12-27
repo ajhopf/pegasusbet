@@ -1,5 +1,7 @@
 package users
 
+import enums.TransactionType
+
 import java.time.LocalDateTime
 
 class WalletTransactions {

@@ -1,7 +1,13 @@
 package usersdatastore
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import dtos.BetResponseDTO
 import dtos.CreateBetDTO
+import dtos.RaceResultPositions
+import dtos.TransactionDTO
+import dtos.WalletDTO
+import enums.BetType
+import enums.TransactionType
 import exceptions.InsuficientFundsException
 import grails.gorm.transactions.Transactional
 import org.apache.kafka.clients.producer.KafkaProducer
@@ -10,15 +16,18 @@ import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.common.serialization.StringSerializer
 import serializers.BetSerializer
 import users.Bet
-import users.BetStatus
+import enums.BetStatus
 import users.User
 import users.Wallet
 
 import java.time.LocalDateTime
 
-@Transactional
+
 class BetsService {
 
+    WalletService walletService
+
+    @Transactional
     BetResponseDTO createBet(User user, CreateBetDTO createBetDTO) {
         LocalDateTime now = LocalDateTime.now()
 
@@ -31,10 +40,18 @@ class BetsService {
         Bet bet = new Bet(
                 user: user,
                 amount: createBetDTO.amount,
+                betType: createBetDTO.betType,
                 raceHorseJockeyId: createBetDTO.raceHorseJockeyId,
                 timeStamp: now,
                 status: BetStatus.WAITING
         )
+
+        TransactionDTO transactionDTO = new TransactionDTO(
+                amount: createBetDTO.amount,
+                transactionType: TransactionType.PLACE_BET
+        )
+
+        walletService.addTransaction(user, transactionDTO)
 
         bet = bet.save(flush: true)
 
@@ -44,10 +61,92 @@ class BetsService {
         return betResponseDTO
     }
 
+
     List<BetResponseDTO> getUsersBets(User user) {
         List<Bet> bets = Bet.findAllByUser(user)
 
         return bets.collect(bet -> new BetResponseDTO(bet))
+    }
+
+    @Transactional
+    void processRaceResult(String raceResultString) {
+        ObjectMapper objectMapper = new ObjectMapper()
+        Map<String, Object> results = objectMapper.readValue(raceResultString, Map.class)
+
+        List<RaceResultPositions> positions = results.positions as RaceResultPositions[]
+        Bet bet = Bet.get(13729)
+
+        bet.status = BetStatus.LOSS
+        bet.save(flush: true)
+
+
+//        positions.each { RaceResultPositions raceResultPositions ->
+//            Bet bet = Bet.get(13729)
+//
+//            processBet(raceResultPositions, bet)
+//
+////            List<Bet> bets = findBets(raceResultPositions.raceHorseJockeyId)
+////
+////
+////            bets.each { Bet bet ->
+////                processBet(raceResultPositions, bet)
+////            }
+//        }
+    }
+
+    List<Bet> findBets(Long raceHorseJockeyId) {
+        List<Bet> bets
+
+        bets = Bet.findAllByRaceHorseJockeyId(raceHorseJockeyId)
+
+        return bets
+    }
+
+    void processBet(RaceResultPositions raceResultPositions, Bet bet) {
+        Integer raceHorseResult = raceResultPositions.result.split("/")[0].toInteger()
+
+        switch (bet.betType) {
+            case 'WIN':
+                raceHorseResult == 1 ? processBetWin(bet, raceResultPositions.odds) : processBetLoss(bet)
+                break
+            case 'PLACE':
+                raceHorseResult < 3 ? processBetWin(bet, raceResultPositions.odds) : processBetLoss(bet)
+                break
+            default:
+                raceHorseResult < 4 ? processBetWin(bet, raceResultPositions.odds) : processBetLoss(bet)
+        }
+    }
+
+    void processBetLoss(Bet bet) {
+        bet.status = BetStatus.LOSS
+        bet.save(flush: true, failOnError: true)
+    }
+
+    void processBetWin(Bet bet, Double multiplier) {
+        bet.status = BetStatus.WIN
+        bet.save(flush: true, failOnError: true)
+
+        BigDecimal totalReturn = bet.amount * multiplier
+        BigDecimal totalEarning = totalReturn - bet.amount
+        BigDecimal totalAmountToDeposit
+
+        switch (bet.betType) {
+            case BetType.WIN:
+                totalAmountToDeposit = totalReturn
+                break
+            case BetType.PLACE:
+                totalAmountToDeposit = totalReturn - ( totalEarning * 0.3 )
+                break
+            default:
+                totalAmountToDeposit = totalReturn - ( totalEarning * 0.5 )
+        }
+
+        TransactionDTO transactionDTO = new TransactionDTO(
+                amount: totalAmountToDeposit,
+                transactionType: TransactionType.BET_WIN
+        )
+
+//        walletService.addTransaction(bet.user, transactionDTO)
     }
 
     void produceBet(BetResponseDTO betResponseDTO) {

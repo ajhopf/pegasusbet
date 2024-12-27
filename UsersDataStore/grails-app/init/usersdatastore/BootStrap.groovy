@@ -1,14 +1,17 @@
 package usersdatastore
 
 import grails.gorm.transactions.Transactional
+import kafka.KafkaConsumerService
 import users.*
 
 
 class BootStrap {
     UserService userService
+    KafkaConsumerService kafkaConsumerService
 
     def init = { servletContext ->
         createUsers()
+        kafkaConsumerService.startConsumer()
     }
 
     @Transactional

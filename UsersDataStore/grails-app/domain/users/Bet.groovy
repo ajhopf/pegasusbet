@@ -1,11 +1,15 @@
 package users
 
+import enums.BetStatus
+import enums.BetType
+
 import java.time.LocalDateTime
 
 class Bet {
     Long raceHorseJockeyId
     BigDecimal amount
     LocalDateTime timeStamp
+    BetType betType
     User user
     BetStatus status
 
@@ -15,12 +19,14 @@ class Bet {
         raceHorseJockeyId nullable: false
         amount nullable: false
         timeStamp nullable: false
+        betType nullable: false
         user nullable: false
         status nullable: false
     }
 
     static mapping = {
      table 'bets'
+        version false
     }
 
 

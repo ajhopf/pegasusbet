@@ -4,7 +4,7 @@ import { TableColumnDefinition } from "../../../../models/table/TableColumnDefin
 import { Subject, takeUntil } from "rxjs";
 import { JockeyService } from "../../../../services/jockey/jockey.service";
 import { Horse } from '../../../../models/horse/Horse'
-import { InformationOverlayComponent } from '../information-overlay/information-overlay.component'
+import { InformationOverlayComponent } from '../../../shared/components/information-overlay/information-overlay.component'
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog'
 
 @Component({

@@ -8,25 +8,10 @@ const kafka = new Kafka({
 
 const producer = kafka.producer()
 
-const orderHorseJockeys = (raceResults: RaceResult) => {
-    raceResults.positions.sort((a, b) => {
-        return a.position - b.position
-    })
-
-    for(let i = 0; i < raceResults.positions.length; i++){
-        raceResults.positions[i].result = i + 1 + "/" + raceResults.positions.length
-    }
-
-}
-
 export const produceRaceResults = async (raceResults: RaceResult) => {
     await producer.connect()
 
-    console.log(raceResults)
-
     orderHorseJockeys(raceResults)
-
-    console.log(raceResults)
 
     await producer.send({
         topic: 'race-results', // Tópico para o qual você deseja enviar a mensagem
@@ -37,3 +22,15 @@ export const produceRaceResults = async (raceResults: RaceResult) => {
 
     await producer.disconnect()
 }
+
+const orderHorseJockeys = (raceResults: RaceResult) => {
+    raceResults.positions.sort((a, b) => {
+        return b.position - a.position
+    })
+
+    for (let i = 0; i < raceResults.positions.length; i++) {
+        raceResults.positions[i].result = i + 1 + "/" + raceResults.positions.length
+    }
+
+}
+

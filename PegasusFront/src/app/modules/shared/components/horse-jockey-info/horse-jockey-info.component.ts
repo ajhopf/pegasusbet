@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core'
 import {
   InformationOverlayComponent
-} from '../../../users/components/information-overlay/information-overlay.component'
+} from '../information-overlay/information-overlay.component'
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog'
 import { Horse } from '../../../../models/horse/Horse'
 import { Jockey } from '../../../../models/jockey/Jockey'

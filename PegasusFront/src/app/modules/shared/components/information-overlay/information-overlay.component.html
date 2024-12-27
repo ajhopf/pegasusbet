@@ -1,6 +1,7 @@
 <ng-container *ngIf="type == 'jockey'" >
   <p>Número de vitórias: {{ jockey?.numberOfVictories}}</p>
   <p>Número de corridas: {{ jockey?.numberOfRaces}}</p>
+  <p>Média das últimas corridas: {{this.lastResultsAverage ? this.lastResultsAverage + "º" : "Não foi possível calcular a média"}}</p>
   <div>
     <h2>Corridas Passadas</h2>
     <ng-container *ngFor="let result of jockey?.jockeyResults">
@@ -16,6 +17,7 @@
   <p>Idade: {{ horse?.age }}</p>
   <p>Número de vitórias: {{ horse?.numberOfVictories}}</p>
   <p>Número de corridas: {{ horse?.numberOfRaces}}</p>
+  <p>Média das últimas corridas: {{this.lastResultsAverage ? this.lastResultsAverage + "º"  : "Não foi possível calcular a média"}}</p>
   <div>
     <h2>Corridas Passadas</h2>
     <ng-container *ngFor="let result of horse?.horseResults">

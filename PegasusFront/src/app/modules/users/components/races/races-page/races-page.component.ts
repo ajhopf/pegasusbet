@@ -28,12 +28,24 @@ export class RacesPageComponent implements OnInit, OnDestroy{
         next: (response) => {
           if (response) {
             this.races = response.races
+            this.sortRacesByDate(this.races)
+            this.sortRaceHorseJockeys(this.races)
           }
         },
         error: (err) => {
           console.log(err)
         }
       })
+  }
+
+  sortRacesByDate(races: Race[]) {
+    races.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+  }
+
+  sortRaceHorseJockeys(races: Race[]) {
+    races.forEach(race => {
+      race.raceHorseJockeys.sort((a, b) => a.odds.currentOdd - b.odds.currentOdd)
+    })
   }
 
   ngOnDestroy(): void {

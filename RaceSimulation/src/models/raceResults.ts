@@ -4,5 +4,6 @@ export interface RaceResult {
         raceHorseJockeyId: number
         position: number
         result?: string
-        odds: number}[]
+        odds: number
+    }[]
 }

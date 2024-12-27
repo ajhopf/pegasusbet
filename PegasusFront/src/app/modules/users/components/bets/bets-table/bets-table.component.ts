@@ -6,7 +6,7 @@ import { OddsService } from '../../../../../services/odds/odds.service'
 import { MessageService } from 'primeng/api'
 import { RacesService } from '../../../../../services/races/races.service'
 import { Race } from '../../../../../models/races/Race'
-import { InformationOverlayComponent } from '../../information-overlay/information-overlay.component'
+import { InformationOverlayComponent } from '../../../../shared/components/information-overlay/information-overlay.component'
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog'
 
 @Component({
