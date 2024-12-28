@@ -12,7 +12,7 @@
         </div>
         <p-progressBar
           [showValue]="false"
-          [style]="{color: positions.raceHorseJockeyId }"
+          [color]="getColor(positions.raceHorseJockeyId.toString().substring(0,2))"
           [value]="positions.position"
         ></p-progressBar>
       </div>

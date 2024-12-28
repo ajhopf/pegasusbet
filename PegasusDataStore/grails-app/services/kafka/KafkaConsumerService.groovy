@@ -75,11 +75,12 @@ class KafkaConsumerService {
     }
 
     private void processNewBet(ConsumerRecord<String, String> record) {
+        println 'Processing new bet - adding value to raceHorseJockey'
         raceService.increaseRaceHorseJockeyTotalBetsAmount(record.value())
     }
 
     private void processRaceResult(ConsumerRecord<String, String> record) {
-        println record.value()
-//        raceService.addResultsToRace(record.value())
+        println 'Processing race result'
+        raceService.addResultsToRace(record.value())
     }
 }

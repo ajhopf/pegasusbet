@@ -5,6 +5,7 @@ import { BetService } from '../../../../../services/bet/bet.service'
 import { MessageService } from 'primeng/api'
 import { RacesService } from '../../../../../services/races/races.service'
 import { Race } from '../../../../../models/races/Race'
+import { NotificationsService } from "../../../../../services/notification/notifications.service";
 
 
 @Component({
@@ -19,16 +20,20 @@ export class BetsTableComponent implements OnInit {
   constructor(
     private betService: BetService,
     private raceService: RacesService,
+    private notificationService: NotificationsService,
     private messageService: MessageService
   ) { }
 
   ngOnInit(): void {
     this.bets$ = this.betService.getUserBets()
 
+
+
     this.betService.updateBetViewStatus()
       .pipe(take(1))
       .subscribe({
         next: response => {
+          this.notificationService.triggerRefreshNotifications()
           console.log(response)
         },
         error: err => {

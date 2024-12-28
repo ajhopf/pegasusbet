@@ -9,6 +9,7 @@ import { TokenFields } from '../../models/auth/TokenFields'
 import { GetUserBetsResponse } from '../../models/bet/GetUserBetsResponse'
 import { CreateBetRequest } from '../../models/bet/CreateBetRequest'
 import { CreateBetResponse } from '../../models/bet/CreateBetResponse'
+import { Bet } from "../../models/bet/Bet";
 
 @Injectable({
   providedIn: 'root'
