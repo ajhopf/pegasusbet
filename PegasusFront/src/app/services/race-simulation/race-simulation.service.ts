@@ -7,7 +7,7 @@ import { TokenFields } from "../../models/auth/TokenFields";
 @Injectable({
   providedIn: 'root'
 })
-export class WebSocketService {
+export class RaceSimulationService {
   private socket: WebSocket | undefined
 
   constructor(
@@ -70,7 +70,7 @@ export class WebSocketService {
     this.socket.send(JSON.stringify(message)); // Envia dados ao backend
   }
 
-  onWebSocketUpdate(type: string, callback: (data: any) => void): void {
+  onWebSocketUpdate(callback: (data: any) => void): void {
     if (!this.socket) {
       console.error('WebSocket não está conectado.');
       return;
@@ -78,10 +78,7 @@ export class WebSocketService {
 
     this.socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
-
-      if (data.type === type) {
         callback(data);
-      }
     };
   }
 

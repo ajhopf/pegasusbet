@@ -4,7 +4,7 @@ import { RacesService } from '../../../../../../services/races/races.service'
 import { Race } from '../../../../../../models/races/Race'
 import { take } from 'rxjs'
 import { RaceSimulationUpdate } from '../../../../../../models/races/RaceSimulationUpdate'
-import { WebSocketService } from "../../../../../../services/race-simulation/web-socket.service";
+import { RaceSimulationService } from "../../../../../../services/race-simulation/race-simulation.service";
 
 @Component({
   selector: 'app-live',
@@ -17,7 +17,7 @@ export class LiveComponent implements OnInit {
   noLiveRace=  false
 
   constructor(
-    private raceSimulationService: WebSocketService,
+    private raceSimulationService: RaceSimulationService,
     private raceService: RacesService
   ) { }
 
@@ -37,7 +37,7 @@ export class LiveComponent implements OnInit {
   connectWebSocket(): void {
     this.raceSimulationService.connect()
 
-    this.raceSimulationService.onWebSocketUpdate('race-update', (data: RaceSimulationUpdate) => {
+    this.raceSimulationService.onWebSocketUpdate((data: RaceSimulationUpdate) => {
       this.raceUpdates = { raceId: data.raceId, finished: data.finished, positions: data.positions };
       console.log(this.raceUpdates);
 

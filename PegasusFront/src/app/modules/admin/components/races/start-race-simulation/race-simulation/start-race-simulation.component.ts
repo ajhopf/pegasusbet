@@ -33,7 +33,7 @@ export class StartRaceSimulationComponent {
   connectWebSocket(): void {
     this.raceSimulationService.connect()
 
-    this.raceSimulationService.onRaceUpdate((data) => {
+    this.raceSimulationService.onWebSocketUpdate((data) => {
       if (data.finished) {
         this.raceIsLive = false
         this.messageService.add({
