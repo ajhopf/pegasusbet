@@ -13,12 +13,14 @@ export const produceRaceResults = async (raceResults: RaceResult) => {
 
     orderHorseJockeys(raceResults)
 
-    await producer.send({
-        topic: 'race-results', // Tópico para o qual você deseja enviar a mensagem
-        messages: [
-            { value: JSON.stringify(raceResults) }
-        ],
-    })
+    for (const position of raceResults.positions) {
+        await producer.send({
+            topic: 'race-results',
+            messages: [
+                {value: JSON.stringify(position)}
+            ]
+        })
+    }
 
     await producer.disconnect()
 }

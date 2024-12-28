@@ -11,7 +11,7 @@ class BetResponseDTO {
     BigDecimal amount
     BetType betType
     Long raceHorseJockeyId
-    LocalDateTime timeStamp
+//    LocalDateTime timeStamp
     BetStatus status
 
     BetResponseDTO(Bet bet) {
@@ -19,7 +19,7 @@ class BetResponseDTO {
         this.amount = bet.amount
         this.betType = bet.betType
         this.raceHorseJockeyId = bet.raceHorseJockeyId
-        this.timeStamp = bet.timeStamp
+//        this.timeStamp = bet.timeStamp
         this.status = bet.status
     }
 }

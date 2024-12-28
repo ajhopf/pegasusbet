@@ -3,9 +3,8 @@ package usersdatastore
 import com.fasterxml.jackson.databind.ObjectMapper
 import dtos.BetResponseDTO
 import dtos.CreateBetDTO
-import dtos.RaceResultPositions
+import dtos.RaceResult
 import dtos.TransactionDTO
-import dtos.WalletDTO
 import enums.BetType
 import enums.TransactionType
 import exceptions.InsuficientFundsException
@@ -46,14 +45,14 @@ class BetsService {
                 status: BetStatus.WAITING
         )
 
+        bet = bet.save(flush: true)
+
         TransactionDTO transactionDTO = new TransactionDTO(
                 amount: createBetDTO.amount,
                 transactionType: TransactionType.PLACE_BET
         )
 
         walletService.addTransaction(user, transactionDTO)
-
-        bet = bet.save(flush: true)
 
         BetResponseDTO betResponseDTO =  new BetResponseDTO(bet)
         produceBet(betResponseDTO)
@@ -69,53 +68,40 @@ class BetsService {
     }
 
     @Transactional
-    void processRaceResult(String raceResultString) {
+    void processRaceResult(String raceHorseJockeyResultString) {
         ObjectMapper objectMapper = new ObjectMapper()
-        Map<String, Object> results = objectMapper.readValue(raceResultString, Map.class)
+        Map<String, Object> results = objectMapper.readValue(raceHorseJockeyResultString, Map.class)
 
-        List<RaceResultPositions> positions = results.positions as RaceResultPositions[]
-        Bet bet = Bet.get(13729)
+        RaceResult raceHorseJockeyResult = results as RaceResult
+        Integer endPosition = raceHorseJockeyResult.result.split("/")[0].toInteger()
 
-        bet.status = BetStatus.LOSS
-        bet.save(flush: true)
+        List<Bet> bets = Bet.findAllByRaceHorseJockeyId(raceHorseJockeyResult.raceHorseJockeyId)
 
+        bets.each { Bet bet ->
+            BetStatus newStatus = determineBetStatus(bet, endPosition)
+            if (newStatus == BetStatus.LOSS) {
+                processBetLoss(bet)
+            } else {
+                processBetWin(bet, raceHorseJockeyResult.odds)
+            }
 
-//        positions.each { RaceResultPositions raceResultPositions ->
-//            Bet bet = Bet.get(13729)
-//
-//            processBet(raceResultPositions, bet)
-//
-////            List<Bet> bets = findBets(raceResultPositions.raceHorseJockeyId)
-////
-////
-////            bets.each { Bet bet ->
-////                processBet(raceResultPositions, bet)
-////            }
-//        }
-    }
-
-    List<Bet> findBets(Long raceHorseJockeyId) {
-        List<Bet> bets
-
-        bets = Bet.findAllByRaceHorseJockeyId(raceHorseJockeyId)
-
-        return bets
-    }
-
-    void processBet(RaceResultPositions raceResultPositions, Bet bet) {
-        Integer raceHorseResult = raceResultPositions.result.split("/")[0].toInteger()
-
-        switch (bet.betType) {
-            case 'WIN':
-                raceHorseResult == 1 ? processBetWin(bet, raceResultPositions.odds) : processBetLoss(bet)
-                break
-            case 'PLACE':
-                raceHorseResult < 3 ? processBetWin(bet, raceResultPositions.odds) : processBetLoss(bet)
-                break
-            default:
-                raceHorseResult < 4 ? processBetWin(bet, raceResultPositions.odds) : processBetLoss(bet)
         }
     }
+
+    private BetStatus determineBetStatus(Bet bet, int resultPosition) {
+        BetType betType = bet.betType
+
+        if (betType == BetType.WIN && resultPosition == 1) {
+            return BetStatus.WIN
+        } else if (betType == BetType.PLACE && (resultPosition == 1 || resultPosition == 2)) {
+            return BetStatus.WIN
+        } else if (betType == BetType.SHOW && (resultPosition == 1 || resultPosition == 2 || resultPosition == 3)) {
+            return BetStatus.WIN
+        } else {
+            return BetStatus.LOSS
+        }
+    }
+
 
     void processBetLoss(Bet bet) {
         bet.status = BetStatus.LOSS
@@ -146,7 +132,7 @@ class BetsService {
                 transactionType: TransactionType.BET_WIN
         )
 
-//        walletService.addTransaction(bet.user, transactionDTO)
+        walletService.addTransaction(bet.user, transactionDTO)
     }
 
     void produceBet(BetResponseDTO betResponseDTO) {

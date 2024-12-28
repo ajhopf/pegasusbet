@@ -35,15 +35,13 @@ class WalletService {
             throw new InsuficientFundsException('Recursos Insuficientes')
         }
 
-        BigDecimal currentAmount = wallet.amount
+        if (transactionsDTO.transactionType in [TransactionType.WITHDRAWAL, TransactionType.PLACE_BET]) {
+            wallet.amount -= transactionsDTO.amount
+        } else {
+            wallet.amount += transactionsDTO.amount
+        }
 
-        BigDecimal newAmount = transactionsDTO.transactionType in [TransactionType.WITHDRAWAL, TransactionType.PLACE_BET]
-                ? currentAmount - transactionsDTO.amount
-                : currentAmount + transactionsDTO.amount
-
-        wallet.amount = newAmount
-
-        wallet.save(flush:true)
+        wallet = wallet.save(flush:true)
 
         WalletTransactions walletTransactions = new WalletTransactions(
                 amount: transactionsDTO.amount,

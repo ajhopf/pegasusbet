@@ -36,8 +36,7 @@ class Bet {
                 "raceHorseJockeyId=" + raceHorseJockeyId +
                 ", amount=" + amount +
                 ", timeStamp=" + timeStamp +
-                ", user=" + user +
                 ", status=" + status +
-                '}';
+                '}'
     }
 }

@@ -14,6 +14,7 @@ class BetsController {
 	static responseFormats = ['json', 'xml']
 	
     def createBet(CreateBetDTO createBetDTO) {
+        'print ln in create bet controller'
         try {
             String username = SecurityContextHolder.context.authentication.name
             User currentUser = User.findByUsername(username)

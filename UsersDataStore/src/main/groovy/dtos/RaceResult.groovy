@@ -1,6 +1,6 @@
 package dtos
 
-class RaceResultPositions {
+class RaceResult {
     Long raceHorseJockeyId
     Double position
     String result

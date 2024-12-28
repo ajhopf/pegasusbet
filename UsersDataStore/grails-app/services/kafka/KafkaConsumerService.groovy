@@ -1,5 +1,6 @@
 package kafka
 
+import enums.TransactionType
 import grails.gorm.transactions.Transactional
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.clients.consumer.ConsumerRecord
@@ -11,7 +12,6 @@ import usersdatastore.BetsService
 
 import java.time.Duration
 
-@Transactional
 class KafkaConsumerService {
     BetsService betsService
 
@@ -52,6 +52,7 @@ class KafkaConsumerService {
         }
     }
 
+    @Transactional
     private void processRaceResult(ConsumerRecord<String, String> record) {
         println record.value()
         betsService.processRaceResult(record.value())

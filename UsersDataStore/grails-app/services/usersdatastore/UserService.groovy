@@ -30,7 +30,7 @@ class UserService {
                 role: role
         )
 
-        user = user.save(flush: true)
+        user = user.save(flush: true, failOnError: true)
 
         UserRole userRole = new UserRole(user: user, role: role)
         userRole.save(flush: true)
