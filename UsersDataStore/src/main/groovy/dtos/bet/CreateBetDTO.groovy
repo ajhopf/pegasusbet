@@ -1,4 +1,4 @@
-package dtos
+package dtos.bet
 
 import enums.BetType
 import grails.validation.Validateable

@@ -1,8 +1,9 @@
-package dtos
+package dtos.raceresult
 
-class RaceResult {
+class HorseJockeyResult {
     Long raceHorseJockeyId
     Double position
     String result
     Double odds
 }
+

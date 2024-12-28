@@ -1,6 +1,6 @@
 package usersdatastore
 
-import dtos.CreateUserDTO
+import dtos.user.CreateUserDTO
 import grails.plugin.springsecurity.annotation.Secured
 
 class UserController {

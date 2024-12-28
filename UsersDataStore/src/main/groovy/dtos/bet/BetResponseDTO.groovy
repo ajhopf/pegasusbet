@@ -1,10 +1,8 @@
-package dtos
+package dtos.bet
 
 import enums.BetType
 import users.Bet
 import enums.BetStatus
-
-import java.time.LocalDateTime
 
 class BetResponseDTO {
     Long id

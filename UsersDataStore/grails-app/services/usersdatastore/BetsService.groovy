@@ -1,10 +1,11 @@
 package usersdatastore
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import dtos.BetResponseDTO
-import dtos.CreateBetDTO
-import dtos.RaceResult
+import dtos.bet.BetResponseDTO
+import dtos.bet.CreateBetDTO
 import dtos.TransactionDTO
+import dtos.raceresult.HorseJockeyResult
+import dtos.raceresult.RaceResultDTO
 import enums.BetType
 import enums.TransactionType
 import exceptions.InsuficientFundsException
@@ -71,20 +72,32 @@ class BetsService {
     void processRaceResult(String raceHorseJockeyResultString) {
         ObjectMapper objectMapper = new ObjectMapper()
         Map<String, Object> results = objectMapper.readValue(raceHorseJockeyResultString, Map.class)
+//
+//        RaceResultDTO raceResultDTO = results as RaceResultDTO
 
-        RaceResult raceHorseJockeyResult = results as RaceResult
-        Integer endPosition = raceHorseJockeyResult.result.split("/")[0].toInteger()
+        List<HorseJockeyResult> raceHorseJockeyPositions = ((List<Map>) results.positions).collect { Map positionData ->
+            new HorseJockeyResult(
+                    raceHorseJockeyId: positionData.raceHorseJockeyId as Long,
+                    position: positionData.position as Double,
+                    result: positionData.result as String,
+                    odds: positionData.odds as Double
+            )
+        }
 
-        List<Bet> bets = Bet.findAllByRaceHorseJockeyId(raceHorseJockeyResult.raceHorseJockeyId)
+        raceHorseJockeyPositions.each { HorseJockeyResult horseJockeyResult ->
+            Integer endPosition = horseJockeyResult.result.split("/")[0].toInteger()
 
-        bets.each { Bet bet ->
-            BetStatus newStatus = determineBetStatus(bet, endPosition)
-            if (newStatus == BetStatus.LOSS) {
-                processBetLoss(bet)
-            } else {
-                processBetWin(bet, raceHorseJockeyResult.odds)
+            List<Bet> bets = Bet.findAllByRaceHorseJockeyId(horseJockeyResult.raceHorseJockeyId)
+
+            bets.each { Bet bet ->
+                BetStatus newStatus = determineBetStatus(bet, endPosition)
+
+                if (newStatus == BetStatus.LOSS) {
+                    processBetLoss(bet)
+                } else {
+                    processBetWin(bet, horseJockeyResult.odds)
+                }
             }
-
         }
     }
 
@@ -101,7 +114,6 @@ class BetsService {
             return BetStatus.LOSS
         }
     }
-
 
     void processBetLoss(Bet bet) {
         bet.status = BetStatus.LOSS

@@ -3,9 +3,8 @@ package serializers
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import dtos.BetResponseDTO
+import dtos.bet.BetResponseDTO
 import org.apache.kafka.common.serialization.Serializer
-import users.Bet
 
 class BetSerializer implements Serializer<BetResponseDTO> {
     @Override

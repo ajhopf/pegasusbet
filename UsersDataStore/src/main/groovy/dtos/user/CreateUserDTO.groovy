@@ -1,4 +1,4 @@
-package dtos
+package dtos.user
 
 class CreateUserDTO {
     String username

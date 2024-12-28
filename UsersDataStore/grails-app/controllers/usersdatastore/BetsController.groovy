@@ -1,7 +1,7 @@
 package usersdatastore
 
-import dtos.BetResponseDTO
-import dtos.CreateBetDTO
+import dtos.bet.BetResponseDTO
+import dtos.bet.CreateBetDTO
 import exceptions.InsuficientFundsException
 import grails.plugin.springsecurity.annotation.Secured
 import org.springframework.security.core.context.SecurityContextHolder
