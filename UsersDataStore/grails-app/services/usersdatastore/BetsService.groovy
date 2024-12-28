@@ -5,7 +5,6 @@ import dtos.bet.BetResponseDTO
 import dtos.bet.CreateBetDTO
 import dtos.TransactionDTO
 import dtos.raceresult.HorseJockeyResult
-import dtos.raceresult.RaceResultDTO
 import enums.BetType
 import enums.TransactionType
 import exceptions.InsuficientFundsException
@@ -28,6 +27,16 @@ class BetsService {
     WalletService walletService
 
     @Transactional
+    void updateBetViewStatus(User user) {
+        List<Bet> bets = Bet.findAllByUser(user)
+
+        bets.each {bet ->
+            bet.resultViewed = true
+            bet.save(flush: true, failOnError: true)
+        }
+    }
+
+    @Transactional
     BetResponseDTO createBet(User user, CreateBetDTO createBetDTO) {
         LocalDateTime now = LocalDateTime.now()
 
@@ -43,7 +52,8 @@ class BetsService {
                 betType: createBetDTO.betType,
                 raceHorseJockeyId: createBetDTO.raceHorseJockeyId,
                 timeStamp: now,
-                status: BetStatus.WAITING
+                status: BetStatus.WAITING,
+                resultViewed: false
         )
 
         bet = bet.save(flush: true)

@@ -3,6 +3,8 @@ package usersdatastore
 class UrlMappings {
 
     static mappings = {
+        "/bets/status" (controller: "bets", action: "updateBetViewStatus", method: 'PUT' )
+
         "/bets" (controller: "bets") {
             action = [POST: "createBet", GET: "getUserBets"]
         }

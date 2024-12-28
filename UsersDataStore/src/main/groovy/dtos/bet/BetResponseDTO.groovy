@@ -11,6 +11,7 @@ class BetResponseDTO {
     Long raceHorseJockeyId
 //    LocalDateTime timeStamp
     BetStatus status
+    boolean resultViewed
 
     BetResponseDTO(Bet bet) {
         this.id = bet.id
@@ -19,5 +20,6 @@ class BetResponseDTO {
         this.raceHorseJockeyId = bet.raceHorseJockeyId
 //        this.timeStamp = bet.timeStamp
         this.status = bet.status
+        this.resultViewed = bet.resultViewed
     }
 }

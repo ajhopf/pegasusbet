@@ -39,7 +39,7 @@ export class NotificationComponent implements OnInit {
 
   filterUnseenBets(bets: Bet[]) {
     return bets.filter(bet => {
-      return !bet.viewed && bet.status !== 'WAITING'
+      return !bet.resultViewed && bet.status !== 'WAITING'
     })
   }
 

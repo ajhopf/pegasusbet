@@ -33,7 +33,7 @@ export class BetService {
   }
 
   updateBetViewStatus() {
-    return this.httpClient.get<any>(`${this.API_URL}/bets/view`, this.getHttpOptions())
+    return this.httpClient.put<any>(`${this.API_URL}/bets/status`,{}, this.getHttpOptions())
   }
 
   getHttpOptions() {

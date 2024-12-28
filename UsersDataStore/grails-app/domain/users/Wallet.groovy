@@ -10,4 +10,8 @@ class Wallet {
     static constraints = {
         walletTransactions nullable: true
     }
+
+    static mapping = {
+        version false
+    }
 }

@@ -15,26 +15,30 @@ import { WalletComponent } from './components/wallet/wallet/wallet.component';
 import { DialogService } from "primeng/dynamicdialog";
 import { InputNumberModule } from 'primeng/inputnumber';
 import { HorseJockeyInfoComponent } from './components/horse-jockey-info/horse-jockey-info.component'
+import { NotificationComponent } from "./components/notification/notification/notification.component";
+import { BadgeModule } from "primeng/badge";
 
 
 @NgModule({
   declarations: [
+    NotificationComponent,
     TableComponent,
     HeaderMenuBarComponent,
     WalletComponent,
     HorseJockeyInfoComponent
   ],
-    imports: [
-        CommonModule,
-        CardModule,
-        SharedModuleNg,
-        TableModule,
-        MenubarModule,
-        ButtonModule,
-        InputTextModule,
-        FormsModule,
-        InputNumberModule
-    ],
+  imports: [
+    CommonModule,
+    CardModule,
+    SharedModuleNg,
+    TableModule,
+    MenubarModule,
+    ButtonModule,
+    InputTextModule,
+    FormsModule,
+    InputNumberModule,
+    BadgeModule
+  ],
   providers: [
     DialogService
   ],

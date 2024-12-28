@@ -12,6 +12,7 @@ class Bet {
     BetType betType
     User user
     BetStatus status
+    boolean resultViewed
 
     static belongsTo = [user: User]
 
@@ -22,10 +23,11 @@ class Bet {
         betType nullable: false
         user nullable: false
         status nullable: false
+        resultViewed nullable: false
     }
 
     static mapping = {
-     table 'bets'
+        table 'bets'
         version false
     }
 
