@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { RaceHorseJockey } from "../../../../models/races/RaceHorseJockey";
 import { BetService } from '../../../../services/bet/bet.service'
 import { CreateBetRequest } from '../../../../models/bet/CreateBetRequest'
@@ -14,6 +14,7 @@ import { WalletService } from '../../../../services/wallet/wallet.service'
 export class PlaceBetSidebarComponent implements OnInit {
   @Input() horseJockey: RaceHorseJockey | undefined
   @Input() participants: number = 0
+  @Output() betCreated = new EventEmitter<string>();
 
   amountInput = 0
   selectedBetType: 'WIN' | 'PLACE' | 'SHOW' = 'WIN'
@@ -78,6 +79,8 @@ export class PlaceBetSidebarComponent implements OnInit {
               severity: 'success',
               summary: 'Aposta criada com sucesso'
             })
+
+            this.betCreated.emit('created')
 
             this.walletService.fetchUserWalletInfo()
               .subscribe({

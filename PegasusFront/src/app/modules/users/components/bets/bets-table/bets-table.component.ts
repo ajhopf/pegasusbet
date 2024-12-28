@@ -2,12 +2,10 @@ import { Component, OnInit } from '@angular/core'
 import { map, Observable, take } from 'rxjs'
 import { GetUserBetsResponse } from '../../../../../models/bet/GetUserBetsResponse'
 import { BetService } from '../../../../../services/bet/bet.service'
-import { OddsService } from '../../../../../services/odds/odds.service'
 import { MessageService } from 'primeng/api'
 import { RacesService } from '../../../../../services/races/races.service'
 import { Race } from '../../../../../models/races/Race'
-import { InformationOverlayComponent } from '../../../../shared/components/information-overlay/information-overlay.component'
-import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog'
+
 
 @Component({
   selector: 'app-bets-table',

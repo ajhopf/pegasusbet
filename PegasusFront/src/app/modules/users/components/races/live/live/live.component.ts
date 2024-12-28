@@ -11,7 +11,7 @@ import { RaceSimulationUpdate } from '../../../../../../models/races/RaceSimulat
   styleUrls: ['./live.component.css']
 })
 export class LiveComponent implements OnInit, OnDestroy {
-  raceUpdates: RaceSimulationUpdate = { raceId: 0, positions: [] }
+  raceUpdates: RaceSimulationUpdate = { raceId: 0, finished: false, positions: [] }
   currentRace: Race | undefined
   noLiveRace=  false
 
@@ -37,8 +37,12 @@ export class LiveComponent implements OnInit, OnDestroy {
     this.raceSimulationService.connect()
 
     this.raceSimulationService.onRaceUpdate((data: RaceSimulationUpdate) => {
-      this.raceUpdates = { raceId: data.raceId, positions: data.positions };
+      this.raceUpdates = { raceId: data.raceId, finished: data.finished, positions: data.positions };
       console.log(this.raceUpdates);
+
+      if (this.raceUpdates.finished) {
+
+      }
 
       if (!this.currentRace) {
         this.raceService.fetchRaceByRaceHorseJockeyId(data.positions[0].raceHorseJockeyId)
@@ -53,6 +57,10 @@ export class LiveComponent implements OnInit, OnDestroy {
     })
   }
 
+  handleRaceFinish() {
+
+  }
+
   getColor() {
 
   }
@@ -65,7 +73,6 @@ export class LiveComponent implements OnInit, OnDestroy {
   getJockey(id:number) {
     const index = this.currentRace!.raceHorseJockeys.findIndex(rhj => rhj.id === id)
     return this.currentRace!.raceHorseJockeys[index].jockey
-
   }
 
   ngOnDestroy(): void {

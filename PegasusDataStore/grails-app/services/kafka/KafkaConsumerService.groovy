@@ -80,6 +80,6 @@ class KafkaConsumerService {
 
     private void processRaceResult(ConsumerRecord<String, String> record) {
         println record.value()
-        raceService.addResultsToRace(record.value())
+//        raceService.addResultsToRace(record.value())
     }
 }

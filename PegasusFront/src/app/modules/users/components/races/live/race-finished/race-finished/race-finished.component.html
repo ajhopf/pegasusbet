@@ -1,0 +1,12 @@
+<ng-container *ngIf="raceFinalPositions">
+  <p-card header="Resultado final">
+    <div *ngFor="let position of raceFinalPositions.positions; let i = index">
+      <app-horse-jockey-info
+        [horse]="getHorse(position.raceHorseJockeyId)"
+        [jockey]="getJockey(position.raceHorseJockeyId)"
+      ></app-horse-jockey-info>
+      <p>Colocação: {{i + 1}}</p>
+    </div>
+  </p-card>
+
+</ng-container>

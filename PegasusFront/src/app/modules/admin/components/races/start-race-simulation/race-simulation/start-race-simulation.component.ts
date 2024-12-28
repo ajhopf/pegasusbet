@@ -8,6 +8,7 @@ import { RaceSimulationParticipant } from '../../../../../../models/races/RaceSi
 import {  RaceSimulationUpdate } from '../../../../../../models/races/RaceSimulationUpdate'
 import { CookieService } from 'ngx-cookie-service'
 import { TokenFields } from '../../../../../../models/auth/TokenFields'
+import { MessageService } from "primeng/api";
 
 @Component({
   selector: 'app-start-race-simulation',
@@ -16,13 +17,13 @@ import { TokenFields } from '../../../../../../models/auth/TokenFields'
 })
 export class StartRaceSimulationComponent {
   races$: Observable<GetRacesResponse> | undefined
-  raceUpdates: RaceSimulationUpdate = {raceId: 0, positions: []}
+  raceUpdates: RaceSimulationUpdate = {raceId: 0, finished: false, positions: []}
   raceIsLive = false
 
   constructor(
     private raceSimulationService: RaceSimulationService,
     private raceService: RacesService,
-    private cookieService: CookieService
+    private messageService: MessageService
   ) {
     this.races$ = this.raceService.fetchRaces(0, 1000)
 
@@ -32,8 +33,17 @@ export class StartRaceSimulationComponent {
   connectWebSocket(): void {
     this.raceSimulationService.connect()
 
-    this.raceSimulationService.onRaceUpdate(() => {
-      this.raceIsLive = true
+    this.raceSimulationService.onRaceUpdate((data) => {
+      if (data.finished) {
+        this.raceIsLive = false
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Corrida finalizada'
+        })
+        this.races$ = this.raceService.fetchRaces(0, 1000)
+      } else {
+        this.raceIsLive = true
+      }
     })
   }
 

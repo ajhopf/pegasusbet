@@ -32,6 +32,9 @@ import { ToastModule } from 'primeng/toast'
 import { ProgressSpinnerModule } from 'primeng/progressspinner'
 import { TooltipModule } from 'primeng/tooltip'
 import { SelectButtonModule } from 'primeng/selectbutton'
+import { InputSwitchModule } from "primeng/inputswitch";
+import { RaceFinishedComponent } from './components/races/live/race-finished/race-finished/race-finished.component';
+import { TagModule } from "primeng/tag";
 
 
 @NgModule({
@@ -45,30 +48,33 @@ import { SelectButtonModule } from 'primeng/selectbutton'
     HorsesTableComponent,
     BetsTableComponent,
     StartRaceSimulationComponent,
-    LiveComponent
+    LiveComponent,
+    RaceFinishedComponent
   ],
-    imports: [
-        CommonModule,
-        PanelModule,
-        CardModule,
-        RouterModule.forChild(USERS_ROUTES),
-        SharedModule,
-        SidebarModule,
-        PaginatorModule,
-        ConfirmDialogModule,
-        ReactiveFormsModule,
-        InputTextModule,
-        KeyFilterModule,
-        ChipModule,
-        ChipsModule,
-        CalendarModule,
-        RippleModule,
-        ProgressBarModule,
-        ToastModule,
-        ProgressSpinnerModule,
-        TooltipModule,
-        SelectButtonModule
-    ],
+  imports: [
+    CommonModule,
+    PanelModule,
+    CardModule,
+    RouterModule.forChild(USERS_ROUTES),
+    SharedModule,
+    SidebarModule,
+    PaginatorModule,
+    ConfirmDialogModule,
+    ReactiveFormsModule,
+    InputTextModule,
+    KeyFilterModule,
+    ChipModule,
+    ChipsModule,
+    CalendarModule,
+    RippleModule,
+    ProgressBarModule,
+    ToastModule,
+    ProgressSpinnerModule,
+    TooltipModule,
+    SelectButtonModule,
+    InputSwitchModule,
+    TagModule
+  ],
   providers: [DialogService, ConfirmationService]
 })
 export class UsersModule { }

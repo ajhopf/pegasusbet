@@ -60,21 +60,36 @@ wss.on('connection', (ws) => {
                         participant.position += speed
                     })
 
-                    const raceUpdate = {
-                        raceId,
-                        positions: participants
-                    }
-
-                    wss.clients.forEach((client) => {
-                        client.send(JSON.stringify(raceUpdate))
-                    })
-
                     // Finaliza a corrida após 100 unidades
                     if (participants.some((p) => p.position >= 3)) {
                         clearInterval(interval)
                         console.log('Corrida finalizada')
 
+                        const raceUpdate = {
+                            raceId,
+                            finished: true,
+                            positions: participants
+                        }
+
+                        sendRaceUpdate(wss.clients, raceUpdate)
+
+                        // wss.clients.forEach((client) => {
+                        //     client.send(JSON.stringify(raceUpdate))
+                        // })
+
                         produceRaceResults({raceId: raceId, positions: participants})
+                    } else {
+                        const raceUpdate = {
+                            raceId,
+                            finished: false,
+                            positions: participants
+                        }
+
+                        sendRaceUpdate(wss.clients, raceUpdate)
+
+                        wss.clients.forEach((client) => {
+                            client.send(JSON.stringify(raceUpdate))
+                        })
                     }
                 }, 2000)
             }
@@ -87,3 +102,9 @@ wss.on('connection', (ws) => {
         console.log('Cliente desconectado')
     })
 })
+
+function sendRaceUpdate(clients, raceUpdate) {
+    clients.forEach((client) => {
+        client.send(JSON.stringify(raceUpdate))
+    })
+}

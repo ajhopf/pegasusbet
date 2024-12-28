@@ -26,7 +26,7 @@ export class RaceSimulationService {
 
       this.messageService.add({
         severity: 'success',
-        summary: 'Servidor conectador com sucesso'
+        summary: 'Servidor conectado com sucesso'
       })
     };
 
@@ -71,7 +71,7 @@ export class RaceSimulationService {
 
     this.socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      callback(data); // Processa as atualizações da corrida
+      callback(data);
     };
   }
 

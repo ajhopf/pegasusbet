@@ -21,6 +21,7 @@
                 <ng-container *ngIf="raceHorseJockey.id === bet.raceHorseJockeyId">
                   <div>
                     <p>Odds atual: {{raceHorseJockey.odds.currentOdd}}</p>
+                    <p>Tipo de aposta: {{bet.betType}}</p>
                     <app-horse-jockey-info
                       [horse]="raceHorseJockey.horse"
                       [jockey]="raceHorseJockey.jockey"
@@ -28,7 +29,8 @@
                   </div>
                   <div>
                     <p>Retorno possível: {{bet.amount * raceHorseJockey.odds.currentOdd | currency}}</p>
-                    <p>Status: {{bet.status}}</p>
+                    <p>Status:</p>
+                    <p-tag severity="{{bet.status == 'WIN' ? 'success' : bet.status == 'LOSS' ? 'danger' : 'warning'}}" value="{{bet.status}}"></p-tag>
                   </div>
                 </ng-container>
               </ng-container>

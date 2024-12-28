@@ -72,8 +72,6 @@ class BetsService {
     void processRaceResult(String raceHorseJockeyResultString) {
         ObjectMapper objectMapper = new ObjectMapper()
         Map<String, Object> results = objectMapper.readValue(raceHorseJockeyResultString, Map.class)
-//
-//        RaceResultDTO raceResultDTO = results as RaceResultDTO
 
         List<HorseJockeyResult> raceHorseJockeyPositions = ((List<Map>) results.positions).collect { Map positionData ->
             new HorseJockeyResult(

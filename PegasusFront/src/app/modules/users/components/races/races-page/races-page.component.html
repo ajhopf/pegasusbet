@@ -1,9 +1,17 @@
 
 <div class="row justify-content-center w-100">
+    <div class="text-center d-flex justify-content-center m-2">
+      <p class="px-3">{{showAll ?  'Visualizando todas corridas' : 'Visualizando apenas corridas aceitando apostas' }}</p>
+      <p-inputSwitch [(ngModel)]="showAll" (onChange)="handleFilterRaces()"></p-inputSwitch>
+    </div>
+
     <app-race-card
       class="col-10 col-md-5 col-xxl-3 my-2"
-      *ngFor="let race of races"
-      [race]="race">
+      *ngFor="let race of filteredRaces"
+      [race]="race"
+      [userBets]="this.userBets"
+      (betCreated)="this.fetchUserBets()"
+    >
     </app-race-card>
 </div>
 

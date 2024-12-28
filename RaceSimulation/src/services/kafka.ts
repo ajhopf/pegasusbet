@@ -13,15 +13,6 @@ export const produceRaceResults = async (raceResults: RaceResult) => {
 
     orderHorseJockeys(raceResults)
 
-    // for (const position of raceResults.positions) {
-    //     await producer.send({
-    //         topic: 'race-results',
-    //         messages: [
-    //             { value: JSON.stringify(position) }
-    //         ]
-    //     })
-    // }
-
     await producer.send({
         topic: 'race-results',
         messages: [
