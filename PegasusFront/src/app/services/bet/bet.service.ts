@@ -32,6 +32,10 @@ export class BetService {
       this.getHttpOptions())
   }
 
+  updateBetViewStatus() {
+    return this.httpClient.get<any>(`${this.API_URL}/bets/view`, this.getHttpOptions())
+  }
+
   getHttpOptions() {
     const JWT_TOKEN = this.cookie.get(TokenFields.ACCESS_TOKEN)
 

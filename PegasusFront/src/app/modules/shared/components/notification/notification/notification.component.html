@@ -1,0 +1,11 @@
+<div>
+  <p-button
+    (onClick)="handleViewNotification()"
+    pTooltip="Apostas encerradas"
+    tooltipPosition="bottom"
+    icon="fa fa-bell"
+    styleClass="p-button-outlined p-button-info">
+    <p-badge class="position-absolute bottom-50" value="{{this.bets?.length}}" severity="warning"></p-badge>
+  </p-button>
+</div>
+

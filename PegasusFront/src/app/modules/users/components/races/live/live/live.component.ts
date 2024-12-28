@@ -1,22 +1,23 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
-import { RaceSimulationService } from '../../../../../../services/race-simulation/race-simulation.service'
+
 import { RacesService } from '../../../../../../services/races/races.service'
 import { Race } from '../../../../../../models/races/Race'
 import { take } from 'rxjs'
 import { RaceSimulationUpdate } from '../../../../../../models/races/RaceSimulationUpdate'
+import { WebSocketService } from "../../../../../../services/race-simulation/web-socket.service";
 
 @Component({
   selector: 'app-live',
   templateUrl: './live.component.html',
   styleUrls: ['./live.component.css']
 })
-export class LiveComponent implements OnInit, OnDestroy {
+export class LiveComponent implements OnInit {
   raceUpdates: RaceSimulationUpdate = { raceId: 0, finished: false, positions: [] }
   currentRace: Race | undefined
   noLiveRace=  false
 
   constructor(
-    private raceSimulationService: RaceSimulationService,
+    private raceSimulationService: WebSocketService,
     private raceService: RacesService
   ) { }
 
@@ -36,13 +37,9 @@ export class LiveComponent implements OnInit, OnDestroy {
   connectWebSocket(): void {
     this.raceSimulationService.connect()
 
-    this.raceSimulationService.onRaceUpdate((data: RaceSimulationUpdate) => {
+    this.raceSimulationService.onWebSocketUpdate('race-update', (data: RaceSimulationUpdate) => {
       this.raceUpdates = { raceId: data.raceId, finished: data.finished, positions: data.positions };
       console.log(this.raceUpdates);
-
-      if (this.raceUpdates.finished) {
-
-      }
 
       if (!this.currentRace) {
         this.raceService.fetchRaceByRaceHorseJockeyId(data.positions[0].raceHorseJockeyId)
@@ -55,10 +52,6 @@ export class LiveComponent implements OnInit, OnDestroy {
       }
 
     })
-  }
-
-  handleRaceFinish() {
-
   }
 
   getColor() {
@@ -75,9 +68,9 @@ export class LiveComponent implements OnInit, OnDestroy {
     return this.currentRace!.raceHorseJockeys[index].jockey
   }
 
-  ngOnDestroy(): void {
-    this.raceSimulationService.closeConnection()
-  }
+  // ngOnDestroy(): void {
+  //   this.raceSimulationService.closeConnection()
+  // }
 
 
 }

@@ -1,15 +1,18 @@
 import { Injectable } from '@angular/core';
 import { MessageService } from 'primeng/api'
 import { RaceSimulationParticipant } from '../../models/races/RaceSimulationParticipant'
+import { CookieService } from "ngx-cookie-service";
+import { TokenFields } from "../../models/auth/TokenFields";
 
 @Injectable({
   providedIn: 'root'
 })
-export class RaceSimulationService {
+export class WebSocketService {
   private socket: WebSocket | undefined
 
   constructor(
     private messageService: MessageService,
+    private cookieService: CookieService
   ) {
   }
 
@@ -23,6 +26,10 @@ export class RaceSimulationService {
 
     this.socket.onopen = () => {
       console.log('WebSocket conectado com sucesso.');
+
+      this.socket?.send(JSON.stringify(
+        { type: 'register', username: this.cookieService.get(TokenFields.USERNAME) }
+      ));
 
       this.messageService.add({
         severity: 'success',
@@ -63,7 +70,7 @@ export class RaceSimulationService {
     this.socket.send(JSON.stringify(message)); // Envia dados ao backend
   }
 
-  onRaceUpdate(callback: (data: any) => void): void {
+  onWebSocketUpdate(type: string, callback: (data: any) => void): void {
     if (!this.socket) {
       console.error('WebSocket não está conectado.');
       return;
@@ -71,7 +78,10 @@ export class RaceSimulationService {
 
     this.socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      callback(data);
+
+      if (data.type === type) {
+        callback(data);
+      }
     };
   }
 

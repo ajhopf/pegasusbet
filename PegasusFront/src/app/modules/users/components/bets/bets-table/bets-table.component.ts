@@ -25,6 +25,17 @@ export class BetsTableComponent implements OnInit {
   ngOnInit(): void {
     this.bets$ = this.betService.getUserBets()
 
+    this.betService.updateBetViewStatus()
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          console.log(response)
+        },
+        error: err => {
+          console.log(err)
+        }
+      })
+
     this.bets$?.pipe(
       map(response => response.bets.map(bet => bet.raceHorseJockeyId)),
     ).subscribe({
@@ -38,6 +49,8 @@ export class BetsTableComponent implements OnInit {
         });
       }
     });
+
+
   }
 
   private fetchRaceInfo(ids: number[]): void {
