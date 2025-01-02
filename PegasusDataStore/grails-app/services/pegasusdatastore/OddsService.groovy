@@ -54,20 +54,22 @@ class OddsService {
     }
 
     void recalculateOdds(Long raceId) {
-        // Obter todos os RaceHorseJockeys na corrida
         Race race = Race.get(raceId)
         List<RaceHorseJockey> raceHorseJockeyList = RaceHorseJockey.findAllByRace(race)
 
-        // Total apostado na corrida
-        BigDecimal totalBetAmount = Bet.findAllByRaceId(raceId).sum { it.amount ?: 0 }
+        BigDecimal raceTotalBetsAmount = 0
 
-        if (totalBetAmount > 0) {
+        raceHorseJockeyList.each {
+            raceTotalBetsAmount += it.totalBetsAmount
+        }
+
+        if (raceTotalBetsAmount > 0) {
             raceHorseJockeyList.each { RaceHorseJockey raceHorseJockey ->
                 // Total apostado no cavalo específico
-                BigDecimal horseBetAmount = Bet.findAllByRaceHorseJockey(raceHorseJockey).sum { it.amount ?: 0 }
+                BigDecimal horseBetAmount = raceHorseJockey.totalBetsAmount
 
                 // Proporção das apostas
-                double betProportion = horseBetAmount / totalBetAmount
+                double betProportion = horseBetAmount / raceTotalBetsAmount
 
                 // Nova odd baseada na proporção
                 double newOdd = (betProportion > 0) ? (1 / betProportion) * 0.9 : raceHorseJockey.odds.currentOdd // 0.9 é a margem da casa

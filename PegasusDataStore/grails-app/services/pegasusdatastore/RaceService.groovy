@@ -1,76 +1,98 @@
 package pegasusdatastore
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import dao.HorseDAO
+import dao.JockeyDAO
+import dao.RaceCourseDAO
+import dao.RaceDAO
+import dao.RaceHorseJockeyDAO
 import exceptions.ResourceNotFoundException
-import grails.gorm.services.Service
 import grails.gorm.transactions.Transactional
-import model.dtos.RaceCourseDTO
 import model.dtos.raceDTOs.HorseJockeyDTO
 import model.dtos.raceDTOs.RaceHorseJockeyDTO
 import model.dtos.raceDTOs.RaceRequestDTO
 import model.dtos.raceDTOs.RaceResponseDTO
 import model.dtos.raceDTOs.RaceResultPositions
-import model.mappers.RaceCourseMapper
 import model.mappers.RaceMapper
-import pegasusdatastore.interfaces.IRaceService
 
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 
-@Service(Race)
-abstract class RaceService implements IRaceService {
+@Transactional
+class RaceService {
+    RaceDAO raceDAO
+    RaceHorseJockeyDAO raceHorseJockeyDAO
+    HorseDAO horseDAO
+    JockeyDAO jockeyDAO
+    RaceCourseDAO raceCourseDAO
+
     OddsService oddsService
 
-    @Transactional
     void addResultsToRace(String resultsString) {
+        println resultsString
         ObjectMapper objectMapper = new ObjectMapper()
         Map<String, Object> results = objectMapper.readValue(resultsString, Map.class)
 
         Long raceId = results.raceId as Long
         List<RaceResultPositions> positions = results.positions as RaceResultPositions[]
 
-        Race race = Race.get(raceId)
+        Race race = raceDAO.getRaceById(raceId)
 
         positions.each {p ->
             Long raceHorseJockeyId = p.raceHorseJockeyId
 
-            RaceHorseJockey rhj = RaceHorseJockey.get(raceHorseJockeyId)
+            RaceHorseJockey rhj = raceHorseJockeyDAO.getRaceHorseJockeyById(raceHorseJockeyId)
 
-            Horse horse = Horse.get(rhj.horseId)
-
-            HorseResults horseResult = new HorseResults(
-                    horse: horse,
-                    date: race.date,
-                    result: p.result
-            )
-
-            horseResult.save(flush: true)
-
-            Jockey jockey = Jockey.get(rhj.jockeyId)
-
-            JockeyResults jockeyResults = new JockeyResults(
-                    jockey: jockey,
-                    date: race.date,
-                    result: p.result
-            )
-
-            jockeyResults.save(flush: true)
+            addResultsToHorseAndJockey(rhj, race, p.result)
 
             rhj.position = p.result
 
-            rhj.save(flush: true)
+            raceHorseJockeyDAO.saveRaceHorseJockey(rhj)
         }
+
 
         race.finished = true
 
-        race.save(flush: true)
+        raceDAO.saveRace(race)
     }
 
-    @Transactional
+    void addResultsToHorseAndJockey(RaceHorseJockey rhj, Race race, String result) {
+        Horse horse = horseDAO.getHorseById(rhj.horseId)
+
+        HorseResults horseResult = new HorseResults(
+                horse: horse,
+                date: race.date,
+                result: result
+        )
+
+        horseDAO.saveHorseResults(horseResult)
+
+        Jockey jockey = jockeyDAO.getJockeyById(rhj.jockeyId)
+
+        JockeyResults jockeyResults = new JockeyResults(
+                jockey: jockey,
+                date: race.date,
+                result: result
+        )
+
+        jockeyDAO.saveJockeyResults(jockeyResults)
+
+        jockey.numberOfRaces = jockey.numberOfRaces + 1
+        horse.numberOfRaces = horse.numberOfRaces + 1
+
+        if (result.split("/")[0] == "1") {
+            jockey.numberOfVictories = jockey.numberOfVictories + 1
+            horse.numberOfVictories = horse.numberOfVictories + 1
+        }
+
+        jockeyDAO.saveJockey(jockey)
+        horseDAO.saveHorse(horse)
+    }
+
     RaceResponseDTO getRaceByRaceHorseJockeyId(Long id) {
-        RaceHorseJockey raceHorseJockey = RaceHorseJockey.get(id)
+        RaceHorseJockey raceHorseJockey = raceHorseJockeyDAO.getRaceHorseJockeyById(id)
 
         if(!raceHorseJockey) {
             throw new ResourceNotFoundException("Não foi possível encontrar o id $id")
@@ -79,7 +101,6 @@ abstract class RaceService implements IRaceService {
         return RaceMapper.toResponseDTO(raceHorseJockey.race)
     }
 
-    @Transactional
     RaceHorseJockeyDTO increaseRaceHorseJockeyTotalBetsAmount(String newBetString) {
         ObjectMapper objectMapper = new ObjectMapper()
 
@@ -88,17 +109,15 @@ abstract class RaceService implements IRaceService {
         Long id = betdata.raceHorseJockeyId as Long
         Long amount = betdata.amount as Long
 
-        RaceHorseJockey raceHorseJockey = RaceHorseJockey.get(id)
+        RaceHorseJockey raceHorseJockey = raceHorseJockeyDAO.getRaceHorseJockeyById(id)
 
         raceHorseJockey.totalBetsAmount += amount
 
-        raceHorseJockey.save(flush:true)
+        raceHorseJockeyDAO.saveRaceHorseJockey(raceHorseJockey)
 
         return new RaceHorseJockeyDTO(raceHorseJockey)
     }
 
-    @Override
-    @Transactional
     Race save(RaceRequestDTO raceRequestDTO) throws ResourceNotFoundException, DateTimeParseException {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
@@ -106,7 +125,7 @@ abstract class RaceService implements IRaceService {
         LocalDate date = LocalDate.parse(raceRequestDTO.date, dateFormatter)
         LocalTime time = LocalTime.parse(raceRequestDTO.time, timeFormatter)
 
-        RaceCourse raceCourse = RaceCourse.get(raceRequestDTO.raceCourseId)
+        RaceCourse raceCourse = raceCourseDAO.getRaceCourseById(raceRequestDTO.raceCourseId)
 
         if (!raceCourse) {
             throw new ResourceNotFoundException("RaceCourse not found. Id: ${raceRequestDTO.raceCourseId}")
@@ -119,7 +138,7 @@ abstract class RaceService implements IRaceService {
                 finished: false
         )
 
-        race = race.save(flush: true)
+        race = raceDAO.saveRace(race)
 
         List<RaceHorseJockey> raceHorseJockeyList = saveHorseJockeys(raceRequestDTO.horseJockeys, race)
         oddsService.calculateInitialOdds(raceHorseJockeyList)
@@ -127,25 +146,23 @@ abstract class RaceService implements IRaceService {
         return race
     }
 
-    @Override
-    @Transactional
     List<RaceResponseDTO> list(Map params) {
-        List<Race> raceList = Race.list(offset: params.offset, max: params.max)
+//        List<Race> raceList = Race.list(offset: params.offset, max: params.max)
+        List<Race> raceList = raceDAO.listRaces(params)
         return RaceMapper.toDTOs(raceList)
     }
 
-    @Transactional
     List<RaceHorseJockey> saveHorseJockeys(List<HorseJockeyDTO> horseJockeyRequestDTOList, Race race) {
         List<RaceHorseJockey> raceHorseJockeyList = []
 
         horseJockeyRequestDTOList.each {horseJockeyRequestDTO ->
-            Horse horse = Horse.get(horseJockeyRequestDTO.horseId)
+            Horse horse = horseDAO.getHorseById(horseJockeyRequestDTO.horseId)
 
             if (!horse) {
                 throw new ResourceNotFoundException("Horse not found. Id: ${horseJockeyRequestDTO.horseId}")
             }
 
-            Jockey jockey = Jockey.get(horseJockeyRequestDTO.jockeyId)
+            Jockey jockey = jockeyDAO.getJockeyById(horseJockeyRequestDTO.jockeyId)
 
             if (!jockey) {
                 throw new ResourceNotFoundException("Jockey not found. Id: ${horseJockeyRequestDTO.horseId}")
@@ -161,7 +178,7 @@ abstract class RaceService implements IRaceService {
                     position: null
             )
 
-            RaceHorseJockey savedRaceHorseJockey = raceHorseJockey.save(flush: true)
+            RaceHorseJockey savedRaceHorseJockey = raceHorseJockeyDAO.saveRaceHorseJockey(raceHorseJockey)
             raceHorseJockeyList << savedRaceHorseJockey
         }
 

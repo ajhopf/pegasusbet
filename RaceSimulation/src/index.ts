@@ -61,7 +61,7 @@ wss.on('connection', (ws) => {
                     })
 
                     // Finaliza a corrida após 100 unidades
-                    if (participants.some((p) => p.position >= 50)) {
+                    if (participants.some((p) => p.position >= 5)) {
                         clearInterval(interval)
                         console.log('Corrida finalizada')
 

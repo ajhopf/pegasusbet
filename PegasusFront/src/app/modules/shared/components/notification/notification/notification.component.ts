@@ -36,9 +36,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe({
         next: value => {
-          console.log(value.bets)
           this.bets = this.filterUnseenBets(value.bets)
-          console.log(this.bets)
         },
         error: err => {
           console.log(err)

@@ -14,7 +14,7 @@ export class RaceFinishedComponent implements OnInit{
   ngOnInit(): void {
     this.raceFinalPositions?.positions?.sort(
       (a, b) => {
-        return a.position - b.position
+        return  b.position - a.position
       }
     )
   }
