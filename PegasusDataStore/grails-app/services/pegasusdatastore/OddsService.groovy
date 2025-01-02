@@ -1,5 +1,7 @@
 package pegasusdatastore
 
+import dao.OddsDAO
+import dao.RaceHorseJockeyDAO
 import grails.gorm.transactions.Transactional
 import model.dtos.oddsDTOs.OddsResponseDTO
 import model.mappers.OddsMapper
@@ -8,20 +10,24 @@ import model.mappers.OddsMapper
 class OddsService {
     private final victoriesWeight = 2
 
+    OddsDAO oddsDAO
+    RaceHorseJockeyDAO raceHorseJockeyDAO
+
     List<OddsResponseDTO> list(Map params) {
-        List<Odds> oddsList = Odds.list(offset: params.offset, max: params.max)
+        List<Odds> oddsList = oddsDAO.listOdds(params)
 
         return OddsMapper.toDTOs(oddsList)
     }
 
     OddsResponseDTO getOddsByRaceHorseJockey(Long id) {
-        RaceHorseJockey raceHorseJockey = RaceHorseJockey.get(id)
-        Odds odds = Odds.findByRaceHorseJockey(raceHorseJockey)
+        RaceHorseJockey raceHorseJockey = raceHorseJockeyDAO.getRaceHorseJockeyById(id)
+
+        Odds odds = oddsDAO.findByRaceHorseJockey(raceHorseJockey)
 
         return OddsMapper.toResponseDTO(odds)
     }
 
-    void calculateInitialOdds(List<RaceHorseJockey> raceHorseJockeyList) {
+    Map<Long, Double> calculateInitialOdds(List<RaceHorseJockey> raceHorseJockeyList) {
         List<Double> predefinedInitialOdds = [2.0, 2.5, 3.0, 4.0, 5.0, 6.0, 7.0]
 
         Map<Long, Double> jockeyRatingMap = [:]
@@ -41,16 +47,19 @@ class OddsService {
         }
 
         initialOddsMap.eachWithIndex{ it, index ->
-            RaceHorseJockey raceHorseJockey = RaceHorseJockey.get(it.key)
+            RaceHorseJockey raceHorseJockey = raceHorseJockeyDAO.getRaceHorseJockeyById(it.key)
 
             Odds raceHorseJockeyOdds = new Odds()
             raceHorseJockeyOdds.raceHorseJockey = raceHorseJockey
             raceHorseJockeyOdds.rating = jockeyRatingMap.find {it.key == raceHorseJockey.id}.value
             raceHorseJockeyOdds.initialOdd = it.value
             raceHorseJockeyOdds.currentOdd = it.value
-
-            raceHorseJockeyOdds.save(flush: true)
+//
+//            raceHorseJockeyOdds.save(flush: true)
+            oddsDAO.saveOdds(raceHorseJockeyOdds)
         }
+
+        return initialOddsMap
     }
 
     void recalculateOdds(Long raceId) {
@@ -84,28 +93,31 @@ class OddsService {
         }
     }
 
+    //Quanto maior o rating melhor é o cavalo
     double calculateHorseRating(Horse horse) {
-        double victoriesIndex = (double) (victoriesWeight * (horse.numberOfRaces > 0 ? horse.numberOfVictories / horse.numberOfRaces : 0))
+        double victoriesIndex = horse.numberOfVictories + 1
         double averagePosition = calculateAveragePosition(horse)
 
-        return victoriesIndex + averagePosition
+        return (victoriesIndex * this.victoriesWeight) / averagePosition
     }
 
     double calculateAveragePosition(Horse horse) {
         if (!horse.horseResults || horse.horseResults.isEmpty()) {
-            return 12
+            return 20
         }
 
         double sumOfPositions = 0
+        double validPositions = 0
 
         horse.horseResults.each { horseResult ->
             List<String> resultParts = horseResult.result.split("/")
             if (resultParts.size() == 2) {
                 int position = resultParts[0]?.toInteger() ?: 0
                 sumOfPositions += position
+                ++validPositions
             }
         }
 
-        return (sumOfPositions / horse.numberOfRaces)
+        return (sumOfPositions / validPositions)
     }
 }

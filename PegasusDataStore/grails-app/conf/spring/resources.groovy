@@ -2,6 +2,7 @@ package spring
 
 import dao.HorseDAO
 import dao.JockeyDAO
+import dao.OddsDAO
 import dao.RaceCourseDAO
 import dao.RaceDAO
 import dao.RaceHorseJockeyDAO
@@ -12,4 +13,5 @@ beans = {
     horseDAO(HorseDAO)
     jockeyDAO(JockeyDAO)
     raceCourseDAO(RaceCourseDAO)
+    oddsDAO(OddsDAO)
 }

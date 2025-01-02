@@ -8,20 +8,6 @@ import pegasusdatastore.interfaces.IRaceCourseService
 
 @Service(RaceCourse)
 abstract class RaceCourseService implements IRaceCourseService {
-
-    @Transactional
-    synchronized RaceCourse addRaceCourse(String name) {
-        RaceCourse existingRaceCourse = RaceCourse.findByName(name, [lock: true])
-
-        if (!existingRaceCourse) {
-            RaceCourse newRaceCourse = new RaceCourse(name: name)
-            newRaceCourse.save(flush: true)
-            return newRaceCourse
-        }
-
-        return existingRaceCourse
-    }
-
     @Override
     @Transactional
     List<RaceCourseDTO> list(Map params) {
