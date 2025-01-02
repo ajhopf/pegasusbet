@@ -31,7 +31,6 @@ class RaceService {
     OddsService oddsService
 
     void addResultsToRace(String resultsString) {
-        println resultsString
         ObjectMapper objectMapper = new ObjectMapper()
         Map<String, Object> results = objectMapper.readValue(resultsString, Map.class)
 
@@ -102,6 +101,8 @@ class RaceService {
     }
 
     RaceHorseJockeyDTO increaseRaceHorseJockeyTotalBetsAmount(String newBetString) {
+        println newBetString
+
         ObjectMapper objectMapper = new ObjectMapper()
 
         Map<String, Object> betdata = objectMapper.readValue(newBetString, Map.class)
@@ -147,7 +148,6 @@ class RaceService {
     }
 
     List<RaceResponseDTO> list(Map params) {
-//        List<Race> raceList = Race.list(offset: params.offset, max: params.max)
         List<Race> raceList = raceDAO.listRaces(params)
         return RaceMapper.toDTOs(raceList)
     }

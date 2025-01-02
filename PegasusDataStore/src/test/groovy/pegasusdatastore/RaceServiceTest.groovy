@@ -5,12 +5,13 @@ import dao.JockeyDAO
 import dao.RaceCourseDAO
 import dao.RaceDAO
 import dao.RaceHorseJockeyDAO
+import grails.testing.gorm.DataTest
 import grails.testing.services.ServiceUnitTest
 import spock.lang.Specification
 
 import java.time.LocalDate
 
-class RaceServiceTest extends Specification implements ServiceUnitTest<RaceService> {
+class RaceServiceTest extends Specification implements ServiceUnitTest<RaceService>, DataTest {
     RaceDAO raceDAO = Mock()
     RaceHorseJockeyDAO raceHorseJockeyDAO = Mock()
     HorseDAO horseDAO = Mock()
@@ -24,6 +25,8 @@ class RaceServiceTest extends Specification implements ServiceUnitTest<RaceServi
     Jockey jockey = null
 
     def setup() {
+        mockDomain(RaceHorseJockey)
+
         service.raceDAO = raceDAO
         service.raceHorseJockeyDAO = raceHorseJockeyDAO
         service.horseDAO = horseDAO
@@ -38,8 +41,11 @@ class RaceServiceTest extends Specification implements ServiceUnitTest<RaceServi
         this.jockey = new Jockey(id: 2, numberOfVictories: 0, numberOfRaces: 0)
 
         this.raceHorseJockey = new RaceHorseJockey(
+                id: 1,
                 horse: this.horse,
-                jockey: this.jockey
+                jockey: this.jockey,
+                totalBetsAmount: 0,
+                odds: new Odds(raceHorseJockey: this.raceHorseJockey)
         )
 
     }
@@ -65,6 +71,19 @@ class RaceServiceTest extends Specification implements ServiceUnitTest<RaceServi
         this.jockey.numberOfVictories == 1
         and: "colocação final foi adicionada ao raceHorseJockey"
         this.raceHorseJockey.position == "1/2"
+    }
+
+    def "increaseHorseJockeyTotalBetsAmount desserializa a string e adiciona os valores da nova aposta ao raceHorseJockey"() {
+        given: "Uma string de nova bet"
+        String betString = '{"id":13748,"amount":10,"betType":"WIN","raceHorseJockeyId":13745,"status":"WAITING","resultViewed":false}'
+        and: "Um horseJockey com 0 de totalBets"
+        raceHorseJockeyDAO.getRaceHorseJockeyById(_) >> this.raceHorseJockey
+
+        when: "método é invocado"
+        service.increaseRaceHorseJockeyTotalBetsAmount(betString)
+
+        then: "o valor de totalBets do raceHorseJockey é incrementado"
+        this.raceHorseJockey.totalBetsAmount == 10
     }
 
 }
