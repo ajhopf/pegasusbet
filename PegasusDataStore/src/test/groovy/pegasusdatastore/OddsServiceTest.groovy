@@ -6,8 +6,6 @@ import grails.testing.gorm.DataTest
 import grails.testing.services.ServiceUnitTest
 import spock.lang.Specification
 
-import java.time.LocalDate
-
 class OddsServiceTest extends Specification implements ServiceUnitTest<OddsService>, DataTest {
     OddsDAO oddsDAO = Mock()
     RaceHorseJockeyDAO raceHorseJockeyDAO = Mock()
@@ -61,7 +59,7 @@ class OddsServiceTest extends Specification implements ServiceUnitTest<OddsServi
     }
 
     def "calculateInitialOdds ordena cavalos corretamente e atribui as odds corretas"() {
-        given: "Varios cavalos"
+        given: "Três racehorsejockeys"
         Horse horse2 = new Horse(
                 id: 2,
                 name: "second horse",
@@ -76,7 +74,7 @@ class OddsServiceTest extends Specification implements ServiceUnitTest<OddsServi
         raceHorseJockey2.id = 2
         RaceHorseJockey raceHorseJockey3 = new RaceHorseJockey(id: 3, horse: this.badHorse, jockey: jockey)
         raceHorseJockey3.id = 3
-        and:
+        and: "Mock de acesso ao banco de dados"
         raceHorseJockeyDAO.getRaceHorseJockeyById(1) >> raceHorseJockey1
         raceHorseJockeyDAO.getRaceHorseJockeyById(2) >> raceHorseJockey2
         raceHorseJockeyDAO.getRaceHorseJockeyById(3) >> raceHorseJockey3

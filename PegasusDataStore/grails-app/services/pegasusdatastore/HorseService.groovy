@@ -1,8 +1,6 @@
 package pegasusdatastore
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.SerializationFeature
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import exceptions.ResourceAlreadyExistsException
 import exceptions.ResourceNotFoundException
 import grails.gorm.transactions.Transactional
@@ -49,11 +47,9 @@ class HorseService  {
 
                 horseResults.save(flush: true)
             }
-
         } else {
             println "Cavalo já existe."
         }
-
 
     }
 

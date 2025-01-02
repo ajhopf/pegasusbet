@@ -1,6 +1,8 @@
 package usersdatastore
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import dao.BetDAO
+import dao.WalletDAO
 import dtos.bet.BetResponseDTO
 import dtos.bet.CreateBetDTO
 import dtos.TransactionDTO
@@ -23,12 +25,13 @@ import java.time.LocalDateTime
 
 
 class BetsService {
-
+    BetDAO betDAO
+    WalletDAO walletDAO
     WalletService walletService
 
     @Transactional
     void updateBetViewStatus(User user) {
-        List<Bet> bets = Bet.findAllByUser(user)
+        List<Bet> bets = betDAO.findAllBetsByUser(user)
 
         bets.each {bet ->
             bet.resultViewed = true
@@ -40,7 +43,7 @@ class BetsService {
     BetResponseDTO createBet(User user, CreateBetDTO createBetDTO) {
         LocalDateTime now = LocalDateTime.now()
 
-        Wallet userWallet = Wallet.findByUser(user)
+        Wallet userWallet = walletDAO.findByUser(user)
 
         if (userWallet.amount < createBetDTO.amount) {
             throw new InsuficientFundsException('Usuário não possui recursos suficientes')
@@ -56,7 +59,7 @@ class BetsService {
                 resultViewed: false
         )
 
-        bet = bet.save(flush: true)
+        bet = betDAO.saveBet(bet)
 
         TransactionDTO transactionDTO = new TransactionDTO(
                 amount: createBetDTO.amount,
@@ -73,7 +76,7 @@ class BetsService {
 
 
     List<BetResponseDTO> getUsersBets(User user) {
-        List<Bet> bets = Bet.findAllByUser(user)
+        List<Bet> bets = betDAO.findAllBetsByUser(user)
 
         return bets.collect(bet -> new BetResponseDTO(bet))
     }
@@ -95,7 +98,7 @@ class BetsService {
         raceHorseJockeyPositions.each { HorseJockeyResult horseJockeyResult ->
             Integer endPosition = horseJockeyResult.result.split("/")[0].toInteger()
 
-            List<Bet> bets = Bet.findAllByRaceHorseJockeyId(horseJockeyResult.raceHorseJockeyId)
+            List<Bet> bets = betDAO.findAllByRaceHorseJockeyId(horseJockeyResult.raceHorseJockeyId)
 
             bets.each { Bet bet ->
                 BetStatus newStatus = determineBetStatus(bet, endPosition)
@@ -109,7 +112,7 @@ class BetsService {
         }
     }
 
-    private BetStatus determineBetStatus(Bet bet, int resultPosition) {
+    protected BetStatus determineBetStatus(Bet bet, int resultPosition) {
         BetType betType = bet.betType
 
         if (betType == BetType.WIN && resultPosition == 1) {
@@ -125,12 +128,12 @@ class BetsService {
 
     void processBetLoss(Bet bet) {
         bet.status = BetStatus.LOSS
-        bet.save(flush: true, failOnError: true)
+        betDAO.saveBet(bet)
     }
 
     void processBetWin(Bet bet, Double multiplier) {
         bet.status = BetStatus.WIN
-        bet.save(flush: true, failOnError: true)
+        betDAO.saveBet(bet)
 
         BigDecimal totalReturn = bet.amount * multiplier
         BigDecimal totalEarning = totalReturn - bet.amount
