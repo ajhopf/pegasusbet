@@ -1,9 +1,14 @@
 
 <div class="row justify-content-center w-100">
     <div class="text-center d-flex justify-content-center m-2">
-      <p class="px-3">{{showAll ?  'Visualizando todas corridas' : 'Visualizando apenas corridas aceitando apostas' }}</p>
-      <p-inputSwitch [(ngModel)]="showAll" (onChange)="handleFilterRaces()"></p-inputSwitch>
+      <p class="px-3">{{showOnlyRacesThatAcceptBetting ? 'Visualizando todas corridas' : 'Visualizando apenas corridas aceitando apostas' }}</p>
+      <p-inputSwitch [(ngModel)]="showOnlyRacesThatAcceptBetting" (onChange)="handleFilterRaces()"></p-inputSwitch>
     </div>
+
+  <div class="text-center d-flex justify-content-center m-2">
+    <p class="px-3">{{showOnlyRacesThatUserBetted ? 'Visualizando apenas corridas com apostas realizadas' : 'Visualizando inclusive corridas sem apostas realizadas' }}</p>
+    <p-inputSwitch [(ngModel)]="showOnlyRacesThatUserBetted" (onChange)="handleFilterRaces()"></p-inputSwitch>
+  </div>
 
     <app-race-card
       class="col-10 col-md-5 col-xxl-3 my-2"

@@ -3,6 +3,7 @@ package usersdatastore
 import dao.WalletDAO
 import dtos.TransactionDTO
 import dtos.WalletDTO
+import dtos.WalletTransactionsDTO
 import exceptions.InsuficientFundsException
 import grails.gorm.transactions.Transactional
 import enums.TransactionType
@@ -21,6 +22,12 @@ class WalletService {
         Wallet wallet = walletDAO.findByUser(user)
 
         return new WalletDTO(wallet)
+    }
+
+    List<WalletTransactionsDTO> getUserWalletTransactions(User user) {
+        List<WalletTransactions> walletTransactions = walletDAO.getUserWalletTransactions(user)
+
+        return walletTransactions.collect {it -> new WalletTransactionsDTO(it)}
     }
 
     WalletDTO addTransaction(User user, TransactionDTO transactionsDTO) {

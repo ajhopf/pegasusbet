@@ -6,6 +6,7 @@ import { CookieService } from 'ngx-cookie-service'
 import { BehaviorSubject, Observable } from 'rxjs'
 import { WalletResponse } from '../../models/wallet/WalletResponse'
 import { TransactionRequest } from '../../models/wallet/TransactionRequest'
+import { UserWalletTransactionsResponse } from '../../models/wallet/UserWalletTransactionsResponse'
 
 @Injectable({
   providedIn: 'root'
@@ -27,6 +28,10 @@ export class WalletService {
 
   fetchUserWalletInfo(): Observable<WalletResponse> {
     return this.httpClient.get<any>(`${this.API_URL}/wallet`, this.getHttpOptions())
+  }
+
+  fetchUserWalletTransactions(): Observable<UserWalletTransactionsResponse> {
+    return this.httpClient.get<any>(`${this.API_URL}/wallet/transactions`, this.getHttpOptions())
   }
 
   addTransaction(transactionRequest: TransactionRequest): Observable<WalletResponse> {

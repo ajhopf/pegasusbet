@@ -18,7 +18,8 @@ export class RacesPageComponent implements OnInit, OnDestroy{
   userBets: Bet[] = []
   filteredRaces: Race[] = []
 
-  showAll: boolean = false
+  showOnlyRacesThatAcceptBetting: boolean = false
+  showOnlyRacesThatUserBetted: boolean = false
 
   constructor(
     private racesService: RacesService,
@@ -32,12 +33,29 @@ export class RacesPageComponent implements OnInit, OnDestroy{
   }
 
   handleFilterRaces() {
-    if (!this.showAll) {
-      this.filteredRaces = this.races.filter(r => !r.finished)
+    this.filteredRaces = []
+
+    if (this.showOnlyRacesThatUserBetted) {
+      this.userBets.forEach(bet => {
+        const race = this.findRaceByRaceHorseJockeyId(bet.raceHorseJockeyId)
+
+        if (race) {
+          !this.filteredRaces.includes(race) && this.filteredRaces.push(race)
+        }
+      })
     } else {
       this.filteredRaces = this.races
     }
+
+    if (!this.showOnlyRacesThatAcceptBetting) {
+      this.filteredRaces = this.filteredRaces.filter(r => !r.finished)
+    }
   }
+
+  findRaceByRaceHorseJockeyId(id: number): Race | undefined {
+    return this.races.find(r => r.raceHorseJockeys.find(rhj => rhj.id === id))
+  }
+
 
   fetchUserBets() {
     this.betsService.getUserBets()

@@ -39,9 +39,29 @@
         </p-card>
       </div>
 
+      <section>
+        <div class="d-flex justify-content-between">
+          <h1>Extrato</h1>
+          <p-button (onClick)="handleGetUserTransactions()">Obter Extrato</p-button>
+        </div>
+
+
+        <ng-container *ngIf="this.fetchingTransactions">
+          <p-progressSpinner></p-progressSpinner>
+        </ng-container>
+
+        <ng-container *ngIf="!this.fetchingTransactions && this.userTransactions.length > 0">
+          <p-card class="m-2" *ngFor="let transaction of this.userTransactions">
+            <div class="row">
+              <p class="col-4 text-center"><span class="fw-bold">Valor: </span>{{transaction.amount | currency}}</p>
+              <p class="col-4 text-center"><span class="fw-bold">Data: </span>{{transaction.timeStamp | date: "dd/MM/yyyy HH:mm"}}</p>
+              <p class="col-4 text-center"><span class="fw-bold">Tipo de movimentação: </span><p-tag severity="{{transformTransactionType(transaction.transactionType).severity}}" value="{{transformTransactionType(transaction.transactionType).value}}"></p-tag></p>
+            </div>
+          </p-card>
+        </ng-container>
+      </section>
+
     </ng-template>
-
-
 
   </p-card>
 </section>

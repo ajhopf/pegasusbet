@@ -69,10 +69,7 @@ class BetsServiceTest extends Specification implements ServiceUnitTest<BetsServi
 
     def "processBetWin invoca o método addTransaction do walletService com o amount correto de acordo com o tipo de Bet"() {
         given:
-        Bet bet = new Bet(
-                betType: betType,
-                amount: 10
-        )
+        Bet bet = new Bet(betType: betType, amount: 10)
 
         when:
         service.processBetWin(bet, multiplier)

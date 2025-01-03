@@ -16,3 +16,7 @@
 :host ::ng-deep .p-inputtext {
   text-align: center;
 }
+
+.transaction-row {
+  margin-top: 0.5rem
+}

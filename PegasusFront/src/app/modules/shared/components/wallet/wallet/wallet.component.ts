@@ -3,6 +3,7 @@ import { WalletService } from "../../../../../services/wallet/wallet.service";
 import { Subject, take, takeUntil } from 'rxjs'
 import { TransactionRequest } from '../../../../../models/wallet/TransactionRequest'
 import { MessageService } from 'primeng/api'
+import { WalletTransaction } from '../../../../../models/wallet/WalletTransaction'
 
 @Component({
   selector: 'app-wallet',
@@ -14,6 +15,9 @@ export class WalletComponent implements OnInit, OnDestroy {
   userMoney = 0
 
   amountInput: number = 0
+
+  fetchingTransactions = false
+  userTransactions: WalletTransaction[] = []
 
   constructor(
     private walletService: WalletService,
@@ -35,6 +39,40 @@ export class WalletComponent implements OnInit, OnDestroy {
           console.log(err)
         }
       })
+  }
+
+  handleGetUserTransactions() {
+    this.fetchingTransactions = true
+
+    this.walletService.fetchUserWalletTransactions()
+      .pipe(take(1))
+      .subscribe({
+        next: walletResponse => {
+          this.userTransactions = walletResponse.transactions
+
+          this.userTransactions.sort((a, b) => {
+            return new Date(b.timeStamp).getTime() - new Date(a.timeStamp).getTime()
+          })
+
+          this.fetchingTransactions = false
+        }
+      })
+  }
+
+  transformTransactionType(transactionType: 'DEPOSIT' | 'WITHDRAWAL' | 'PLACE_BET' | 'BET_WIN') {
+    switch (transactionType) {
+      case 'DEPOSIT':
+        return {severity: 'info', value: 'Depósito'}
+        break
+      case 'WITHDRAWAL':
+        return {severity: 'danger', value: 'Retirada'}
+        break
+      case 'PLACE_BET':
+        return {severity: 'warning', value: 'Aposta realizada'}
+        break
+      default:
+        return {severity: 'success', value: 'Aposta Ganha'}
+    }
   }
 
   handleNewTransaction(type: 'DEPOSIT' | 'WITHDRAWAL'): void {

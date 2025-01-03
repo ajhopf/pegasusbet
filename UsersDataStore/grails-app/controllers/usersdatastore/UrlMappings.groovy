@@ -13,6 +13,10 @@ class UrlMappings {
             action = [POST: "addTransaction", GET: "getWalletInfo"]
         }
 
+        "/wallet/transactions" (controller: "wallet") {
+            action = [GET: "getWalletTransactions"]
+        }
+
         "/user" (controller: 'user', action: 'save')
         "/user/admin" (controller: 'user', action: 'createAdmin')
 

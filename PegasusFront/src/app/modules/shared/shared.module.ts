@@ -17,6 +17,8 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { HorseJockeyInfoComponent } from './components/horse-jockey-info/horse-jockey-info.component'
 import { NotificationComponent } from "./components/notification/notification/notification.component";
 import { BadgeModule } from "primeng/badge";
+import { ProgressSpinnerModule } from 'primeng/progressspinner'
+import { TagModule } from 'primeng/tag'
 
 
 @NgModule({
@@ -37,7 +39,9 @@ import { BadgeModule } from "primeng/badge";
     InputTextModule,
     FormsModule,
     InputNumberModule,
-    BadgeModule
+    BadgeModule,
+    ProgressSpinnerModule,
+    TagModule
   ],
   providers: [
     DialogService

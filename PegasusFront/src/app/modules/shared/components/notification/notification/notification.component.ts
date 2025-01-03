@@ -5,6 +5,7 @@ import { Subject, take, takeUntil } from "rxjs";
 import { Bet } from "../../../../../models/bet/Bet";
 import { Router } from "@angular/router";
 import { NotificationsService } from "../../../../../services/notification/notifications.service";
+import { MessageService } from 'primeng/api'
 
 @Component({
   selector: 'app-notification',
@@ -18,7 +19,8 @@ export class NotificationComponent implements OnInit, OnDestroy {
   constructor(
     private betService: BetService,
     private notificationService: NotificationsService,
-    private router: Router
+    private router: Router,
+    private messageService: MessageService
   ) {}
 
   ngOnInit() {
@@ -37,6 +39,18 @@ export class NotificationComponent implements OnInit, OnDestroy {
       .subscribe({
         next: value => {
           this.bets = this.filterUnseenBets(value.bets)
+
+          if (this.bets.length > 0) {
+            this.bets.filter(bet => {
+              const severity = bet.status == 'WIN' ? 'success' : 'danger'
+              const summary = bet.status == 'WIN' ? 'Aposta ganha!' : 'Infelizmente não foi dessa vez...'
+
+              this.messageService.add({
+                severity: severity,
+                summary: summary
+              })
+            })
+          }
         },
         error: err => {
           console.log(err)
