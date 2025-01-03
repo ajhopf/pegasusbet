@@ -5,7 +5,9 @@ O PegasusBet é um sistema de apostas de cavalos.
 ## Apresentaçao em Vídeo
 
 Parte 1: https://drive.google.com/file/d/1Op_xfYP4_uwUbdVxRflgENHujOZQSnoO/view?usp=sharing
+
 Parte 2: https://drive.google.com/file/d/1j3hx5W6zP-rPZKUB5iBbeAjEiTB0W5Br/view?usp=sharing
+
 Parte 3: https://drive.google.com/file/d/1EA3eUjod7nEkLwaSrScLLePiQb-CXm6m/view?usp=sharing
 
 Cenário:
