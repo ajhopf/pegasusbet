@@ -74,7 +74,7 @@ export class PlaceBetSidebarComponent implements OnInit {
       this.betService.createBet(createBetRequest)
         .pipe(take(1))
         .subscribe({
-          next: response => {
+          next: carresponse => {
             this.messageService.add({
               severity: 'success',
               summary: 'Aposta criada com sucesso'

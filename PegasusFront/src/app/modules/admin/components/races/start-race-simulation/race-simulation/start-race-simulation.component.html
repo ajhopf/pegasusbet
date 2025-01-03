@@ -1,7 +1,7 @@
 <ng-container *ngIf="races$ | async; let races">
-  <div class="row justify-content-center w-100">
+  <div>
     <ng-container *ngFor="let race of races.races">
-      <div *ngIf="!race.finished" class="col-10 my-2">
+      <div *ngIf="!race.finished" class="col-12 my-2">
         <app-race-card
           [race]="race">
         </app-race-card>

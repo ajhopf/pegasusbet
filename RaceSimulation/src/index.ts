@@ -61,7 +61,7 @@ wss.on('connection', (ws) => {
                     })
 
                     // Finaliza a corrida após 100 unidades
-                    if (participants.some((p) => p.position >= 5)) {
+                    if (participants.some((p) => p.position >= 50)) {
                         clearInterval(interval)
                         console.log('Corrida finalizada')
 
@@ -91,7 +91,7 @@ wss.on('connection', (ws) => {
                             client.send(JSON.stringify(raceUpdate))
                         })
                     }
-                }, 2000)
+                }, 750)
             }
         } catch (err) {
             console.error('Erro ao processar mensagem:', err)
