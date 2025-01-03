@@ -1,0 +1,18 @@
+/*:host ::ng-deep .p-panel-header {*/
+/*  background-color: var(--teal-500);*/
+/*  border-color: var(--teal-500);*/
+/*  color: #ffffff;*/
+/*}*/
+
+:host ::ng-deep .p-card-body, :host ::ng-deep .p-card-content {
+  padding: 0;
+  margin: 0;
+}
+
+.odds-container:hover {
+  background-color: #d9d6d6;
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+}
+
+

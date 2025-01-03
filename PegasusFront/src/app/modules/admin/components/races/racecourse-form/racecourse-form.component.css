@@ -1,0 +1,13 @@
+.image-container {
+  border-radius: 8px;
+  min-height: 400px;
+  background-image: url("/assets/jockeys.webp");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  filter: grayscale(50%);
+}
+
+.racecourse-form-container {
+  width: 75vw;
+}

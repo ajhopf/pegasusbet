@@ -1,0 +1,32 @@
+<section class="racecourse-form-container py-5" xmlns:form="http://www.w3.org/1999/html">
+  <p-card>
+    <ng-template pTemplate="header">
+      <div class="image-container"></div>
+      <h1 class="text-center mt-3">Criar Circuito</h1>
+    </ng-template>
+
+    <ng-template pTemplate="body">
+      <p-card>
+        <form (ngSubmit)="handleCreateRacecourseSubmit()" [formGroup]="createRacecourseForm">
+
+          <div class="d-flex flex-column">
+            <label htmlFor="racecourse">Circuito</label>
+            <input pInputText id="racecourse" aria-describedby="racecourse-help" formControlName="racecourse"/>
+            <small id="racecourse-help">Digite o nome do circuito</small>
+          </div>
+
+          <div class="w-100">
+            <button
+              [disabled]="createRacecourseForm.invalid"
+              pButton
+              pRipple
+              label="Criar Circuito"
+              class="p-button"></button>
+          </div>
+        </form>
+
+      </p-card>
+    </ng-template>
+
+  </p-card>
+</section>

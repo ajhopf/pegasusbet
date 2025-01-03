@@ -1,0 +1,62 @@
+<section class="m-0 m-md-5">
+  <p-card >
+    <ng-template pTemplate="header">
+      <div class="image-container"></div>
+      <h1 class="text-center mt-3">Carteira</h1>
+    </ng-template>
+
+    <ng-template pTemplate="body">
+      <div class="d-flex justify-content-center flex-column">
+        <p-card class="m-2">
+          <p class="text-center m-0 fw-bold">Valor disponível: {{userMoney | currency: "BRL"}}</p>
+        </p-card>
+
+        <p-card class="m-2 text-center">
+          <p class="m-0 fw-bold">Realizar transação</p>
+          <app-money-conversion
+            (onInputChange)="handleInputChange($event)"
+          ></app-money-conversion>
+          <div class="text-center my-2">
+            <p-button
+              class="mx-2"
+              styleClass="p-button-outlined p-button-success"
+              (onClick)="handleNewTransaction('DEPOSIT')">
+              Adicionar
+            </p-button>
+
+            <p-button
+              class="mx-2"
+              styleClass="p-button-outlined p-button-danger"
+              (onClick)="handleNewTransaction('WITHDRAWAL')">
+              Retirar
+            </p-button>
+          </div>
+        </p-card>
+      </div>
+
+      <section>
+        <div class="d-flex justify-content-between">
+          <h1>Extrato</h1>
+          <p-button (onClick)="handleGetUserTransactions()">Obter Extrato</p-button>
+        </div>
+
+
+        <ng-container *ngIf="this.fetchingTransactions">
+          <p-progressSpinner></p-progressSpinner>
+        </ng-container>
+
+        <ng-container *ngIf="!this.fetchingTransactions && this.userTransactions.length > 0">
+          <p-card class="m-2" *ngFor="let transaction of this.userTransactions">
+            <div class="row">
+              <p class="col-4 text-center"><span class="fw-bold">Valor: </span>{{transaction.amount | currency}}</p>
+              <p class="col-4 text-center"><span class="fw-bold">Data: </span>{{transaction.timeStamp | date: "dd/MM/yyyy HH:mm"}}</p>
+              <p class="col-4 text-center"><span class="fw-bold">Tipo de movimentação: </span><p-tag severity="{{transformTransactionType(transaction.transactionType).severity}}" value="{{transformTransactionType(transaction.transactionType).value}}"></p-tag></p>
+            </div>
+          </p-card>
+        </ng-container>
+      </section>
+
+    </ng-template>
+
+  </p-card>
+</section>

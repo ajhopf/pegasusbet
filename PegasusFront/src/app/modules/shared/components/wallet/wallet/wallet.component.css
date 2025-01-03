@@ -1,0 +1,22 @@
+.image-container {
+  border-radius: 8px;
+  min-height: 200px;
+  background-image: url("/assets/wallet-image2.webp");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  filter: grayscale(50%);
+}
+
+:host ::ng-deep .p-button, :host ::ng-deep .p-inputnumber {
+  min-width: 300px;
+  text-align: center;
+}
+
+:host ::ng-deep .p-inputtext {
+  text-align: center;
+}
+
+.transaction-row {
+  margin-top: 0.5rem
+}

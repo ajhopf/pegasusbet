@@ -1,0 +1,43 @@
+<div *ngIf="horseJockey">
+  <h1 class="text-center mb-5">Realizar Aposta</h1>
+  <p-card class="text-center">
+    <app-horse-jockey-info
+      [horse]="horseJockey.horse"
+      [jockey]="horseJockey.jockey"
+    ></app-horse-jockey-info>
+
+    <p class="m-3">Odds: {{horseJockey.odds.currentOdd}}</p>
+  </p-card>
+
+  <p-card class="text-center">
+    <p class="fw-bold">Criar Aposta</p>
+    <p-inputNumber
+      [(ngModel)]="amountInput"
+      class="text-center"
+      inputId="currency-us"
+      mode="currency"
+      currency="BRL"
+      locale="pt-BR">
+    </p-inputNumber>
+    <p-selectButton
+      [options]="betTypes"
+      [(ngModel)]="selectedBetType"
+      [multiple]="false"
+      optionLabel="label"
+      optionValue="value">
+    </p-selectButton>
+    <div *ngIf="amountInput > 0">
+      <p>Retorno possível: {{ calculateReturn() }}</p>
+    </div>
+
+    <ng-template pTemplate="footer">
+      <p-button
+        class="m-2"
+        styleClass="p-button-outlined p-button-success"
+        (onClick)="createBet()">
+        <i class="fa-solid fa-hat-wizard me-2"></i>Apostar
+      </p-button>
+    </ng-template>
+  </p-card>
+
+</div>

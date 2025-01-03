@@ -1,0 +1,23 @@
+<ng-container *ngIf="races$ | async; let races">
+  <div class="row justify-content-center w-100">
+    <ng-container *ngFor="let race of races.races">
+      <div *ngIf="!race.finished" class="col-10 my-2">
+        <app-race-card
+          [race]="race">
+        </app-race-card>
+        <button
+          pButton
+          pRipple
+          [disabled]="raceIsLive"
+          pTooltip="Não é possível iniciar mais de uma corrida ao mesmo tempo"
+          [tooltipDisabled]="!raceIsLive"
+          (click)="startRace(race)"
+          class="p-button-success w-100">
+          Iniciar Corrida
+        </button>
+      </div>
+    </ng-container>
+  </div>
+</ng-container>
+
+

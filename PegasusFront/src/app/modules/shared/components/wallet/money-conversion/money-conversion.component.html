@@ -1,0 +1,24 @@
+<div>
+  <span>Escolha a moeda para depósito. O sistema PegasusBet trabalha com o Real como moeda oficial.</span>
+  <p-selectButton
+    [options]="paymentOptions"
+    [(ngModel)]="selectedCoin"
+    (onChange)="handlePaymentChange()"
+    optionLabel="name"
+    optionValue="value"></p-selectButton>
+  <ng-container *ngIf="this.conversionRate !== 1">
+    <p>Conversão atual: 1 {{this.selectedCoin}} = {{this.conversionRate}} BRL</p>
+  </ng-container>
+
+  <p-inputNumber
+    [(ngModel)]="amountInput"
+    (onInput)="handleInputChange()"
+    class="text-center"
+    inputId="currency-us"
+    mode="{{'currency'}}"
+    currency="{{this.selectedCoin}}"
+    locale="pt-BR">
+  </p-inputNumber>
+
+  <p *ngIf="this.conversionRate !== 1">Valor total para depósito: {{this.amountInput * this.conversionRate | currency: "BRL"}}</p>
+</div>

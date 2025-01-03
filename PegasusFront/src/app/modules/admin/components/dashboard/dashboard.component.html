@@ -1,0 +1,28 @@
+<section class="dashboard">
+  <p-card>
+
+    <h1>Seja bem vindo de volta, {{ username }}</h1>
+
+    <div class="d-flex flex-column align-items-center">
+      <div class="m-3 w-100">
+        <p-button
+          [disabled]="isSearchingHorses"
+          (onClick)="insertHorses()">
+          <i *ngIf="isSearchingHorses" class="pi pi-spin pi-cog" style="font-size: 2rem"></i>
+          <span *ngIf="!isSearchingHorses">Procurar novos cavalos</span>
+        </p-button>
+      </div>
+
+      <div class="m-3 w-100">
+        <p-button
+          [disabled]="isSearchingJockeys"
+          (onClick)="insertJockeys()">
+          <i *ngIf="isSearchingJockeys" class="pi pi-spin pi-cog" style="font-size: 2rem"></i>
+          <span *ngIf="!isSearchingJockeys">Procurar novos Jockeys</span>
+        </p-button>
+      </div>
+    </div>
+
+
+  </p-card>
+</section>

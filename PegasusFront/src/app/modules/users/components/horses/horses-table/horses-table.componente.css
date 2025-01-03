@@ -1,0 +1,9 @@
+.image-container {
+  border-radius: 8px;
+  min-height: 400px;
+  background-image: url("/assets/horses2.webp");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  filter: grayscale(50%);
+}

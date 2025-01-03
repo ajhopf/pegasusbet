@@ -1,0 +1,27 @@
+.background-container {
+  overflow: hidden;
+}
+
+.background-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('/assets/login-image.jpg');/* Caminho para a imagem */
+  background-size: cover;
+  background-position: top;
+  z-index: -1;
+  filter: grayscale(65%);
+}
+
+.card-container {
+  width: 40%
+}
+
+@media (max-width: 768px) {
+  .card-container {
+    width: 80%
+  }
+}
