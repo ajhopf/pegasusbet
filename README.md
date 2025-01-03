@@ -1,4 +1,8 @@
-# Horse Racing
+# Pegasus Bet
+
+O PegasusBet é um sistema para controle
+
+
 
 ## Modelagem do Banco de Dados
 ![horse-racing.png](assets/horse-racing.png)

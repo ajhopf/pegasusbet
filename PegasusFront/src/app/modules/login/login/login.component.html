@@ -3,8 +3,10 @@
     <p-card>
       <h1 class="text-center">PegasusBet</h1>
 
-      <form [formGroup]="loginForm" (ngSubmit)="handleLogin()">
+      <form [formGroup]="loginForm" (ngSubmit)="handleFormSubmit()">
         <div class="d-flex align-items-center flex-column">
+
+          <h1 *ngIf="this.createUserMode" class="mt-5 text-danger">Crie seu usuário</h1>
 
           <span class="p-float-label m-3 w-100 d-flex justify-content-center flex-column">
             <input id="username" type="text" pInputText formControlName="username"/>
@@ -17,12 +19,20 @@
           </span>
 
           <div class="w-100">
-            <button pButton pRipple label="Login" class="p-button-success" class="w-100"></button>
+            <button pButton pRipple label="{{this.createUserMode ? 'Criar Usuário' : 'Login'}}" class="w-100"></button>
           </div>
 
         </div>
       </form>
+
+      <div class="text-center mt-5">
+        <p>{{this.createUserMode ? 'Já possui cadastro?' : 'Não possui cadastro?'}}</p>
+        <p-button (onClick)="handleChangeForm()">{{this.createUserMode ? 'Logar com usuário existente' : 'Criar usuário'}}</p-button>
+      </div>
+
     </p-card>
+
+
 
   </div>
 </div>

@@ -25,6 +25,10 @@ export class AuthService {
       .post<LoginResponse>(`${this.USERS_API}/api/login`, {username, password})
   }
 
+  createUser(username: string, password: string): Observable<any> {
+    return this.httpClient.post<any>(`${this.USERS_API}/user`, {username, password})
+  }
+
   logout(){
     this.cookieService.deleteAll()
   }
