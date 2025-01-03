@@ -18,7 +18,9 @@ import { HorseJockeyInfoComponent } from './components/horse-jockey-info/horse-j
 import { NotificationComponent } from "./components/notification/notification/notification.component";
 import { BadgeModule } from "primeng/badge";
 import { ProgressSpinnerModule } from 'primeng/progressspinner'
-import { TagModule } from 'primeng/tag'
+import { TagModule } from 'primeng/tag';
+import { MoneyConversionComponent } from './components/wallet/money-conversion/money-conversion.component'
+import { SelectButtonModule } from 'primeng/selectbutton'
 
 
 @NgModule({
@@ -27,7 +29,8 @@ import { TagModule } from 'primeng/tag'
     TableComponent,
     HeaderMenuBarComponent,
     WalletComponent,
-    HorseJockeyInfoComponent
+    HorseJockeyInfoComponent,
+    MoneyConversionComponent
   ],
   imports: [
     CommonModule,
@@ -41,7 +44,8 @@ import { TagModule } from 'primeng/tag'
     InputNumberModule,
     BadgeModule,
     ProgressSpinnerModule,
-    TagModule
+    TagModule,
+    SelectButtonModule
   ],
   providers: [
     DialogService

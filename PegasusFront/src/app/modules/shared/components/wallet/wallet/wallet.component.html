@@ -13,14 +13,9 @@
 
         <p-card class="m-2 text-center">
           <p class="m-0 fw-bold">Realizar transação</p>
-          <p-inputNumber
-            [(ngModel)]="amountInput"
-            class="text-center"
-            inputId="currency-us"
-            mode="currency"
-            currency="BRL"
-            locale="pt-BR">
-          </p-inputNumber>
+          <app-money-conversion
+            (onInputChange)="handleInputChange($event)"
+          ></app-money-conversion>
           <div class="text-center my-2">
             <p-button
               class="mx-2"

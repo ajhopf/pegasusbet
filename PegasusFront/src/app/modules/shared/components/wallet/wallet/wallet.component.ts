@@ -41,6 +41,11 @@ export class WalletComponent implements OnInit, OnDestroy {
       })
   }
 
+  handleInputChange(amountToDeposit: number) {
+    this.amountInput = +amountToDeposit.toFixed(2)
+    console.log("Amount input: " + this.amountInput)
+  }
+
   handleGetUserTransactions() {
     this.fetchingTransactions = true
 
@@ -102,8 +107,6 @@ export class WalletComponent implements OnInit, OnDestroy {
             severity: 'success',
             summary: 'Operação realizada com sucesso',
           })
-
-          this.amountInput = 0
         },
         error: err => {
           console.log(err)
@@ -113,8 +116,6 @@ export class WalletComponent implements OnInit, OnDestroy {
             summary: 'Erro ao realizar operação',
             detail: err.error.message
           })
-
-          this.amountInput = 0
         }
       })
   }
